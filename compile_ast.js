@@ -66,6 +66,8 @@ function compile_ast(ast) {
           case true:
           case ":else":
           case "else":
+          case "otherwise":
+          case ":otherwise":
             return action;
         }
         return ["if", condition, action, _cond_builder(rest)];
