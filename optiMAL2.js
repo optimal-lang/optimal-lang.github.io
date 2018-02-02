@@ -1,68 +1,26 @@
-//var code2ary = require("./code2ary");
-//var compile_ast = require("./compile_ast");
-if(typeof module !== "undefined") {
+if (typeof module !== "undefined") {
   var code2ary = require("./code2ary");
   var compile_ast = require("./compile_ast");
-  var miniMAL = require("./miniMAL");
 }
 
 function optiMAL(E) {
-  let glob = miniMAL(E);
   let toplevel = E;
-  glob.DEMO = exp => glob.EVAL(exp, true);
-  glob.EVAL = (exp, debug) => {
-    let src = exp;
-    let steps = code2ary(src);
-    let last;
-    for (let step of steps) {
-      let exp = step[0];
-      let ast = step[1];
-      var tm1 = new Date().getTime();
-      try {
-        if (debug) console.log("[EVAL] " + exp);
-        if (debug) console.log(" [AST] " + JSON.stringify(ast));
-        let val = glob.eval(ast);
-        last = val;
-        let output;
-        if (typeof val === "function") {
-          output = "function";
-        } else if (
-          !(val instanceof Array) &&
-          val instanceof Object &&
-          Object.prototype.toString.call(val) !== "[object Object]"
-        ) {
-          try {
-            output =
-              Object.prototype.toString.call(val) + " " + JSON.stringify(val);
-          } catch(e) {}
-        } else {
-          try {
-            output = JSON.stringify(val);
-          } catch(e) {}
-        }
-        var tm2 = new Date().getTime();
-        if (debug) {
-          if(output===undefined) {
-            console.log("==> (" + (tm2 - tm1) + " ms)");
-            console.log(val);
-          } else {
-            console.log("==> " + output + " (" + (tm2 - tm1) + " ms)");
-          }
-        }
-      } catch (e) {
-        if (!debug) console.log("[EVAL] " + exp);
-        if (!debug) console.log(" [AST] " + JSON.stringify(ast));
-        console.log(" [EXCEPTION]");
-        if (e.stack) console.log(e.stack);
-        else console.log(e);
-        break;
+  let glob = Object.create(E);
+  let $isNode$ = typeof process !== "undefined";
+  glob.LOAD = (path, debug) => {
+    let src = null;
+    if ($isNode$) {
+      src = require("fs").readFileSync(path);
+    } else {
+      let request = new XMLHttpRequest();
+      request.open("GET", path, false);
+      request.send(null);
+      if (request.status === 200) {
+        src = request.responseText;
       }
     }
-    return last;
-  };
-  glob.LOAD = (path, debug) => {
-    let src = require("fs").readFileSync(path);
-    return glob.EVAL(src, debug);
+    if (src === null) console.log("Could not read: " + path);
+    return glob.EXEC(src, debug);
   };
   glob.RUN = exp => glob.EXEC(exp, true);
   glob.EXEC = (exp, debug) => {
@@ -91,15 +49,15 @@ function optiMAL(E) {
           try {
             output =
               Object.prototype.toString.call(val) + " " + JSON.stringify(val);
-          } catch(e) {}
+          } catch (e) {}
         } else {
           try {
             output = JSON.stringify(val);
-          } catch(e) {}
+          } catch (e) {}
         }
         var tm2 = new Date().getTime();
         if (debug) {
-          if(output===undefined) {
+          if (output === undefined) {
             console.log("==> (" + (tm2 - tm1) + " ms)");
             console.log(val);
           } else {
@@ -121,4 +79,4 @@ function optiMAL(E) {
   return glob;
 }
 
-if(typeof module !== "undefined") module.exports = optiMAL;
+if (typeof module !== "undefined") module.exports = optiMAL;
