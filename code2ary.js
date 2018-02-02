@@ -8,14 +8,14 @@ function tokenize(str) {
     result.push(token);
   }
   return result;
-};
+}
 
 function read_token(code, exp) {
   if (code.length === 0) return undefined;
   let token = code.shift();
   exp.push(token);
   return token;
-};
+}
 
 function read_list(code, exp, ch) {
   let result = [];
@@ -30,7 +30,7 @@ function read_list(code, exp, ch) {
     result.push(ast);
   }
   return result;
-};
+}
 
 function read_sexp(code, exp) {
   let token = read_token(code, exp);
@@ -48,29 +48,11 @@ function read_sexp(code, exp) {
       let ast = read_sexp(code, exp);
       return ["`", ast];
     case '"':
-      /*
-      console.log(token);
-      token = token.replace(/(\|\|)|(\|[^|])/g, function(m) {
-        if(m==="||") return "|";
-        return "\\" + m.substring(1);
-      });
-      */
       token = JSON.parse(token);
-      //return ["`", token.replace(/(^"|"$)/g, "")];
       return ["`", token];
     case "@":
       token = token.replace(/(^@|@$)/g, "");
       token = token.replace(/(@@)/g, "@");
-      /*
-      let re;
-      if ((re = token.match(/(\/(?:\\\/|[^/])*\/)([a-z]*)/))) {
-        let re1 = re[1].replace(/(^\/|\/$)/g, "");
-        return re[2] === ""
-          ? ["RegExp", ["`", re1]]
-          : ["RegExp", ["`", re1], ["`", re[2]]];
-      }
-      return JSON.parse(token);
-      */
       return ["@", token];
     case "#":
       switch (token) {
@@ -89,7 +71,7 @@ function read_sexp(code, exp) {
     default:
       return token;
   }
-};
+}
 
 function join_sexp(exp) {
   if (exp.length === 0) return "";
@@ -108,7 +90,7 @@ function join_sexp(exp) {
     last = token;
   }
   return result;
-};
+}
 
 function code2ary(text) {
   let code = tokenize(text);
@@ -122,6 +104,6 @@ function code2ary(text) {
     result.push([join_sexp(exp), ast]);
   }
   return result;
-};
+}
 
-if(typeof module !== "undefined") module.exports = code2ary;
+if (typeof module !== "undefined") module.exports = code2ary;
