@@ -4,7 +4,8 @@ function tokenize(str) {
   let token;
   while ((token = re.exec(str)[1]) !== "") {
     if (token[0] === ";") continue;
-    if (token.match(/^-?[0-9][0-9.]*$/)) token = parseFloat(token, 10);
+    //if (token.match(/^-?[0-9][0-9.]*$/)) token = parseFloat(token, 10);
+    if (isFinite(token)) token = parseFloat(token, 10);
     result.push(token);
   }
   return result;
