@@ -1,6 +1,6 @@
 function put_prefix(token, prep_steps) {
   let result;
-  switch(token[0]) {
+  switch (token[0]) {
     case "!":
       result = "toplevel." + token.substring(1);
       break;
@@ -10,9 +10,9 @@ function put_prefix(token, prep_steps) {
     default:
       return token;
   }
-  if(prep_steps) {
+  if (prep_steps) {
     let list = result.split(".");
-    for(let i=2; i<list.length; i++) {
+    for (let i = 2; i < list.length; i++) {
       let exp = list.slice(0, i).join(".");
       let step = "(typeof " + exp + `!=="object"?` + exp + "={}:null)";
       prep_steps.push(step);
@@ -41,10 +41,7 @@ function compile_ast(ast) {
     return put_prefix(ast);
   }
   if (!(ast instanceof Array)) {
-    //console.log(ast);
-    //console.log(typeof ast);
     return ast.toString();
-    //return JSON.stringify(ast);
   }
   if (ast.length === 0) return ast;
   switch (ast[0]) {
@@ -56,6 +53,28 @@ function compile_ast(ast) {
     case "_do":
     case "progn":
       return compile_body(ast, 1);
+    case "case": {
+      let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
+      let rest = ast.slice(2);
+      rest.forEach(x => {
+        let val = x[0];
+        switch (val) {
+          case ":else":
+          case "else":
+          case "otherwise":
+          case ":otherwise":
+            result += "default:";
+            break;
+          default:
+            if (val instanceof Array && val[0] === "`") val = val[1];
+            result += "case " + JSON.stringify(val) + ":";
+        }
+        let body = compile_body(x, 1);
+        result += "return " + body + ";";
+      });
+      result += "}return null})()";
+      return result;
+    }
     case "_cond": {
       function _cond_builder(rest) {
         //console.log(rest);
@@ -79,12 +98,10 @@ function compile_ast(ast) {
     case "cond": {
       let new_ast = [];
       ast.slice(1).forEach(x => {
-        //console.log(x);
         new_ast.push(x[0]);
         new_ast.push(["_do"].concat(x.slice(1)));
       });
       new_ast.unshift("_cond");
-      //console.log(new_ast);
       return compile_ast(new_ast);
     }
     case "dec!":
@@ -96,11 +113,12 @@ function compile_ast(ast) {
       return compile_ast(ast[1]) + sign + "=" + val;
     case "def":
     case "def!": {
-      //return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
       let prep_steps = [];
       let v = put_prefix(ast[1], prep_steps);
-      if(prep_steps.length>0) {
-        return prep_steps.join(",") + ",(" + v + "=" +  compile_ast(ast[2]) + ")";
+      if (prep_steps.length > 0) {
+        return (
+          prep_steps.join(",") + ",(" + v + "=" + compile_ast(ast[2]) + ")"
+        );
       } else {
         return v + "=" + compile_ast(ast[2]);
       }
@@ -129,9 +147,7 @@ function compile_ast(ast) {
         args += ast[1][i];
       }
       args += ")";
-      return (
-        "function" + args + "{return " + compile_body(ast, 2) + "}"
-      );
+      return "function" + args + "{return " + compile_body(ast, 2) + "}";
     }
     case "dotimes": {
       let ast1 = ast[1];
@@ -169,7 +185,6 @@ function compile_ast(ast) {
           new_ast1.push(x[1]);
         }
       }
-      //console.log(new_ast1);
       return compile_ast(["_" + ast[0], new_ast1].concat(ast.slice(2)));
     }
     case "_let":
@@ -228,13 +243,7 @@ function compile_ast(ast) {
       );
     }
     case "=":
-      return (
-        "(" +
-        compile_ast(ast[1]) +
-        "===" +
-        compile_ast(ast[2]) +
-        ")"
-      );
+      return "(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")";
     case "%":
     case "==":
     case "===":
@@ -244,13 +253,7 @@ function compile_ast(ast) {
     case ">":
     case "<=":
     case ">=":
-      return (
-        "(" +
-        compile_ast(ast[1]) +
-        ast[0] +
-        compile_ast(ast[2]) +
-        ")"
-      );
+      return "(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")";
     case "+":
     case "-":
     case "*":
@@ -279,7 +282,6 @@ function compile_ast(ast) {
 function compile_do(ast) {
   let ast1 = ast[1];
   let parallel = ast[0] === "do";
-  //console.log("parallel="+parallel);
   let ast1_len = ast1.length;
   let ast1_vars = [];
   if (parallel) {
@@ -313,8 +315,7 @@ function compile_do(ast) {
   }
   let new_ast = [parallel ? "_let" : "_let*", ast1_vars].concat([until_ast]);
   new_ast.push(ast2[1]);
-  //console.log(new_ast);
   return compile_ast(new_ast);
 }
 
-if(typeof module !== "undefined")  module.exports = compile_ast;
+if (typeof module !== "undefined") module.exports = compile_ast;
