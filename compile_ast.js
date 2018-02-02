@@ -77,7 +77,6 @@ function compile_ast(ast) {
     }
     case "_cond": {
       function _cond_builder(rest) {
-        //console.log(rest);
         if (rest.length === 0) return null;
         let condition = rest.shift();
         let action = rest.shift();
@@ -92,7 +91,6 @@ function compile_ast(ast) {
         return ["if", condition, action, _cond_builder(rest)];
       }
       ast = _cond_builder(ast.slice(1));
-      //console.log(ast);
       return compile_ast(ast);
     }
     case "cond": {
@@ -129,7 +127,6 @@ function compile_ast(ast) {
         new_ast.unshift(ast[1].slice(1));
         new_ast.unshift("fn");
         new_ast = ["def", ast[1][0], new_ast];
-        //console.log(new_ast);
         return compile_ast(new_ast);
       } else {
         return compile_ast(["def", ast[1], ast[2]]);
@@ -159,7 +156,6 @@ function compile_ast(ast) {
       ];
       let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"]];
       ast = ["do*", bind, exit].concat(ast.slice(2));
-      //console.log(ast);
       return compile_ast(ast);
     }
     case "if":
@@ -194,7 +190,6 @@ function compile_ast(ast) {
       let assigns = "";
       for (let i in ast[1]) {
         if (i % 2) {
-          //console.log(ast[1][i - 1]);
           if (i > 1) vars += ",";
           vars += ast[1][i - 1];
           let val = compile_ast(ast[1][i]);
@@ -231,7 +226,6 @@ function compile_ast(ast) {
       return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
     case "until":
     case "while": {
-      // ((function(){while(i<5){i++,console.log(i)}})(),null)
       let condition = compile_ast(ast[1]);
       if (ast[0] === "until") condition = "!" + condition;
       return (
