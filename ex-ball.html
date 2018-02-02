@@ -6,12 +6,6 @@
 	<script src="tarp.require.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/1.6.1/pixi.js"></script>
-	<!--
-	<script src="code2ary.js"></script>
-	<script src="compile_ast.js"></script>
-	<script src="miniMAL.js"></script>
-	<script src="optiMAL2.js"></script>
-	-->
 </head>
 <body>
 
@@ -19,87 +13,40 @@
 <div id="sx">SX: 0<br />SY: 0</div>
 
 <script>
-//var optiMAL = Tarp.require("./optiMAL2");
 var optiMAL = Tarp.require("https://optimal-lang.github.io/optiMAL2");
 var glob = optiMAL(window);
-
-/*
-
-update = function() {
-  return (
-    (function(__dotimes_cnt__, __dotimes_idx__, i) {
-      __dotimes_cnt__ = starCount;
-      __dotimes_idx__ = 0;
-      i = __dotimes_idx__;
-      return (
-        ((function() {
-          while (!(__dotimes_idx__ >= __dotimes_cnt__)) {
-            (stars[i].sprite.position.x = stars[i].x + slideX),
-              (stars[i].sprite.position.y = stars[i].y + slideY),
-              (stars[i].x = stars[i].x * sx),
-              (stars[i].y = stars[i].y * sy),
-              stars[i].x > w
-                ? (stars[i].x = stars[i].x - w)
-                : stars[i].x < -1 * w ? (stars[i].x = stars[i].x + ww) : null,
-              stars[i].y > h
-                ? (stars[i].y = stars[i].y - h)
-                : stars[i].y < -1 * h ? (stars[i].y = stars[i].y + h) : null,
-              (__dotimes_idx__ = __dotimes_idx__ + 1),
-              (i = __dotimes_idx__);
-          }
-        })(),
-        null),
-        null
-      );
-    })(),
-    renderer.render(stage),
-    requestAnimFrame(update)
-  );
-};
-
-	function update()
-	{
-		for (var i = 0; i < starCount; i++)
-		{
-			stars[i].sprite.position.x = stars[i].x + slideX;
-			stars[i].sprite.position.y = stars[i].y + slideY;
-			stars[i].x = stars[i].x * sx;
-			stars[i].y = stars[i].y * sy;
-
-			if (stars[i].x > w)
-			{
-				stars[i].x = stars[i].x - w;
-			}
-			else if (stars[i].x < -w)
-			{
-				stars[i].x = stars[i].x + w;
-			}
-
-			if (stars[i].y > h)
-			{
-				stars[i].y = stars[i].y - h;
-			}
-			else if (stars[i].y < -h)
-			{
-				stars[i].y = stars[i].y + h;
-			}
-		}
-
-		renderer.render(stage);
-
-		requestAnimFrame(update);
-	}
- */
-
-//SX: 1.0383472311681983
-//SY: 1.0297042156184761
-
 glob.RUN(`
 (define w 1024)
 (define h 768)
-;(define starCount 2500)
 (define starCount 2500)
-(define sx (+ 1.0 (/ @Math.random()@ 20]
+;(define sx (+ 1.0 (/ @Math.random()@ 20]
+;(define sy (+ 1.0 (/ @Math.random()@ 20]
+(define sx 1.0445291344952077)
+(define sy 1.037120924078791)
+(define slideX (/ w 2]
+(define slideY (/ h 2]
+(define stars @[]@)
+(define (start)
+  (let [(ballTexture @new PIXI.Texture.fromImage("bubble_32x32.png")@]
+    (set renderer (@PIXI.autoDetectRenderer@ w h))
+    (set stage @new PIXI.Stage@)
+    (document.body.appendChild renderer.view)
+    [dotimes (i starCount)
+      (let [(tempBall @new PIXI.Sprite(ballTexture)@]
+        @tempBall.position.x = (Math.random() * w) - slideX@
+        @tempBall.position.y = (Math.random() * h) - slideY@
+        @tempBall.anchor.x = 0.5@
+        @tempBall.anchor.y = 0.5@
+        @stars.push({ sprite: tempBall, x: tempBall.position.x, y: tempBall.position.y })@
+        @stage.addChild(tempBall)@]
+    @document.getElementById('rnd').onclick = newWave@
+    @document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy@
+    (resize)
+    (requestAnimFrame update)]
+(define (newWave)
+  @sx = 1.0 + (Math.random() / 20)@
+  @sy = 1.0 + (Math.random() / 20)@
+  @document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy@]
 (define (resize)
   (let* ([w (- @$(window).width()@ 32]
          [h (- @$(window).height()@ 132]
@@ -124,111 +71,7 @@ glob.RUN(`
 (@$(window).resize@ resize)
 (set window.onorientationchange resize)
 (document.addEventListener "DOMContentLoaded", start, #false)
-
-`);
-
-	//$(window).resize(resize)
-	//window.onorientationchange = resize;
-
-	//document.addEventListener('DOMContentLoaded', start, false);
-
-	//	Globals, globals everywhere and not a drop to drink
-	//var w = 1024;
-	//var h = 768;
-	//var starCount = 2500;
-	//var sx = 1.0 + (Math.random() / 20);
-	var sy = 1.0 + (Math.random() / 20);
-	var slideX = w / 2;
-	var slideY = h / 2;
-	var stars = [];
-
-	function start() {
-
-		var ballTexture = new PIXI.Texture.fromImage("bubble_32x32.png");
-
-		renderer = PIXI.autoDetectRenderer(w, h);
-
-		stage = new PIXI.Stage;
-
-		document.body.appendChild(renderer.view);
-
-		for (var i = 0; i < starCount; i++)
-		{
-			var tempBall = new PIXI.Sprite(ballTexture);
-
-			tempBall.position.x = (Math.random() * w) - slideX;
-			tempBall.position.y = (Math.random() * h) - slideY;
-			tempBall.anchor.x = 0.5;
-			tempBall.anchor.y = 0.5;
-
-			stars.push({ sprite: tempBall, x: tempBall.position.x, y: tempBall.position.y });
-
-			stage.addChild(tempBall);
-		}
-
-		document.getElementById('rnd').onclick = newWave;
-		document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy;
-
-		resize();
-
-		requestAnimFrame(update);
-
-	}
-
-	function newWave () {
-
-		sx = 1.0 + (Math.random() / 20);
-		sy = 1.0 + (Math.random() / 20);
-		document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy;
-
-	}
-
-/*
-	function resize()
-	{
-		w = $(window).width() - 32;
-		h = $(window).height() - 132;
-
-		slideX = w / 2;
-		slideY = h / 2;
-
-		renderer.resize(w, h);
-	}
-*/
-/*
-	function update()
-	{
-		for (var i = 0; i < starCount; i++)
-		{
-			stars[i].sprite.position.x = stars[i].x + slideX;
-			stars[i].sprite.position.y = stars[i].y + slideY;
-			stars[i].x = stars[i].x * sx;
-			stars[i].y = stars[i].y * sy;
-
-			if (stars[i].x > w)
-			{
-				stars[i].x = stars[i].x - w;
-			}
-			else if (stars[i].x < -w)
-			{
-				stars[i].x = stars[i].x + w;
-			}
-
-			if (stars[i].y > h)
-			{
-				stars[i].y = stars[i].y - h;
-			}
-			else if (stars[i].y < -h)
-			{
-				stars[i].y = stars[i].y + h;
-			}
-		}
-
-		renderer.render(stage);
-
-		requestAnimFrame(update);
-	}
-*/
+`); // glob.RUN(
 </script>
 
 </body>
