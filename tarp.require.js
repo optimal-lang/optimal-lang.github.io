@@ -1,4 +1,4 @@
-// https://github.com/letorbi/smoothie/blob/tarp/require.js
+// https://github.com/letorbi/tarp.require/blob/master/require.js
 //
 // This file is part of //\ Tarp.
 //
@@ -36,7 +36,6 @@
     )).href;
     // NOTE create cache item if required
     cached = cache[href] = cache[href] || {
-      d: undefined, // deviation
       e: undefined, // error
       m: { // module
         children: undefined,
@@ -137,7 +136,7 @@
         (new Function(
           "exports,require,module,__filename,__dirname",
           cached.s + "\n//# sourceURL=" + module.uri
-        ))(module.exports, module.require, module, module.id, module.id.match(/.*\//)[0]);
+        ))(module.exports, module.require, module, module.uri, module.uri.match(/.*\//)[0]);
       module.loaded = true;
     }
     return cached.m;
@@ -154,7 +153,7 @@
         else if (mode == 1)
           return href;
         else if (mode == 2)
-          return cached.m.paths;
+          return [id[0] == "." ? pwd.match(/.*\//)[0] : root];
         else
           return evaluate(cached, parent).exports;
       }
