@@ -1,59 +1,44 @@
-function put_prefix(prefix, token) {
-  /*
-  if (token instanceof Array) {
-    if (token[0] === "@") return token[1];
+function put_prefix(token, prep_steps) {
+  let result;
+  switch(token[0]) {
+    case "!":
+      result = "toplevel." + token.substring(1);
+      break;
+    case "&":
+      result = "glob." + token.substring(1);
+      break;
+    default:
+      return token;
   }
-  */
-  let ch = token[0];
-  if(ch==="!") {
-    prefix = "toplevel";
-    token = token.substring(1);
-  } else if(ch==="&") {
-    prefix = "glob";
-    token = token.substring(1);
-  } else {
-    prefix = null;
-  }
-  //if (token.match(/^&.+$/)) token = token.substring(1); else prefix = null;
-  //if (!token.match(/^&.+$/)) prefix = null;
-  //if (token[0] === "!") token = token.substring(1);
-  function put_prefix_help(prefix, extend) {
-    if (extend.match(/^[_a-z]+[_a-z0-9]*$/i)) {
-  	  if(!prefix) return extend;
-      return prefix + "." + extend;
+  if(prep_steps) {
+    let list = result.split(".");
+    for(let i=2; i<list.length; i++) {
+      let exp = list.slice(0, i).join(".");
+      let step = "(typeof " + exp + `!=="object"?` + exp + "={}:null)";
+      prep_steps.push(step);
     }
-    if(!prefix) prefix = "toplevel";
-    return prefix + "[" + JSON.stringify(extend) + "]";
-  }
-  let ary = token.split(".");
-  let result = prefix; //put_prefix_help(prefix, ary.shift());
-  while (ary.length > 0) {
-    let extend = ary.shift();
-    result = put_prefix_help(result, extend);
   }
   return result;
 }
 
-function compile_body(prefix, ast, start) {
-  if (start === ast.length - 1) return compile_ast(prefix, ast[start]);
+function compile_body(ast, start) {
+  if (start === ast.length - 1) return compile_ast(ast[start]);
   let result = "(";
   for (let i = start; i < ast.length; i++) {
     if (i > start) result += ",";
-    result += compile_ast(prefix, ast[i]);
+    result += compile_ast(ast[i]);
   }
   return result + ")";
 }
 
-function compile_ast(prefix, ast) {
+function compile_ast(ast) {
   if (ast === undefined) return "undefined";
   if (!ast) {
     return JSON.stringify(ast);
   }
   if (typeof ast === "string") {
     if (ast.match(/^:.+$/)) return JSON.stringify(ast);
-    //if (ast.match(/^!.+$/)) return put_prefix(prefix, ast.substring(1));
-    //if (ast.match(/^&.+$/)) return ast.substring(1);
-    return put_prefix(prefix, ast);
+    return put_prefix(ast);
   }
   if (!(ast instanceof Array)) {
     //console.log(ast);
@@ -70,7 +55,7 @@ function compile_ast(prefix, ast) {
     case "begin":
     case "_do":
     case "progn":
-      return compile_body(prefix, ast, 1);
+      return compile_body(ast, 1);
     case "_cond": {
       function _cond_builder(rest) {
         //console.log(rest);
@@ -87,7 +72,7 @@ function compile_ast(prefix, ast) {
       }
       ast = _cond_builder(ast.slice(1));
       //console.log(ast);
-      return compile_ast(prefix, ast);
+      return compile_ast(ast);
     }
     case "cond": {
       let new_ast = [];
@@ -98,19 +83,26 @@ function compile_ast(prefix, ast) {
       });
       new_ast.unshift("_cond");
       //console.log(new_ast);
-      return compile_ast(prefix, new_ast);
+      return compile_ast(new_ast);
     }
     case "dec!":
     case "dec":
     case "inc!":
     case "inc":
       let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
-      let val = ast.length < 3 ? 1 : compile_ast(prefix, ast[2]);
-      return compile_ast(prefix, ast[1]) + sign + "=" + val;
+      let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
+      return compile_ast(ast[1]) + sign + "=" + val;
     case "def":
-    case "def!":
-      //return put_prefix(prefix, ast[1]) + "=" + compile_ast(prefix, ast[2]);
-      return compile_ast(prefix, ast[1]) + "=" + compile_ast(prefix, ast[2]);
+    case "def!": {
+      //return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
+      let prep_steps = [];
+      let v = put_prefix(ast[1], prep_steps);
+      if(prep_steps.length>0) {
+        return prep_steps.join(",") + ",(" + v + "=" +  compile_ast(ast[2]) + ")";
+      } else {
+        return v + "=" + compile_ast(ast[2]);
+      }
+    }
     case "define": {
       if (ast[1] instanceof Array) {
         let new_ast = ast.slice(2);
@@ -118,14 +110,14 @@ function compile_ast(prefix, ast) {
         new_ast.unshift("fn");
         new_ast = ["def", ast[1][0], new_ast];
         //console.log(new_ast);
-        return compile_ast(prefix, new_ast);
+        return compile_ast(new_ast);
       } else {
-        return compile_ast(prefix, ast[1]) + "=" + compile_ast(prefix, ast[2]);
+        return compile_ast(["def", ast[1], ast[2]]);
       }
     }
     case "do":
     case "do*":
-      return compile_do(prefix, ast);
+      return compile_do(ast);
     case "fn":
     case "fn*":
     case "lambda": {
@@ -136,7 +128,7 @@ function compile_ast(prefix, ast) {
       }
       args += ")";
       return (
-        "function" + args + "{return " + compile_body(prefix, ast, 2) + "}"
+        "function" + args + "{return " + compile_body(ast, 2) + "}"
       );
     }
     case "dotimes": {
@@ -150,16 +142,16 @@ function compile_ast(prefix, ast) {
       let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"]];
       ast = ["do*", bind, exit].concat(ast.slice(2));
       //console.log(ast);
-      return compile_ast(prefix, ast);
+      return compile_ast(ast);
     }
     case "if":
       return (
         "(" +
-        compile_ast(prefix, ast[1]) +
+        compile_ast(ast[1]) +
         "?" +
-        compile_ast(prefix, ast[2]) +
+        compile_ast(ast[2]) +
         ":" +
-        compile_body(prefix, ast, 3) +
+        compile_body(ast, 3) +
         ")"
       );
     case "let":
@@ -176,7 +168,7 @@ function compile_ast(prefix, ast) {
         }
       }
       //console.log(new_ast1);
-      return compile_ast(prefix, ["_" + ast[0], new_ast1].concat(ast.slice(2)));
+      return compile_ast(["_" + ast[0], new_ast1].concat(ast.slice(2)));
     }
     case "_let":
     case "_let*": {
@@ -188,7 +180,7 @@ function compile_ast(prefix, ast) {
           //console.log(ast[1][i - 1]);
           if (i > 1) vars += ",";
           vars += ast[1][i - 1];
-          let val = compile_ast(prefix, ast[1][i]);
+          let val = compile_ast(ast[1][i]);
           if (i > 1) vals += ",";
           vals += val;
           assigns += ast[1][i - 1] + "=" + val + ";";
@@ -201,7 +193,7 @@ function compile_ast(prefix, ast) {
           "((function" +
           vars +
           "{return " +
-          compile_body(prefix, ast, 2) +
+          compile_body(ast, 2) +
           "})" +
           vals +
           ")"
@@ -213,32 +205,32 @@ function compile_ast(prefix, ast) {
           "{" +
           assigns +
           "return " +
-          compile_body(prefix, ast, 2) +
+          compile_body(ast, 2) +
           "})())"
         );
     }
     case "set!":
     case "set":
-      return compile_ast(prefix, ast[1]) + "=" + compile_ast(prefix, ast[2]);
+      return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
     case "until":
     case "while": {
       // ((function(){while(i<5){i++,console.log(i)}})(),null)
-      let condition = compile_ast(prefix, ast[1]);
+      let condition = compile_ast(ast[1]);
       if (ast[0] === "until") condition = "!" + condition;
       return (
         "((function(){while(" +
         condition +
         "){" +
-        compile_body(prefix, ast, 2) +
+        compile_body(ast, 2) +
         "}})(),null)"
       );
     }
     case "=":
       return (
         "(" +
-        compile_ast(prefix, ast[1]) +
+        compile_ast(ast[1]) +
         "===" +
-        compile_ast(prefix, ast[2]) +
+        compile_ast(ast[2]) +
         ")"
       );
     case "%":
@@ -252,9 +244,9 @@ function compile_ast(prefix, ast) {
     case ">=":
       return (
         "(" +
-        compile_ast(prefix, ast[1]) +
+        compile_ast(ast[1]) +
         ast[0] +
-        compile_ast(prefix, ast[2]) +
+        compile_ast(ast[2]) +
         ")"
       );
     case "+":
@@ -262,27 +254,27 @@ function compile_ast(prefix, ast) {
     case "*":
     case "/": {
       function insert_op(op, rest) {
-        let result = [compile_ast(prefix, rest.shift())];
+        let result = [compile_ast(rest.shift())];
         while (rest.length > 0) {
           result.push(op);
-          result.push(compile_ast(prefix, rest.shift()));
+          result.push(compile_ast(rest.shift()));
         }
         return result.join("");
       }
       return "(" + insert_op(ast[0], ast.slice(1)) + ")";
     }
     default:
-      let fcall = compile_ast(prefix, ast[0]) + "(";
+      let fcall = compile_ast(ast[0]) + "(";
       for (let i = 1; i < ast.length; i++) {
         if (i > 1) fcall += ",";
-        fcall += compile_ast(prefix, ast[i]);
+        fcall += compile_ast(ast[i]);
       }
       fcall += ")";
       return fcall;
   }
 }
 
-function compile_do(prefix, ast) {
+function compile_do(ast) {
   let ast1 = ast[1];
   let parallel = ast[0] === "do";
   //console.log("parallel="+parallel);
@@ -320,7 +312,7 @@ function compile_do(prefix, ast) {
   let new_ast = [parallel ? "_let" : "_let*", ast1_vars].concat([until_ast]);
   new_ast.push(ast2[1]);
   //console.log(new_ast);
-  return compile_ast(prefix, new_ast);
+  return compile_ast(new_ast);
 }
 
 if(typeof module !== "undefined")  module.exports = compile_ast;

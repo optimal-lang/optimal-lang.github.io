@@ -76,7 +76,7 @@ function optiMAL(E) {
       try {
         if (debug) console.log("[COMPILE] " + exp);
         if (debug) console.log("    [AST] " + JSON.stringify(ast));
-        let text = compile_ast("glob", ast);
+        let text = compile_ast(ast);
         if (debug) console.log("[COMPILED] " + text);
         let val = eval(text);
         last = val;
