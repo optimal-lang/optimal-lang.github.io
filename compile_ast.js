@@ -4,7 +4,17 @@ function put_prefix(prefix, token) {
     if (token[0] === "@") return token[1];
   }
   */
-  if (token.match(/^&.+$/)) token = token.substring(1); else prefix = null;
+  let ch = token[0];
+  if(ch==="!") {
+    prefix = "toplevel";
+    token = token.substring(1);
+  } else if(ch==="&") {
+    prefix = "glob";
+    token = token.substring(1);
+  } else {
+    prefix = null;
+  }
+  //if (token.match(/^&.+$/)) token = token.substring(1); else prefix = null;
   //if (!token.match(/^&.+$/)) prefix = null;
   //if (token[0] === "!") token = token.substring(1);
   function put_prefix_help(prefix, extend) {
