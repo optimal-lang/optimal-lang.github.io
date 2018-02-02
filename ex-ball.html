@@ -46,7 +46,9 @@ glob.RUN(`
 (define (newWave)
   @sx = 1.0 + (Math.random() / 20)@
   @sy = 1.0 + (Math.random() / 20)@
-  @document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy@]
+  @$('#sx').html('SX: ' + sx + '<br />SY: ' + sy)@
+  ;@document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy@
+  ]
 (define (resize)
   (let* ([w (- @$(window).width()@ 32]
          [h (- @$(window).height()@ 132]
