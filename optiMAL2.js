@@ -109,6 +109,7 @@ function optiMAL(E) {
       } catch (e) {
         if (!debug) console.log("[COMPILE] " + exp);
         if (!debug) console.log("    [AST] " + JSON.stringify(ast));
+        if (!debug) console.log("[COMPILED] " + text);
         console.log(" [EXCEPTION]");
         if (e.stack) console.log(e.stack);
         else console.log(e);
