@@ -3,9 +3,11 @@ if (typeof module !== "undefined") {
   var compile_ast = require("./compile_ast");
 }
 
-function optiMAL(E) {
-  let toplevel = E;
-  let glob = Object.create(E);
+//function optiMAL(E) {
+//  let toplevel = E;
+//  let glob = Object.create(E);
+function optiMAL(toplevel) {
+  let glob = Object.create(toplevel);
   let $isNode$ = typeof process !== "undefined";
   glob.LOAD = (path, debug) => {
     let src = null;
