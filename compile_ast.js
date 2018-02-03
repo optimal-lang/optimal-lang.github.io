@@ -224,6 +224,15 @@ function compile_ast(ast) {
     case "set!":
     case "set":
       return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
+    case "throw": {
+      return "(function(){throw " + compile_ast(ast[1]) + "})()";
+    }
+    case "try": {
+      let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
+      result += (ast[2][1] + "){return " + compile_body(ast[2], 2) + "}");
+      result += "})()";
+      return result;
+    }
     case "until":
     case "while": {
       let condition = compile_ast(ast[1]);
