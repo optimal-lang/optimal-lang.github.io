@@ -351,8 +351,8 @@ function optiMAL(toplevel) {
     }
     return result;
   };
-  glob.load_list_d = path => glob.load_list(path, true);
-  glob.load_list = (path, debug) => {
+  glob.load_d = path => glob.load(path, true);
+  glob.load = (path, debug) => {
     let src = null;
     if ($isNode$) {
       src = require("fs").readFileSync(path);
