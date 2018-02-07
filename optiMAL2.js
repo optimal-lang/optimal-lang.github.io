@@ -272,15 +272,7 @@ Compiler.prototype.compile_ast = function(ast) {
     case "-":
     case "*":
     case "/": {
-      function insert_op(comp, op, rest) {
-        let result = [comp.compile_ast(rest.shift())];
-        while (rest.length > 0) {
-          result.push(op);
-          result.push(comp.compile_ast(rest.shift()));
-        }
-        return result.join("");
-      }
-      return "(" + insert_op(this, ast[0], ast.slice(1)) + ")";
+      return "(" + this.insert_op(ast[0], ast.slice(1)) + ")";
     }
     default:
       let fcall = this.compile_ast(ast[0]) + "(";
@@ -291,6 +283,15 @@ Compiler.prototype.compile_ast = function(ast) {
       fcall += ")";
       return fcall;
   }
+};
+
+Compiler.prototype.insert_op = function(op, rest) {
+  let result = [this.compile_ast(rest[0])];
+  for (let i = 1; i < rest.length; i++) {
+    result.push(op);
+    result.push(this.compile_ast(rest[i]));
+  }
+  return result.join("");
 };
 
 Compiler.prototype.compile_do = function(ast) {
