@@ -426,6 +426,7 @@ function optiMAL(toplevel) {
         console.log(" [EXCEPTION]");
         if (e.stack) console.log(e.stack);
         else console.log(e);
+        /*if(!debug)*/ throw(e);
         break;
       }
     }
