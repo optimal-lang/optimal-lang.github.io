@@ -1,9 +1,10 @@
 if (typeof module !== "undefined") {
   var code2ary = require("./code2ary");
-  //var compile_ast = require("./compile_ast");
 }
 
-function put_prefix(token, prep_steps) {
+function /*class*/ Compiler() {}
+
+Compiler.prototype.put_prefix = function(token, prep_steps) {
   let result;
   switch (token[0]) {
     case "!":
@@ -24,26 +25,26 @@ function put_prefix(token, prep_steps) {
     }
   }
   return result;
-}
+};
 
-function compile_body(ast, start) {
-  if (start === ast.length - 1) return compile_ast(ast[start]);
+Compiler.prototype.compile_body = function(ast, start) {
+  if (start === ast.length - 1) return this.compile_ast(ast[start]);
   let result = "(";
   for (let i = start; i < ast.length; i++) {
     if (i > start) result += ",";
-    result += compile_ast(ast[i]);
+    result += this.compile_ast(ast[i]);
   }
   return result + ")";
-}
+};
 
-function compile_ast(ast) {
+Compiler.prototype.compile_ast = function(ast) {
   if (ast === undefined) return "undefined";
   if (!ast) {
     return JSON.stringify(ast);
   }
   if (typeof ast === "string") {
     if (ast.match(/^:.+$/)) return JSON.stringify(ast);
-    return put_prefix(ast);
+    return this.put_prefix(ast);
   }
   if (!(ast instanceof Array)) {
     return ast.toString();
@@ -57,9 +58,9 @@ function compile_ast(ast) {
     case "begin":
     case "_do":
     case "progn":
-      return compile_body(ast, 1);
+      return this.compile_body(ast, 1);
     case "case": {
-      let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
+      let result = "(function(){switch(" + this.compile_ast(ast[1]) + "){";
       let rest = ast.slice(2);
       rest.forEach(x => {
         let val = x[0];
@@ -74,7 +75,7 @@ function compile_ast(ast) {
             if (val instanceof Array && val[0] === "`") val = val[1];
             result += "case " + JSON.stringify(val) + ":";
         }
-        let body = compile_body(x, 1);
+        let body = this.compile_body(x, 1);
         result += "return " + body + ";";
       });
       result += "}return null})()";
@@ -96,7 +97,7 @@ function compile_ast(ast) {
         return ["if", condition, action, _cond_builder(rest)];
       }
       ast = _cond_builder(ast.slice(1));
-      return compile_ast(ast);
+      return this.compile_ast(ast);
     }
     case "cond": {
       let new_ast = [];
@@ -105,25 +106,25 @@ function compile_ast(ast) {
         new_ast.push(["_do"].concat(x.slice(1)));
       });
       new_ast.unshift("_cond");
-      return compile_ast(new_ast);
+      return this.compile_ast(new_ast);
     }
     case "dec!":
     case "dec":
     case "inc!":
     case "inc":
       let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
-      let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
-      return compile_ast(ast[1]) + sign + "=" + val;
+      let val = ast.length < 3 ? 1 : this.compile_ast(ast[2]);
+      return this.compile_ast(ast[1]) + sign + "=" + val;
     case "def":
     case "def!": {
       let prep_steps = [];
-      let v = put_prefix(ast[1], prep_steps);
+      let v = this.put_prefix(ast[1], prep_steps);
       if (prep_steps.length > 0) {
         return (
-          prep_steps.join(",") + ",(" + v + "=" + compile_ast(ast[2]) + ")"
+          prep_steps.join(",") + ",(" + v + "=" + this.compile_ast(ast[2]) + ")"
         );
       } else {
-        return v + "=" + compile_ast(ast[2]);
+        return v + "=" + this.compile_ast(ast[2]);
       }
     }
     case "define": {
@@ -132,14 +133,14 @@ function compile_ast(ast) {
         new_ast.unshift(ast[1].slice(1));
         new_ast.unshift("fn");
         new_ast = ["def", ast[1][0], new_ast];
-        return compile_ast(new_ast);
+        return this.compile_ast(new_ast);
       } else {
-        return compile_ast(["def", ast[1], ast[2]]);
+        return this.compile_ast(["def", ast[1], ast[2]]);
       }
     }
     case "do":
     case "do*":
-      return compile_do(ast);
+      return this.compile_do(ast);
     case "fn":
     case "fn*":
     case "lambda": {
@@ -149,7 +150,7 @@ function compile_ast(ast) {
         args += ast[1][i];
       }
       args += ")";
-      return "function" + args + "{return " + compile_body(ast, 2) + "}";
+      return "function" + args + "{return " + this.compile_body(ast, 2) + "}";
     }
     case "dotimes": {
       let ast1 = ast[1];
@@ -161,16 +162,16 @@ function compile_ast(ast) {
       ];
       let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"]];
       ast = ["do*", bind, exit].concat(ast.slice(2));
-      return compile_ast(ast);
+      return this.compile_ast(ast);
     }
     case "if":
       return (
         "(" +
-        compile_ast(ast[1]) +
+        this.compile_ast(ast[1]) +
         "?" +
-        compile_ast(ast[2]) +
+        this.compile_ast(ast[2]) +
         ":" +
-        compile_body(ast, 3) +
+        this.compile_body(ast, 3) +
         ")"
       );
     case "let":
@@ -186,7 +187,7 @@ function compile_ast(ast) {
           new_ast1.push(x[1]);
         }
       }
-      return compile_ast(["_" + ast[0], new_ast1].concat(ast.slice(2)));
+      return this.compile_ast(["_" + ast[0], new_ast1].concat(ast.slice(2)));
     }
     case "_let":
     case "_let*": {
@@ -197,7 +198,7 @@ function compile_ast(ast) {
         if (i % 2) {
           if (i > 1) vars += ",";
           vars += ast[1][i - 1];
-          let val = compile_ast(ast[1][i]);
+          let val = this.compile_ast(ast[1][i]);
           if (i > 1) vals += ",";
           vals += val;
           assigns += ast[1][i - 1] + "=" + val + ";";
@@ -210,7 +211,7 @@ function compile_ast(ast) {
           "((function" +
           vars +
           "{return " +
-          compile_body(ast, 2) +
+          this.compile_body(ast, 2) +
           "})" +
           vals +
           ")"
@@ -222,36 +223,39 @@ function compile_ast(ast) {
           "{" +
           assigns +
           "return " +
-          compile_body(ast, 2) +
+          this.compile_body(ast, 2) +
           "})())"
         );
     }
     case "set!":
     case "set":
-      return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
+      return this.compile_ast(ast[1]) + "=" + this.compile_ast(ast[2]);
     case "throw": {
-      return "(function(){throw " + compile_ast(ast[1]) + "})()";
+      return "(function(){throw " + this.compile_ast(ast[1]) + "})()";
     }
     case "try": {
-      let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
-      result += ast[2][1] + "){return " + compile_body(ast[2], 2) + "}";
+      let result =
+        "(function(){try{return " + this.compile_ast(ast[1]) + "}catch(";
+      result += ast[2][1] + "){return " + this.compile_body(ast[2], 2) + "}";
       result += "})()";
       return result;
     }
     case "until":
     case "while": {
-      let condition = compile_ast(ast[1]);
+      let condition = this.compile_ast(ast[1]);
       if (ast[0] === "until") condition = "!" + condition;
       return (
         "((function(){while(" +
         condition +
         "){" +
-        compile_body(ast, 2) +
+        this.compile_body(ast, 2) +
         "}})(),null)"
       );
     }
     case "=":
-      return "(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")";
+      return (
+        "(" + this.compile_ast(ast[1]) + "===" + this.compile_ast(ast[2]) + ")"
+      );
     case "%":
     case "==":
     case "===":
@@ -261,33 +265,35 @@ function compile_ast(ast) {
     case ">":
     case "<=":
     case ">=":
-      return "(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")";
+      return (
+        "(" + this.compile_ast(ast[1]) + ast[0] + this.compile_ast(ast[2]) + ")"
+      );
     case "+":
     case "-":
     case "*":
     case "/": {
-      function insert_op(op, rest) {
-        let result = [compile_ast(rest.shift())];
+      function insert_op(comp, op, rest) {
+        let result = [comp.compile_ast(rest.shift())];
         while (rest.length > 0) {
           result.push(op);
-          result.push(compile_ast(rest.shift()));
+          result.push(comp.compile_ast(rest.shift()));
         }
         return result.join("");
       }
-      return "(" + insert_op(ast[0], ast.slice(1)) + ")";
+      return "(" + insert_op(this, ast[0], ast.slice(1)) + ")";
     }
     default:
-      let fcall = compile_ast(ast[0]) + "(";
+      let fcall = this.compile_ast(ast[0]) + "(";
       for (let i = 1; i < ast.length; i++) {
         if (i > 1) fcall += ",";
-        fcall += compile_ast(ast[i]);
+        fcall += this.compile_ast(ast[i]);
       }
       fcall += ")";
       return fcall;
   }
-}
+};
 
-function compile_do(ast) {
+Compiler.prototype.compile_do = function(ast) {
   let ast1 = ast[1];
   let parallel = ast[0] === "do";
   let ast1_len = ast1.length;
@@ -323,8 +329,10 @@ function compile_do(ast) {
   }
   let new_ast = [parallel ? "_let" : "_let*", ast1_vars].concat([until_ast]);
   new_ast.push(ast2[1]);
-  return compile_ast(new_ast);
-}
+  return this.compile_ast(new_ast);
+};
+
+var $comp$ = new Compiler();
 
 function optiMAL(toplevel) {
   let glob = Object.create(toplevel);
@@ -332,7 +340,7 @@ function optiMAL(toplevel) {
   glob.compile_ast_d = ast => glob.compile_ast(ast, true);
   glob.compile_ast = (ast, debug) => {
     if (debug) console.log(" [AST] " + JSON.stringify(ast));
-    let text = compile_ast(ast);
+    let text = $comp$.compile_ast(ast);
     if (debug) console.log("[CODE] " + text);
     return text;
   };
@@ -345,7 +353,7 @@ function optiMAL(toplevel) {
       let ast = step[1];
       if (debug) console.log("[LIST] " + exp);
       if (debug) console.log(" [AST] " + JSON.stringify(ast));
-      let text = compile_ast(ast);
+      let text = $comp$.compile_ast(ast);
       if (debug) console.log("[CODE] " + text);
       result += text + ";\n";
     }
@@ -380,7 +388,7 @@ function optiMAL(toplevel) {
       try {
         if (debug) console.log("[LIST] " + exp);
         if (debug) console.log(" [AST] " + JSON.stringify(ast));
-        let text = compile_ast(ast);
+        let text = $comp$.compile_ast(ast);
         if (debug) console.log("[CODE] " + text);
         let val = eval(text);
         last = val;
