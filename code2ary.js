@@ -87,6 +87,8 @@ function join_sexp(exp) {
       last !== "'"
     )
       result += " ";
+    if (token === "[") token = "(";
+    if (token === "]") token = ")";
     result += token;
     last = token;
   }
