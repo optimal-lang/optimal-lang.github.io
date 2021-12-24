@@ -1,11 +1,14 @@
+function tokenize_regexp() {
+  return /[\s,]*([()\[\]'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|[^\s,()\[\]'"`;@]*)/g;
+  //return new RegExp("[\\s,]*([()\\[\\]'`]|\"(?:\\\\.|[^\\\\\"])*\"|@(?:@@|[^@])*@|;.*|[^\\s,()\\[\\]'\"`;@]*)", "g");
+}
+
 function tokenize(str) {
-  let re = /[\s,]*([()\[\]'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|[^\s,()\[\]'"`;@]*)/g;
+  let re = tokenize_regexp();
   let result = [];
   let token;
   while ((token = re.exec(str)[1]) !== "") {
     if (token[0] === ";") continue;
-    //if (token.match(/^-?[0-9][0-9.]*$/)) token = parseFloat(token, 10);
-    if (isFinite(token)) token = parseFloat(token, 10);
     result.push(token);
   }
   return result;
@@ -56,20 +59,9 @@ function read_sexp(code, exp) {
       token = token.replace(/(@@)/g, "@");
       return ["@", token];
     case "#":
-      switch (token) {
-        case "#null":
-        case "#nil":
-        case "#n":
-          return null;
-        case "#false":
-        case "#f":
-          return false;
-        case "#true":
-        case "#t":
-          return true;
-      }
       return token;
     default:
+      //if (isFinite(token)) return ["@", token];
       return token;
   }
 }
@@ -83,7 +75,8 @@ function join_sexp(exp) {
     if (
       token !== ")" &&
       token !== "]" &&
-      (last !== "(") & (last !== "[") &&
+      last !== "(" &&
+      last !== "[" &&
       last !== "'"
     )
       result += " ";
@@ -95,7 +88,7 @@ function join_sexp(exp) {
   return result;
 }
 
-function code2ary(text) {
+export function code2ary(text: string) {
   let code = tokenize(text);
   let result = [];
   while (true) {
@@ -108,5 +101,3 @@ function code2ary(text) {
   }
   return result;
 }
-
-if (typeof module !== "undefined") module.exports = code2ary;

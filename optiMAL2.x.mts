@@ -1,33 +1,8 @@
-if (typeof module !== "undefined") {
-  var code2ary = require("./code2ary");
-}
+import { code2ary } from "./code2ary.x.mjs";
 
 function /*class*/ Compiler() {}
 
-Compiler.prototype.put_prefix = function(token, prep_steps) {
-  let result;
-  switch (token[0]) {
-    case "!":
-      result = "toplevel." + token.substring(1);
-      break;
-    case "&":
-      result = "glob." + token.substring(1);
-      break;
-    default:
-      return token;
-  }
-  if (prep_steps) {
-    let list = result.split(".");
-    for (let i = 2; i < list.length; i++) {
-      let exp = list.slice(0, i).join(".");
-      let step = "(typeof " + exp + `!=="object"?` + exp + "={}:null)";
-      prep_steps.push(step);
-    }
-  }
-  return result;
-};
-
-Compiler.prototype.compile_body = function(ast, start) {
+Compiler.prototype.compile_body = function (ast, start) {
   if (start === ast.length - 1) return this.compile_ast(ast[start]);
   let result = "(";
   for (let i = start; i < ast.length; i++) {
@@ -37,14 +12,33 @@ Compiler.prototype.compile_body = function(ast, start) {
   return result + ")";
 };
 
-Compiler.prototype.compile_ast = function(ast) {
+Compiler.prototype.compile_ast = function (ast) {
   if (ast === undefined) return "undefined";
   if (!ast) {
     return JSON.stringify(ast);
   }
   if (typeof ast === "string") {
     if (ast.match(/^:.+$/)) return JSON.stringify(ast);
-    return this.put_prefix(ast);
+    if (ast.match(/^#.+$/)) {
+      switch (ast) {
+        case "#null":
+        case "#nil":
+        case "#n":
+          return null;
+        case "#false":
+        case "#f":
+          return false;
+        case "#true":
+        case "#t":
+          return true;
+        case "#undefined":
+        case "#u":
+          return undefined;
+        default:
+          return ast;
+      }
+    }
+    return ast;
   }
   if (!(ast instanceof Array)) {
     return ast.toString();
@@ -62,7 +56,7 @@ Compiler.prototype.compile_ast = function(ast) {
     case "case": {
       let result = "(function(){switch(" + this.compile_ast(ast[1]) + "){";
       let rest = ast.slice(2);
-      rest.forEach(x => {
+      rest.forEach((x) => {
         let val = x[0];
         switch (val) {
           case ":else":
@@ -101,7 +95,7 @@ Compiler.prototype.compile_ast = function(ast) {
     }
     case "cond": {
       let new_ast = [];
-      ast.slice(1).forEach(x => {
+      ast.slice(1).forEach((x) => {
         new_ast.push(x[0]);
         new_ast.push(["_do"].concat(x.slice(1)));
       });
@@ -117,15 +111,12 @@ Compiler.prototype.compile_ast = function(ast) {
       return this.compile_ast(ast[1]) + sign + "=" + val;
     case "def":
     case "def!": {
-      let prep_steps = [];
-      let v = this.put_prefix(ast[1], prep_steps);
-      if (prep_steps.length > 0) {
-        return (
-          prep_steps.join(",") + ",(" + v + "=" + this.compile_ast(ast[2]) + ")"
-        );
-      } else {
-        return v + "=" + this.compile_ast(ast[2]);
-      }
+      let v = ast[1];
+      return "var " + v + "=" + this.compile_ast(ast[2]);
+    }
+    case "set!": {
+      let v = ast[1];
+      return v + "=" + this.compile_ast(ast[2]);
     }
     case "define": {
       if (ast[1] instanceof Array) {
@@ -158,7 +149,7 @@ Compiler.prototype.compile_ast = function(ast) {
       let bind = [
         ["__dotimes_cnt__", ast1[1]],
         ["__dotimes_idx__", 0, ["+", "__dotimes_idx__", 1]],
-        [ast1[0], "__dotimes_idx__", "__dotimes_idx__"]
+        [ast1[0], "__dotimes_idx__", "__dotimes_idx__"],
       ];
       let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"]];
       ast = ["do*", bind, exit].concat(ast.slice(2));
@@ -194,7 +185,7 @@ Compiler.prototype.compile_ast = function(ast) {
       let vars = "(";
       let vals = "(";
       let assigns = "";
-      for (let i in ast[1]) {
+      for (let i = 0; i < ast[1].length; i++) {
         if (i % 2) {
           if (i > 1) vars += ",";
           vars += ast[1][i - 1];
@@ -285,7 +276,7 @@ Compiler.prototype.compile_ast = function(ast) {
   }
 };
 
-Compiler.prototype.insert_op = function(op, rest) {
+Compiler.prototype.insert_op = function (op, rest) {
   let result = [this.compile_ast(rest[0])];
   for (let i = 1; i < rest.length; i++) {
     result.push(op);
@@ -294,7 +285,7 @@ Compiler.prototype.insert_op = function(op, rest) {
   return result.join("");
 };
 
-Compiler.prototype.compile_do = function(ast) {
+Compiler.prototype.compile_do = function (ast) {
   let ast1 = ast[1];
   let parallel = ast[0] === "do";
   let ast1_len = ast1.length;
@@ -335,17 +326,16 @@ Compiler.prototype.compile_do = function(ast) {
 
 var $comp$ = new Compiler();
 
-function optiMAL(toplevel) {
+export function optiMAL(toplevel) {
   let glob = Object.create(toplevel);
-  let $isNode$ = typeof process !== "undefined";
-  glob.compile_ast_d = ast => glob.compile_ast(ast, true);
+  glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
   glob.compile_ast = (ast, debug) => {
     if (debug) console.log(" [AST] " + JSON.stringify(ast));
     let text = $comp$.compile_ast(ast);
     if (debug) console.log("[CODE] " + text);
     return text;
   };
-  glob.compile_d = text => glob.compile(text, true);
+  glob.compile_d = (text) => glob.compile(text, true);
   glob.compile = (text, debug) => {
     let steps = code2ary(text);
     let result = "";
@@ -360,28 +350,13 @@ function optiMAL(toplevel) {
     }
     return result;
   };
-  glob.load_d = path => glob.load(path, true);
-  glob.load = (path, debug) => {
-    let src = null;
-    if ($isNode$) {
-      src = require("fs").readFileSync(path);
-    } else {
-      let request = new XMLHttpRequest();
-      request.open("GET", path, false);
-      request.send(null);
-      if (request.status === 200) {
-        src = request.responseText;
-      }
-    }
-    if (src === null) console.log("Could not read: " + path);
-    return glob.exec(src, debug);
-  };
-  glob.run = exp => glob.exec(exp, true);
-  glob.exec_d = exp => glob.exec(exp, true);
+  glob.run = (exp) => glob.exec(exp, true);
+  glob.exec_d = (exp) => glob.exec(exp, true);
   glob.exec = (exp, debug) => {
     let src = exp;
     let steps = code2ary(src);
     let last;
+    let text;
     for (let step of steps) {
       let exp = step[0];
       let ast = step[1];
@@ -389,7 +364,7 @@ function optiMAL(toplevel) {
       try {
         if (debug) console.log("[LIST] " + exp);
         if (debug) console.log(" [AST] " + JSON.stringify(ast));
-        let text = $comp$.compile_ast(ast);
+        text = $comp$.compile_ast(ast);
         if (debug) console.log("[CODE] " + text);
         let val = eval(text);
         last = val;
@@ -426,13 +401,33 @@ function optiMAL(toplevel) {
         console.log(" [EXCEPTION]");
         if (e.stack) console.log(e.stack);
         else console.log(e);
-        /*if(!debug)*/ throw(e);
+        throw e;
         break;
       }
     }
     return last;
   };
+  glob.compileAll = (exp, debug) => {
+    let src = exp;
+    let steps = code2ary(src);
+    let result = "";
+    for (let step of steps) {
+      let exp = step[0];
+      let ast = step[1];
+      if (debug) console.log("[LIST] " + exp);
+      if (debug) console.log(" [AST] " + JSON.stringify(ast));
+      let text = $comp$.compile_ast(ast);
+      if (debug) console.log("[CODE] " + text);
+      result += text + ";\n";
+    }
+    return result;
+  };
+  glob.execAll = (exp, debug) => {
+    let text = glob.compileAll(exp, debug);
+    return eval(text);
+  };
+  glob.runAll = (exp) => {
+    return glob.execAll(exp, true);
+  };
   return glob;
 }
-
-if (typeof module !== "undefined") module.exports = optiMAL;
