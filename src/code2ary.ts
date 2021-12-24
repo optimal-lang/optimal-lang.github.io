@@ -21,7 +21,11 @@ function read_token(code: Array<string>, exp: Array<string>) {
   return token;
 }
 
-function read_list(code: Array<string>, exp: Array<string>, ch: string): Array<any> {
+function read_list(
+  code: Array<string>,
+  exp: Array<string>,
+  ch: string
+): Array<any> {
   let result = [];
   let ast;
   while ((ast = read_sexp(code, exp)) !== undefined) {
