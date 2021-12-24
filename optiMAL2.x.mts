@@ -141,6 +141,7 @@ Compiler.prototype.compile_ast = function (ast) {
         args += ast[1][i];
       }
       args += ")";
+	  if (ast.length < 3) return "function" + args + "{}";
       return "function" + args + "{return " + this.compile_body(ast, 2) + "}";
     }
     case "dotimes": {
