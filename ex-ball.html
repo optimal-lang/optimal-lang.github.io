@@ -26,8 +26,8 @@ glob.runAll(`
 (define slideX (/ w 2]
 (define slideY (/ h 2]
 (define stars @[]@)
-(define renderer #undefined)
-(define stage #undefined)
+(define renderer)
+(define stage)
 (define (start)
   (let [(ballTexture @new PIXI.Texture.fromImage("bubble_32x32.png")@)]
     (set renderer (@PIXI.autoDetectRenderer@ w h))
