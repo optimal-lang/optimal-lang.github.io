@@ -1,7 +1,5 @@
 import { code2ary } from "./code2ary.x.mjs";
 
-function /*class*/ Compiler() {}
-
 function compile_body(ast, start) {
   if (start === ast.length - 1) return compile_ast(ast[start]);
   let result = "(";

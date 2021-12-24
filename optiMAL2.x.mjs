@@ -1,5 +1,4 @@
 import { code2ary } from "./code2ary.x.mjs";
-function Compiler() { }
 function compile_body(ast, start) {
     if (start === ast.length - 1)
         return compile_ast(ast[start]);
@@ -11,7 +10,6 @@ function compile_body(ast, start) {
     }
     return result + ")";
 }
-;
 function compile_ast(ast) {
     if (ast === undefined)
         return "undefined";
@@ -249,7 +247,7 @@ function compile_ast(ast) {
                 "}})(),null)");
         }
         case "=":
-            return ("(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")");
+            return "(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")";
         case "%":
         case "==":
         case "===":
@@ -259,7 +257,7 @@ function compile_ast(ast) {
         case ">":
         case "<=":
         case ">=":
-            return ("(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")");
+            return "(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")";
         case "+":
         case "-":
         case "*":
@@ -277,7 +275,6 @@ function compile_ast(ast) {
             return fcall;
     }
 }
-;
 function insert_op(op, rest) {
     let result = [compile_ast(rest[0])];
     for (let i = 1; i < rest.length; i++) {
@@ -286,7 +283,6 @@ function insert_op(op, rest) {
     }
     return result.join("");
 }
-;
 function compile_do(ast) {
     let ast1 = ast[1];
     let parallel = ast[0] === "do";
@@ -330,7 +326,6 @@ function compile_do(ast) {
     new_ast.push(ast2[1]);
     return compile_ast(new_ast);
 }
-;
 //var $comp$ = new Compiler();
 export function optiMAL(toplevel) {
     let glob = Object.create(toplevel);
