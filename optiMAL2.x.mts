@@ -2,17 +2,17 @@ import { code2ary } from "./code2ary.x.mjs";
 
 function /*class*/ Compiler() {}
 
-Compiler.prototype.compile_body = function (ast, start) {
-  if (start === ast.length - 1) return this.compile_ast(ast[start]);
+function compile_body(ast, start) {
+  if (start === ast.length - 1) return compile_ast(ast[start]);
   let result = "(";
   for (let i = start; i < ast.length; i++) {
     if (i > start) result += ",";
-    result += this.compile_ast(ast[i]);
+    result += compile_ast(ast[i]);
   }
   return result + ")";
-};
+}
 
-Compiler.prototype.compile_ast = function (ast) {
+function compile_ast(ast) {
   if (ast === undefined) return "undefined";
   if (!ast) {
     return JSON.stringify(ast);
@@ -52,9 +52,9 @@ Compiler.prototype.compile_ast = function (ast) {
     case "begin":
     case "_do":
     case "progn":
-      return this.compile_body(ast, 1);
+      return compile_body(ast, 1);
     case "case": {
-      let result = "(function(){switch(" + this.compile_ast(ast[1]) + "){";
+      let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
       let rest = ast.slice(2);
       rest.forEach((x) => {
         let val = x[0];
@@ -69,7 +69,7 @@ Compiler.prototype.compile_ast = function (ast) {
             if (val instanceof Array && val[0] === "`") val = val[1];
             result += "case " + JSON.stringify(val) + ":";
         }
-        let body = this.compile_body(x, 1);
+        let body = compile_body(x, 1);
         result += "return " + body + ";";
       });
       result += "}return null})()";
@@ -91,7 +91,7 @@ Compiler.prototype.compile_ast = function (ast) {
         return ["if", condition, action, _cond_builder(rest)];
       }
       ast = _cond_builder(ast.slice(1));
-      return this.compile_ast(ast);
+      return compile_ast(ast);
     }
     case "cond": {
       let new_ast = [];
@@ -100,23 +100,23 @@ Compiler.prototype.compile_ast = function (ast) {
         new_ast.push(["_do"].concat(x.slice(1)));
       });
       new_ast.unshift("_cond");
-      return this.compile_ast(new_ast);
+      return compile_ast(new_ast);
     }
     case "dec!":
     case "dec":
     case "inc!":
     case "inc":
       let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
-      let val = ast.length < 3 ? 1 : this.compile_ast(ast[2]);
-      return this.compile_ast(ast[1]) + sign + "=" + val;
+      let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
+      return compile_ast(ast[1]) + sign + "=" + val;
     case "def":
     case "def!": {
       let v = ast[1];
-      return "var " + v + "=" + this.compile_ast(ast[2]);
+      return "var " + v + "=" + compile_ast(ast[2]);
     }
     case "set!": {
       let v = ast[1];
-      return v + "=" + this.compile_ast(ast[2]);
+      return v + "=" + compile_ast(ast[2]);
     }
     case "define": {
       if (ast[1] instanceof Array) {
@@ -124,14 +124,14 @@ Compiler.prototype.compile_ast = function (ast) {
         new_ast.unshift(ast[1].slice(1));
         new_ast.unshift("fn");
         new_ast = ["def", ast[1][0], new_ast];
-        return this.compile_ast(new_ast);
+        return compile_ast(new_ast);
       } else {
-        return this.compile_ast(["def", ast[1], ast[2]]);
+        return compile_ast(["def", ast[1], ast[2]]);
       }
     }
     case "do":
     case "do*":
-      return this.compile_do(ast);
+      return compile_do(ast);
     case "fn":
     case "fn*":
     case "lambda": {
@@ -142,7 +142,7 @@ Compiler.prototype.compile_ast = function (ast) {
       }
       args += ")";
       if (ast.length < 3) return "function" + args + "{}";
-      return "function" + args + "{return " + this.compile_body(ast, 2) + "}";
+      return "function" + args + "{return " + compile_body(ast, 2) + "}";
     }
     case "dotimes": {
       let ast1 = ast[1];
@@ -154,16 +154,16 @@ Compiler.prototype.compile_ast = function (ast) {
       ];
       let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"]];
       ast = ["do*", bind, exit].concat(ast.slice(2));
-      return this.compile_ast(ast);
+      return compile_ast(ast);
     }
     case "if":
       return (
         "(" +
-        this.compile_ast(ast[1]) +
+        compile_ast(ast[1]) +
         "?" +
-        this.compile_ast(ast[2]) +
+        compile_ast(ast[2]) +
         ":" +
-        this.compile_body(ast, 3) +
+        compile_body(ast, 3) +
         ")"
       );
     case "let":
@@ -179,7 +179,7 @@ Compiler.prototype.compile_ast = function (ast) {
           new_ast1.push(x[1]);
         }
       }
-      return this.compile_ast(["_" + ast[0], new_ast1].concat(ast.slice(2)));
+      return compile_ast(["_" + ast[0], new_ast1].concat(ast.slice(2)));
     }
     case "_let":
     case "_let*": {
@@ -190,7 +190,7 @@ Compiler.prototype.compile_ast = function (ast) {
         if (i % 2) {
           if (i > 1) vars += ",";
           vars += ast[1][i - 1];
-          let val = this.compile_ast(ast[1][i]);
+          let val = compile_ast(ast[1][i]);
           if (i > 1) vals += ",";
           vals += val;
           assigns += ast[1][i - 1] + "=" + val + ";";
@@ -203,7 +203,7 @@ Compiler.prototype.compile_ast = function (ast) {
           "((function" +
           vars +
           "{return " +
-          this.compile_body(ast, 2) +
+          compile_body(ast, 2) +
           "})" +
           vals +
           ")"
@@ -215,39 +215,36 @@ Compiler.prototype.compile_ast = function (ast) {
           "{" +
           assigns +
           "return " +
-          this.compile_body(ast, 2) +
+          compile_body(ast, 2) +
           "})())"
         );
     }
     case "set!":
     case "set":
-      return this.compile_ast(ast[1]) + "=" + this.compile_ast(ast[2]);
+      return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
     case "throw": {
-      return "(function(){throw " + this.compile_ast(ast[1]) + "})()";
+      return "(function(){throw " + compile_ast(ast[1]) + "})()";
     }
     case "try": {
-      let result =
-        "(function(){try{return " + this.compile_ast(ast[1]) + "}catch(";
-      result += ast[2][1] + "){return " + this.compile_body(ast[2], 2) + "}";
+      let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
+      result += ast[2][1] + "){return " + compile_body(ast[2], 2) + "}";
       result += "})()";
       return result;
     }
     case "until":
     case "while": {
-      let condition = this.compile_ast(ast[1]);
+      let condition = compile_ast(ast[1]);
       if (ast[0] === "until") condition = "!" + condition;
       return (
         "((function(){while(" +
         condition +
         "){" +
-        this.compile_body(ast, 2) +
+        compile_body(ast, 2) +
         "}})(),null)"
       );
     }
     case "=":
-      return (
-        "(" + this.compile_ast(ast[1]) + "===" + this.compile_ast(ast[2]) + ")"
-      );
+      return "(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")";
     case "%":
     case "==":
     case "===":
@@ -257,36 +254,34 @@ Compiler.prototype.compile_ast = function (ast) {
     case ">":
     case "<=":
     case ">=":
-      return (
-        "(" + this.compile_ast(ast[1]) + ast[0] + this.compile_ast(ast[2]) + ")"
-      );
+      return "(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")";
     case "+":
     case "-":
     case "*":
     case "/": {
-      return "(" + this.insert_op(ast[0], ast.slice(1)) + ")";
+      return "(" + insert_op(ast[0], ast.slice(1)) + ")";
     }
     default:
-      let fcall = this.compile_ast(ast[0]) + "(";
+      let fcall = compile_ast(ast[0]) + "(";
       for (let i = 1; i < ast.length; i++) {
         if (i > 1) fcall += ",";
-        fcall += this.compile_ast(ast[i]);
+        fcall += compile_ast(ast[i]);
       }
       fcall += ")";
       return fcall;
   }
-};
+}
 
-Compiler.prototype.insert_op = function (op, rest) {
-  let result = [this.compile_ast(rest[0])];
+function insert_op(op, rest) {
+  let result = [compile_ast(rest[0])];
   for (let i = 1; i < rest.length; i++) {
     result.push(op);
-    result.push(this.compile_ast(rest[i]));
+    result.push(compile_ast(rest[i]));
   }
   return result.join("");
-};
+}
 
-Compiler.prototype.compile_do = function (ast) {
+function compile_do(ast) {
   let ast1 = ast[1];
   let parallel = ast[0] === "do";
   let ast1_len = ast1.length;
@@ -322,17 +317,17 @@ Compiler.prototype.compile_do = function (ast) {
   }
   let new_ast = [parallel ? "_let" : "_let*", ast1_vars].concat([until_ast]);
   new_ast.push(ast2[1]);
-  return this.compile_ast(new_ast);
-};
+  return compile_ast(new_ast);
+}
 
-var $comp$ = new Compiler();
+//var $comp$ = new Compiler();
 
 export function optiMAL(toplevel) {
   let glob = Object.create(toplevel);
   glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
   glob.compile_ast = (ast, debug) => {
     if (debug) console.log(" [AST] " + JSON.stringify(ast));
-    let text = $comp$.compile_ast(ast);
+    let text = compile_ast(ast);
     if (debug) console.log("[CODE] " + text);
     return text;
   };
@@ -345,7 +340,7 @@ export function optiMAL(toplevel) {
       let ast = step[1];
       if (debug) console.log("[LIST] " + exp);
       if (debug) console.log(" [AST] " + JSON.stringify(ast));
-      let text = $comp$.compile_ast(ast);
+      let text = compile_ast(ast);
       if (debug) console.log("[CODE] " + text);
       result += text + ";\n";
     }
@@ -365,7 +360,7 @@ export function optiMAL(toplevel) {
       try {
         if (debug) console.log("[LIST] " + exp);
         if (debug) console.log(" [AST] " + JSON.stringify(ast));
-        text = $comp$.compile_ast(ast);
+        text = compile_ast(ast);
         if (debug) console.log("[CODE] " + text);
         let val = eval(text);
         last = val;
@@ -417,7 +412,7 @@ export function optiMAL(toplevel) {
       let ast = step[1];
       if (debug) console.log("[LIST] " + exp);
       if (debug) console.log(" [AST] " + JSON.stringify(ast));
-      let text = $comp$.compile_ast(ast);
+      let text = compile_ast(ast);
       if (debug) console.log("[CODE] " + text);
       result += text + ";\n";
     }
