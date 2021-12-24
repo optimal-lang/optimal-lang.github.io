@@ -1,0 +1,92 @@
+import { code2ary } from "./code2ary";
+import { optiMAL } from "./optiMAL2";
+var glob = optiMAL(globalThis);
+glob.runAll(`
+(define (dummy))
+(dummy)
+(define (dummy) (console.log "dummy!"))
+(dummy)
+            (define w 1024)
+            (set! w 2048)
+            (define h 768)
+            (define (myLog x)
+             (let ((y 123)(z 777)zz)
+              (set! z 888)
+              (set! zz 999)
+              (console.log x)
+              (console.log y)
+              (console.log z)
+              (console.log zz)
+             )
+            )
+            (myLog w)
+            (define (myFunc)
+             (let* ((x 123) (y (+ x 1)))
+              (console.log y)
+             )
+            )
+            (myFunc)
+            `);
+console.log("this is main.js!");
+var ary = code2ary(`
+             (define w 1024)
+             (define h 768)
+             (define starCount 2500)
+             ; (define sx (+ 1.0 (/ @Math.random()@ 20]
+             ; (define sy (+ 1.0 (/ @Math.random()@ 20]
+                                   (define sx 1.0445291344952077)
+                                   (define sy 1.037120924078791)
+                                   (define slideX (/ w 2]
+                                    (define slideY (/ h 2]
+                                     (define stars @[]@)
+                                     (define (start)
+                                      (let [(ballTexture @new PIXI.Texture.fromImage("bubble_32x32.png")@] ; [(ballTexture @new PIXI.Texture.fromImage("freewares64.png")@]
+                                              (set renderer (@PIXI.autoDetectRenderer@ w h))
+                                              (set stage @new PIXI.Stage@)
+                                              (document.body.appendChild renderer.view)
+                                              [dotimes (i starCount)
+                                                      (let [(tempBall @new PIXI.Sprite(ballTexture)@]
+                                                              @tempBall.position.x = (Math.random() * w) - slideX@
+                                                                      @tempBall.position.y = (Math.random() * h) - slideY@
+                                                                              @tempBall.anchor.x = 0.5@
+                                                                                      @tempBall.anchor.y = 0.5@
+                                                                                              @stars.push({ sprite: tempBall, x: tempBall.position.x, y: tempBall.position.y })@
+                                                                                              @stage.addChild(tempBall)@]
+                                                              @document.getElementById('rnd').onclick = newWave@
+                                                                      @document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy@
+                                                                              (resize)
+                                                                              (requestAnimFrame update)]
+                                                      (define (newWave)
+                                                              @sx = 1.0 + (Math.random() / 20)@
+                                                                      @sy = 1.0 + (Math.random() / 20)@
+                                                                              @$('#sx').html('SX: ' + sx + '<br />SY: ' + sy)@
+                                                                              ; @document.getElementById('sx').innerHTML = 'SX: ' + sx + '<br />SY: ' + sy@
+                                                      ]
+                                                      (define (resize)
+                                                              (let* ([w (- @$(window).width()@ 32]
+                                                                      [h (- @$(window).height()@ 132]
+                                                                              [slideX (/ w 2]
+                                                                                      [slideY (/ h 2])
+                                                                                      (renderer.resize w h)]
+                                                                              (define (update)
+                                                                                      (dotimes (i starCount)
+                                                                                              (set @stars[i].sprite.position.x@ (+ @stars[i].x@ slideX))
+                                                                                              (set @stars[i].sprite.position.y@ (+ @stars[i].y@ slideY))
+                                                                                              (set @stars[i].x@ (* @stars[i].x@ sx))
+                                                                                              (set @stars[i].y@ (* @stars[i].y@ sy))
+                                                                                              (cond
+                                                                                                      [(> @stars[i].x@ w) (set @stars[i].x@ (- @stars[i].x@ w))]
+                                                                                                      [(< @stars[i].x@ (* -1 w)) (set @stars[i].x@ (+ @stars[i].x@ w))])
+                                                                                              (cond
+                                                                                                      [(> @stars[i].y@ h) (set @stars[i].y@ (- @stars[i].y@ h))]
+                                                                                                      [(< @stars[i].y@ (* -1 h)) (set @stars[i].y@ (+ @stars[i].y@ h))])
+                                                                                      )
+                                                                                      (renderer.render stage)
+                                                                                      (requestAnimFrame update)]
+                                                                              (@$(window).resize@ resize)
+                                                                              (set window.onorientationchange resize)
+                                                                              (document.addEventListener "DOMContentLoaded", start, #false)
+                                                                              `);
+for (var e of ary) {
+  console.log(e);
+}

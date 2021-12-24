@@ -3,25 +3,25 @@ function tokenize_regexp() {
   //return new RegExp("[\\s,]*([()\\[\\]'`]|\"(?:\\\\.|[^\\\\\"])*\"|@(?:@@|[^@])*@|;.*|[^\\s,()\\[\\]'\"`;@]*)", "g");
 }
 
-function tokenize(str) {
+function tokenize(str: string) {
   let re = tokenize_regexp();
   let result = [];
   let token;
-  while ((token = re.exec(str)[1]) !== "") {
+  while ((token = re.exec(str)![1]) !== "") {
     if (token[0] === ";") continue;
     result.push(token);
   }
   return result;
 }
 
-function read_token(code, exp) {
+function read_token(code: Array<string>, exp: Array<string>) {
   if (code.length === 0) return undefined;
   let token = code.shift();
-  exp.push(token);
+  exp.push(token!);
   return token;
 }
 
-function read_list(code, exp, ch) {
+function read_list(code: Array<string>, exp: Array<string>, ch: string): Array<any> {
   let result = [];
   let ast;
   while ((ast = read_sexp(code, exp)) !== undefined) {
@@ -36,7 +36,7 @@ function read_list(code, exp, ch) {
   return result;
 }
 
-function read_sexp(code, exp) {
+function read_sexp(code: Array<string>, exp: Array<string>): any {
   let token = read_token(code, exp);
   if (token === undefined) return undefined;
   let ch = token[0];
@@ -66,7 +66,7 @@ function read_sexp(code, exp) {
   }
 }
 
-function join_sexp(exp) {
+function join_sexp(exp: Array<string>) {
   if (exp.length === 0) return "";
   let last = exp.shift();
   let result = "" + last;
@@ -92,7 +92,7 @@ export function code2ary(text: string) {
   let code = tokenize(text);
   let result = [];
   while (true) {
-    let exp = [];
+    let exp: Array<string> = [];
     let ast = read_sexp(code, exp);
     if (ast === undefined) break;
     if (ast === ")") continue;

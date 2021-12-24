@@ -1,6 +1,6 @@
-import { code2ary } from "./code2ary.x.mjs";
+import { code2ary } from "./code2ary";
 
-function compile_body(ast, start) {
+function compile_body(ast: Array<any>, start: number): string {
   if (start === ast.length - 1) return compile_ast(ast[start]);
   let result = "(";
   for (let i = start; i < ast.length; i++) {
@@ -10,7 +10,7 @@ function compile_body(ast, start) {
   return result + ")";
 }
 
-function compile_ast(ast) {
+function compile_ast(ast: any): string {
   if (ast === undefined) return "undefined";
   if (!ast) {
     return JSON.stringify(ast);
@@ -22,16 +22,16 @@ function compile_ast(ast) {
         case "#null":
         case "#nil":
         case "#n":
-          return null;
+          return "null";
         case "#false":
         case "#f":
-          return false;
+          return "false";
         case "#true":
         case "#t":
-          return true;
+          return "true";
         case "#undefined":
         case "#u":
-          return undefined;
+          return "undefined";
         default:
           return ast;
       }
@@ -41,7 +41,7 @@ function compile_ast(ast) {
   if (!(ast instanceof Array)) {
     return ast.toString();
   }
-  if (ast.length === 0) return ast;
+  if (ast.length === 0) return "[]"; //return ast;
   switch (ast[0]) {
     case "`":
       return JSON.stringify(ast[1]);
@@ -74,7 +74,7 @@ function compile_ast(ast) {
       return result;
     }
     case "_cond": {
-      function _cond_builder(rest) {
+      function _cond_builder(rest: Array<any>): any {
         if (rest.length === 0) return null;
         let condition = rest.shift();
         let action = rest.shift();
@@ -270,7 +270,7 @@ function compile_ast(ast) {
   }
 }
 
-function insert_op(op, rest) {
+function insert_op(op: string, rest: Array<any>) {
   let result = [compile_ast(rest[0])];
   for (let i = 1; i < rest.length; i++) {
     result.push(op);
@@ -279,7 +279,7 @@ function insert_op(op, rest) {
   return result.join("");
 }
 
-function compile_do(ast) {
+function compile_do(ast: any): string {
   let ast1 = ast[1];
   let parallel = ast[0] === "do";
   let ast1_len = ast1.length;
@@ -288,7 +288,7 @@ function compile_do(ast) {
     ast1_vars.push("__do__");
     ast1_vars.push(["@", "new Array(" + ast1_len + ").fill(null)"]);
   }
-  ast1.forEach((x, i) => {
+  ast1.forEach((x: any, i: number) => {
     ast1_vars.push(x[0]);
     ast1_vars.push(x[1]);
   });
@@ -296,18 +296,18 @@ function compile_do(ast) {
   if (ast2.length < 2) ast2 = [ast2[0], null];
   let until_ast = ["until", ast2[0]].concat(ast.slice(3));
   if (parallel) {
-    ast1.forEach((x, i) => {
+    ast1.forEach((x: any, i: number) => {
       if (x.length < 3) return;
       let next_step = ["set!", ["@", "__do__[" + i + "]"], x[2]];
       until_ast.push(next_step);
     });
-    ast1.forEach((x, i) => {
+    ast1.forEach((x: any, i: number) => {
       if (x.length < 3) return;
       let next_step = ["set!", x[0], ["@", "__do__[" + i + "]"]];
       until_ast.push(next_step);
     });
   } else {
-    ast1.forEach((x, i) => {
+    ast1.forEach((x: any, i: number) => {
       if (x.length < 3) return;
       let next_step = ["set!", x[0], x[2]];
       until_ast.push(next_step);
@@ -320,17 +320,17 @@ function compile_do(ast) {
 
 //var $comp$ = new Compiler();
 
-export function optiMAL(toplevel) {
+export function optiMAL(toplevel: any) {
   let glob = Object.create(toplevel);
-  glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
-  glob.compile_ast = (ast, debug) => {
+  glob.compile_ast_d = (ast: any) => glob.compile_ast(ast, true);
+  glob.compile_ast = (ast: any, debug: boolean) => {
     if (debug) console.log(" [AST] " + JSON.stringify(ast));
     let text = compile_ast(ast);
     if (debug) console.log("[CODE] " + text);
     return text;
   };
-  glob.compile_d = (text) => glob.compile(text, true);
-  glob.compile = (text, debug) => {
+  glob.compile_d = (text: string) => glob.compile(text, true);
+  glob.compile = (text: string, debug: boolean) => {
     let steps = code2ary(text);
     let result = "";
     for (let step of steps) {
@@ -344,13 +344,13 @@ export function optiMAL(toplevel) {
     }
     return result;
   };
-  glob.run = (exp) => glob.exec(exp, true);
-  glob.exec_d = (exp) => glob.exec(exp, true);
-  glob.exec = (exp, debug) => {
+  glob.run = (exp: string) => glob.exec(exp, true);
+  glob.exec_d = (exp: string) => glob.exec(exp, true);
+  glob.exec = (exp: string, debug: boolean) => {
     let src = exp;
     let steps = code2ary(src);
     let last;
-    let text;
+    let text: string = "";
     for (let step of steps) {
       let exp = step[0];
       let ast = step[1];
@@ -388,7 +388,7 @@ export function optiMAL(toplevel) {
             console.log("==> " + output + " (" + (tm2 - tm1) + " ms)");
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         if (!debug) console.log("[LIST] " + exp);
         if (!debug) console.log(" [AST] " + JSON.stringify(ast));
         if (!debug) console.log("[CODE] " + text);
@@ -401,7 +401,7 @@ export function optiMAL(toplevel) {
     }
     return last;
   };
-  glob.compileAll = (exp, debug) => {
+  glob.compileAll = (exp: string, debug: boolean) => {
     let src = exp;
     let steps = code2ary(src);
     let result = "";
@@ -416,11 +416,11 @@ export function optiMAL(toplevel) {
     }
     return result;
   };
-  glob.execAll = (exp, debug) => {
+  glob.execAll = (exp: string, debug: boolean) => {
     let text = glob.compileAll(exp, debug);
     return eval(text);
   };
-  glob.runAll = (exp) => {
+  glob.runAll = (exp: string) => {
     return glob.execAll(exp, true);
   };
   return glob;
