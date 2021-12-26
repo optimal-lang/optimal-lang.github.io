@@ -292,7 +292,7 @@ function compile_do(ast) {
         ast1_vars.push("__do__");
         ast1_vars.push(["@", "new Array(" + ast1_len + ").fill(null)"]);
     }
-    ast1.forEach((x, i) => {
+    ast1.forEach((x) => {
         ast1_vars.push(x[0]);
         ast1_vars.push(x[1]);
     });
@@ -315,7 +315,7 @@ function compile_do(ast) {
         });
     }
     else {
-        ast1.forEach((x, i) => {
+        ast1.forEach((x) => {
             if (x.length < 3)
                 return;
             let next_step = ["set!", x[0], x[2]];

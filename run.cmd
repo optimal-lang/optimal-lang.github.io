@@ -1,4 +1,7 @@
-call npm run-script build
-start npm run-script serve
+call build.cmd
+if not "%ERRORLEVEL%"  == "0" (
+  exit /b 1
+)
+start http-server
 sleep 6
-start http://127.0.0.1:8080/ex-ball.html
+start %USERPROFILE%\scoop\apps\googlechrome-dev\current\chrome.exe --incognito http://localhost:8080/ex-ball.html
