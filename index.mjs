@@ -8,4 +8,5 @@ glob.runAll(`
 (console.log (+ x y]
 [let ((a 33) (b 44)) (console.log (+ a b]
 [let* ((a 55) (b (+ 1 a))) (console.log (list a b]
+[let* [(a 55) (b (+ 1 a] (console.log (list a b]
 `); // glob.runAll(
