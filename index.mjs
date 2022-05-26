@@ -9,4 +9,13 @@ glob.runAll(`
 [let ((a 33) (b 44)) (console.log (+ a b]
 [let* ((a 55) (b (+ 1 a))) (console.log (list a b]
 [let* [(a 55) (b (+ 1 a] (console.log (list a b]
+(define (fact n)
+  (let ((factorial 1.0))
+    (if (< n 0)
+        -1
+      (begin
+        [dotimes (i n)
+          (set! factorial (* factorial (+ 1 i]
+        factorial]
+(console.log (fact 4))
 `); // glob.runAll(
