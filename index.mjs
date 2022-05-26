@@ -24,4 +24,6 @@ glob.runAll(`
       ((< x n) result)
       (set! result (* result n))))
 (console.log (fact2 4))
-      `); // glob.runAll(
+(console.log (&& (< 2 4) (< 3 4]
+(console.log (&& (< 2 4) (> 3 4]
+    `); // glob.runAll(

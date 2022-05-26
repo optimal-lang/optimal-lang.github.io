@@ -268,9 +268,14 @@ function compile_ast(ast) {
         case "<=":
         case ">=":
             return "(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")";
+        case "&&":
+        case "||":
+        case "&":
+        case "|":
         case "+":
         case "-":
         case "*":
+        case "**":
         case "/": {
             return "(" + insert_op(ast[0], ast.slice(1)) + ")";
         }
