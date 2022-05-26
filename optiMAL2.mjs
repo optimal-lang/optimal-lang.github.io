@@ -16,28 +16,15 @@ function compile_ast(ast) {
     if (!ast) {
         return JSON.stringify(ast);
     }
+    /*
+    if (typeof ast === "number") {
+        console.log("number");
+        return "" + ast;
+    }
+    */
     if (typeof ast === "string") {
-        if (ast.match(/^:.+$/))
+        if (ast.match(/^:.+$/) || ast.match(/^#.+$/))
             return JSON.stringify(ast);
-        if (ast.match(/^#.+$/)) {
-            switch (ast) {
-                case "#null":
-                case "#nil":
-                case "#n":
-                    return "null";
-                case "#false":
-                case "#f":
-                    return "false";
-                case "#true":
-                case "#t":
-                    return "true";
-                case "#undefined":
-                case "#u":
-                    return "undefined";
-                default:
-                    return ast;
-            }
-        }
         return ast;
     }
     if (!(ast instanceof Array)) {
@@ -115,7 +102,8 @@ function compile_ast(ast) {
         case "def":
         case "def!": {
             let v = ast[1];
-            return "var " + v + "=" + compile_ast(ast[2]);
+            //return "var " + v + "=" + compile_ast(ast[2]);
+            return "let " + v + "=" + compile_ast(ast[2]);
         }
         case "set!": {
             let v = ast[1];
@@ -223,6 +211,28 @@ function compile_ast(ast) {
                     compile_body(ast, 2) +
                     "})())");
         }
+        case "list": {
+            let result = "[";
+            for (let i=1; i<ast.length; i++) {
+                if (i>1) result += ",";
+                //console.log(ast[i]);
+                //console.log(typeof ast[i] === "number");
+                result += compile_ast(ast[i]);
+            }
+            result += "]";
+            return result;
+        }
+        case "dict": {
+            let result = "{";
+            for (let i=1; i<ast.length; i+=2) {
+                if (i>1) result += ",";
+                result += compile_ast(ast[i]);
+                result += ":";
+                result += compile_ast(ast[i+1]);
+            }
+            result += "}";
+            return result;
+        }
         case "set!":
         case "set":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
@@ -276,6 +286,8 @@ function compile_ast(ast) {
     }
 }
 function insert_op(op, rest) {
+    if (rest.length === 1)
+        return op + compile_ast(rest[0]);
     let result = [compile_ast(rest[0])];
     for (let i = 1; i < rest.length; i++) {
         result.push(op);
