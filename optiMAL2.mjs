@@ -302,7 +302,8 @@ function compile_do(ast) {
     let ast1_vars = [];
     if (parallel) {
         ast1_vars.push("__do__");
-        ast1_vars.push(["@", "new Array(" + ast1_len + ").fill(null)"]);
+        //ast1_vars.push(["@", "new Array(" + ast1_len + ").fill(null)"]);
+        ast1_vars.push("new Array(" + ast1_len + ").fill(null)");
     }
     ast1.forEach((x) => {
         ast1_vars.push(x[0]);
@@ -316,13 +317,15 @@ function compile_do(ast) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = ["set!", ["@", "__do__[" + i + "]"], x[2]];
+            //let next_step = ["set!", ["@", "__do__[" + i + "]"], x[2]];
+            let next_step = ["set!", "__do__[" + i + "]", x[2]];
             until_ast.push(next_step);
         });
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = ["set!", x[0], ["@", "__do__[" + i + "]"]];
+            //let next_step = ["set!", x[0], ["@", "__do__[" + i + "]"]];
+            let next_step = ["set!", x[0], "__do__[" + i + "]"];
             until_ast.push(next_step);
         });
     }

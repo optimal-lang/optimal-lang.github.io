@@ -18,4 +18,9 @@ glob.runAll(`
           (set! factorial (* factorial (+ 1 i]
         factorial]
 (console.log (fact 4))
-`); // glob.runAll(
+(define (fact2 x)
+  (do ((n 2 (+ 1 n)) (result 1))
+      ((< x n) result)
+      (set! result (* result n))))
+(console.log (fact2 4))
+      `); // glob.runAll(
