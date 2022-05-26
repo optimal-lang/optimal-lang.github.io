@@ -3,6 +3,7 @@ var glob = optiMAL(window);
 glob.runAll(`
 (console.log "ハロー©")
 [dotimes (i 3) (console.log i]
+[dotimes (i 3) (dotimes (j 2) (console.log (list i j]
 (define x 11)
 (define y 22)
 (console.log (+ x y]
