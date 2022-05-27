@@ -43,3 +43,20 @@ Deno.test("01B", () => {
   console.log(v1);
   assert(v1 == 2);
 });
+
+Deno.test("01B", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define x 123)
+    (case x
+      [ -1
+        (console.log "(case1)")
+        1 ]
+      [ :else
+        (console.log "(case2)")
+        2 ]
+    ]
+  `);
+  console.log(v1);
+  assert(v1 == 2);
+});

@@ -85,9 +85,9 @@ function compile_ast(ast) {
             return compile_ast(new_ast);
         }
         case "dec!":
-        case "dec":
+        //case "dec":
         case "inc!":
-        case "inc":
+        //case "inc":
             let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
             let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
             return compile_ast(ast[1]) + sign + "=" + val;
