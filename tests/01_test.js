@@ -136,6 +136,20 @@ Deno.test("01H", () => {
 });
 
 Deno.test("01I", () => {
+  var v1;
+  try {
+    var glob = optiMAL(window);
+    v1 = glob.runAll(`
+      (throw 123)
+    `);
+  } catch(ex) {
+    v1 = ex + 1
+  }
+  console.log(v1);
+  assertEquals(v1, 124);
+});
+
+Deno.test("01J", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define (fact x)
