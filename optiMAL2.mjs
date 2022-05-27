@@ -16,12 +16,6 @@ function compile_ast(ast) {
     if (!ast) {
         return JSON.stringify(ast);
     }
-    /*
-    if (typeof ast === "number") {
-        console.log("number");
-        return "" + ast;
-    }
-    */
     if (typeof ast === "string") {
         if (ast.match(/^:.+$/) || ast.match(/^#.+$/))
             return JSON.stringify(ast);
@@ -38,8 +32,6 @@ function compile_ast(ast) {
         case "@":
             return ast[1];
         case "begin":
-        case "_do":
-        case "progn":
             return compile_body(ast, 1);
         case "case": {
             let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
@@ -87,7 +79,7 @@ function compile_ast(ast) {
             let new_ast = [];
             ast.slice(1).forEach((x) => {
                 new_ast.push(x[0]);
-                new_ast.push(["_do"].concat(x.slice(1)));
+                new_ast.push(["begin"].concat(x.slice(1)));
             });
             new_ast.unshift("_cond");
             return compile_ast(new_ast);
@@ -213,8 +205,8 @@ function compile_ast(ast) {
         }
         case "list": {
             let result = "[";
-            for (let i=1; i<ast.length; i++) {
-                if (i>1) result += ",";
+            for (let i = 1; i < ast.length; i++) {
+                if (i > 1) result += ",";
                 //console.log(ast[i]);
                 //console.log(typeof ast[i] === "number");
                 result += compile_ast(ast[i]);
@@ -224,11 +216,11 @@ function compile_ast(ast) {
         }
         case "dict": {
             let result = "{";
-            for (let i=1; i<ast.length; i+=2) {
-                if (i>1) result += ",";
+            for (let i = 1; i < ast.length; i += 2) {
+                if (i > 1) result += ",";
                 result += compile_ast(ast[i]);
                 result += ":";
-                result += compile_ast(ast[i+1]);
+                result += compile_ast(ast[i + 1]);
             }
             result += "}";
             return result;
