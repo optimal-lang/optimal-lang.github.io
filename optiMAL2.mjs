@@ -95,10 +95,6 @@ function compile_ast(ast) {
             //return "var " + v + "=" + compile_ast(ast[2]);
             return "let " + v + "=" + compile_ast(ast[2]);
         }
-        case "set!": {
-            let v = ast[1];
-            return v + "=" + compile_ast(ast[2]);
-        }
         case "define": {
             if (ast[1] instanceof Array) {
                 let new_ast = ast.slice(2);
@@ -223,7 +219,6 @@ function compile_ast(ast) {
             return result;
         }
         case "set!":
-        case "set": // used by ex-ball.html
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
             return "(function(){throw " + compile_ast(ast[1]) + "})()";

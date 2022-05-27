@@ -29,8 +29,8 @@ glob.runAll(`
 (define stage)
 (define (start)
   (let [(ballTexture @new PIXI.Texture.fromImage("bubble_32x32.png")@)]
-    (set renderer (@PIXI.autoDetectRenderer@ w h))
-    (set stage @new PIXI.Stage@)
+    (set! renderer (@PIXI.autoDetectRenderer@ w h))
+    (set! stage @new PIXI.Stage@)
     (document.body.appendChild renderer.view)
     [dotimes (i starCount)
       (let [(tempBall @new PIXI.Sprite(ballTexture)@]
@@ -58,21 +58,21 @@ glob.runAll(`
     (renderer.resize w h)]
 (define (update)
   (dotimes (i starCount)
-    (set @stars[i].sprite.position.x@ (+ @stars[i].x@ slideX))
-    (set @stars[i].sprite.position.y@ (+ @stars[i].y@ slideY))
-    (set @stars[i].x@ (* @stars[i].x@ sx))
-    (set @stars[i].y@ (* @stars[i].y@ sy))
+    (set! @stars[i].sprite.position.x@ (+ @stars[i].x@ slideX))
+    (set! @stars[i].sprite.position.y@ (+ @stars[i].y@ slideY))
+    (set! @stars[i].x@ (* @stars[i].x@ sx))
+    (set! @stars[i].y@ (* @stars[i].y@ sy))
     (cond
-      [(> @stars[i].x@ w) (set @stars[i].x@ (- @stars[i].x@ w))]
-      [(< @stars[i].x@ (* -1 w)) (set @stars[i].x@ (+ @stars[i].x@ w))])
+      [(> @stars[i].x@ w) (set! @stars[i].x@ (- @stars[i].x@ w))]
+      [(< @stars[i].x@ (* -1 w)) (set! @stars[i].x@ (+ @stars[i].x@ w))])
     (cond
-      [(> @stars[i].y@ h) (set @stars[i].y@ (- @stars[i].y@ h))]
-      [(< @stars[i].y@ (* -1 h)) (set @stars[i].y@ (+ @stars[i].y@ h))])
+      [(> @stars[i].y@ h) (set! @stars[i].y@ (- @stars[i].y@ h))]
+      [(< @stars[i].y@ (* -1 h)) (set! @stars[i].y@ (+ @stars[i].y@ h))])
    )
   (renderer.render stage)
   (requestAnimFrame update)]
 (@$(window).resize@ resize)
-(set window.onorientationchange resize)
+(set! window.onorientationchange resize)
 (document.addEventListener "DOMContentLoaded", start, #false)
 `); // glob.RUN(
 </script>
