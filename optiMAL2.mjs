@@ -25,7 +25,7 @@ function compile_ast(ast) {
         return ast.toString();
     }
     if (ast.length === 0)
-        return "[]"; //return ast;
+        return "[]";
     switch (ast[0]) {
         case "`":
             return JSON.stringify(ast[1]);
@@ -85,9 +85,7 @@ function compile_ast(ast) {
             return compile_ast(new_ast);
         }
         case "dec!":
-        //case "dec":
         case "inc!":
-        //case "inc":
             let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
             let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
             return compile_ast(ast[1]) + sign + "=" + val;
@@ -117,7 +115,6 @@ function compile_ast(ast) {
         case "do*":
             return compile_do(ast);
         case "fn":
-        case "fn*":
         case "lambda": {
             let args = "(";
             for (let i = 0; i < ast[1].length; i++) {
@@ -132,7 +129,9 @@ function compile_ast(ast) {
         }
         case "dotimes": {
             let ast1 = ast[1];
-            if (ast1.length < 2)
+            if (!(ast1 instanceof Array))
+                ast1 = ["__dotimes__", ast1];
+            else if (ast1.length < 2)
                 ast1 = ["__dotimes__", ast1[0]];
             let bind = [
                 ["__dotimes_cnt__", ast1[1]],
@@ -207,8 +206,6 @@ function compile_ast(ast) {
             let result = "[";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1) result += ",";
-                //console.log(ast[i]);
-                //console.log(typeof ast[i] === "number");
                 result += compile_ast(ast[i]);
             }
             result += "]";
@@ -226,7 +223,7 @@ function compile_ast(ast) {
             return result;
         }
         case "set!":
-        case "set":
+        case "set": // used by ex-ball.html
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
             return "(function(){throw " + compile_ast(ast[1]) + "})()";

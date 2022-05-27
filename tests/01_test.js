@@ -44,7 +44,7 @@ Deno.test("01B", () => {
   assert(v1 == 2);
 });
 
-Deno.test("01B", () => {
+Deno.test("01C", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define x 123)
@@ -59,4 +59,30 @@ Deno.test("01B", () => {
   `);
   console.log(v1);
   assert(v1 == 2);
+});
+
+Deno.test("01D", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '())
+    (dotimes (3)
+      @list.push(1)@
+      )
+    list
+  `);
+  console.log(v1);
+  assertEquals(v1, [1,1,1]);
+});
+
+Deno.test("01E", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '())
+    (dotimes 3
+      @list.push(1)@
+      )
+    list
+  `);
+  console.log(v1);
+  assertEquals(v1, [1,1,1]);
 });
