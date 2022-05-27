@@ -86,3 +86,16 @@ Deno.test("01E", () => {
   console.log(v1);
   assertEquals(v1, [1,1,1]);
 });
+
+Deno.test("01F", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '())
+    (dotimes (i 3)
+      @list.push(i)@
+      )
+    list
+  `);
+  console.log(v1);
+  assertEquals(v1, [0,1,2]);
+});
