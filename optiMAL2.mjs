@@ -225,6 +225,7 @@ function compile_ast(ast) {
         }
         case "try": {
             let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
+            if (ast[2][0] != "catch") throw "try without catch clause";
             result += ast[2][1] + "){return " + compile_body(ast[2], 2) + "}";
             result += "})()";
             return result;

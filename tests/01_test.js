@@ -99,3 +99,23 @@ Deno.test("01F", () => {
   console.log(v1);
   assertEquals(v1, [0,1,2]);
 });
+
+Deno.test("01G", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (try 123
+      (catch ex (+ 1 ex]
+  `);
+  console.log(v1);
+  assertEquals(v1, 123);
+});
+
+Deno.test("01G", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (try (throw 123)
+      (catch ex (+ 1 ex]
+  `);
+  console.log(v1);
+  assertEquals(v1, 124);
+});

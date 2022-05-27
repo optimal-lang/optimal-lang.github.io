@@ -26,4 +26,8 @@ glob.runAll(`
 (console.log (fact2 4))
 (console.log (&& (< 2 4) (< 3 4]
 (console.log (&& (< 2 4) (> 3 4]
-`); // glob.runAll()
+  (try (throw 123)
+  (catch ex (console.log ex]
+(try (throw 123)
+  (catchX ex (console.log ex]
+  `); // glob.runAll()
