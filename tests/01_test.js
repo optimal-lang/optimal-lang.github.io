@@ -3,6 +3,7 @@ import {
   assert,
   assertFalse,
   assertEquals,
+  assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
 
 import { optiMAL } from "../optiMAL2.mjs";
@@ -118,4 +119,18 @@ Deno.test("01G", () => {
   `);
   console.log(v1);
   assertEquals(v1, 124);
+});
+
+Deno.test("01H", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL(window);
+      var v1 = glob.runAll(`
+        (try (throw 123)
+          (catch ex (let ((msg "Panic!")) (throw @new Error(msg)@]
+      `);
+    },
+    Error,
+    "Panic!",
+  );
 });
