@@ -1,2 +1,2 @@
-echo "http://localhost:8000/"
-python3 -m http.server 8000
+echo "http://localhost:8080/"
+python3 -m http.server 8080
