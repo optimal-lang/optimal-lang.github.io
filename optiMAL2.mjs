@@ -175,7 +175,7 @@ function compile_ast(ast) {
                 ["__dolist_list__", ast1[1]],
                 ["__dolist_cnt__", ["length", ast1[1]]],
                 ["__dolist_idx__", 0, ["+", "__dolist_idx__", 1]],
-                [ast1[0], ["aref", "__dotimes_list__", "__dotimes_idx__"], ["aref", "__dotimes_list__", "__dotimes_idx__"]],
+                [ast1[0], ["nth", "__dolist_idx__", "__dolist_list__"], ["nth", "__dolist_idx__", "__dolist_list__"]],
             ];
             let exit = [[">=", "__dolist_idx__", "__dolist_cnt__"], result_exp];
             ast = ["do*", bind, exit].concat(ast.slice(2));

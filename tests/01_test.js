@@ -72,7 +72,7 @@ Deno.test("01D", () => {
     list
   `);
   console.log(v1);
-  assertEquals(v1, [0,1,2]);
+  assertEquals(v1, [0, 1, 2]);
 });
 
 Deno.test("01E", () => {
@@ -85,7 +85,7 @@ Deno.test("01E", () => {
     list
   `);
   console.log(v1);
-  assertEquals(v1, [0,1,2]);
+  assertEquals(v1, [0, 1, 2]);
 });
 
 Deno.test("01F", () => {
@@ -98,7 +98,7 @@ Deno.test("01F", () => {
     list
   `);
   console.log(v1);
-  assertEquals(v1, [0,1,2]);
+  assertEquals(v1, [0, 1, 2]);
 });
 
 Deno.test("01G", () => {
@@ -142,7 +142,7 @@ Deno.test("01J", () => {
     v1 = glob.runAll(`
       (throw 123)
     `);
-  } catch(ex) {
+  } catch (ex) {
     v1 = ex + 1
   }
   console.log(v1);
@@ -172,7 +172,7 @@ Deno.test("01L", () => {
       )
   `);
   console.log(v1);
-  assertEquals(v1, [0,1,2]);
+  assertEquals(v1, [0, 1, 2]);
 });
 
 Deno.test("01M", () => {
@@ -193,4 +193,17 @@ Deno.test("01N", () => {
   `);
   console.log(v1);
   assertEquals(v1, 3);
+});
+
+Deno.test("01O", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '(1 2 3))
+    (define result '())
+    (dolist (i list result)
+      @result.push(i * 10)@
+      )
+  `);
+  console.log(v1);
+  assertEquals(v1, [10, 20, 30]);
 });
