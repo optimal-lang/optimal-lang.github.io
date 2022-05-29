@@ -66,7 +66,7 @@ Deno.test("01D", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define list '())
-    (dotimes (3)
+    (dotimes '3
       @list.push(1)@
       )
     list
@@ -111,7 +111,7 @@ Deno.test("01G", () => {
   assertEquals(v1, 123);
 });
 
-Deno.test("01G", () => {
+Deno.test("01H", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (try (throw 123)
@@ -121,7 +121,7 @@ Deno.test("01G", () => {
   assertEquals(v1, 124);
 });
 
-Deno.test("01H", () => {
+Deno.test("01I", () => {
   assertThrows(
     () => {
       var glob = optiMAL(window);
@@ -135,7 +135,7 @@ Deno.test("01H", () => {
   );
 });
 
-Deno.test("01I", () => {
+Deno.test("01J", () => {
   var v1;
   try {
     var glob = optiMAL(window);
@@ -149,7 +149,7 @@ Deno.test("01I", () => {
   assertEquals(v1, 124);
 });
 
-Deno.test("01J", () => {
+Deno.test("01K", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define (fact x)

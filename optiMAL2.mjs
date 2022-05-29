@@ -1,4 +1,15 @@
 import { code2ary } from "./code2ary.mjs";
+
+function is_array(x) {
+    return (x instanceof Array);
+}
+
+function is_quoted(x) {
+    if (!is_array(x)) return false;
+    if (x.length === 0) return false;
+    return x[0] === "`";
+}
+
 function compile_body(ast, start) {
     if (start === ast.length - 1)
         return compile_ast(ast[start]);
@@ -10,6 +21,7 @@ function compile_body(ast, start) {
     }
     return result + ")";
 }
+
 function compile_ast(ast) {
     if (ast === undefined)
         return "undefined";
@@ -125,10 +137,13 @@ function compile_ast(ast) {
         }
         case "dotimes": {
             let ast1 = ast[1];
-            if (!(ast1 instanceof Array))
-                ast1 = ["__dotimes__", ast1];
+            if (!is_array(ast1) || is_quoted(ast1))
+                ast1 = ["index", ast1];
+            //if (!(ast1 instanceof Array))
+            //    ast1 = ["__dotimes__", ast1];
             else if (ast1.length < 2)
-                ast1 = ["__dotimes__", ast1[0]];
+                //ast1 = ["__dotimes__", ast1[0]];
+                throw new Error("syntax error");
             let bind = [
                 ["__dotimes_cnt__", ast1[1]],
                 ["__dotimes_idx__", 0, ["+", "__dotimes_idx__", 1]],
@@ -275,6 +290,7 @@ function compile_ast(ast) {
             return fcall;
     }
 }
+
 function insert_op(op, rest) {
     if (rest.length === 1)
         return op + compile_ast(rest[0]);
@@ -285,6 +301,7 @@ function insert_op(op, rest) {
     }
     return result.join("");
 }
+
 function compile_do(ast) {
     let ast1 = ast[1];
     let parallel = ast[0] === "do";
@@ -331,7 +348,7 @@ function compile_do(ast) {
     new_ast.push(ast2[1]);
     return compile_ast(new_ast);
 }
-//var $comp$ = new Compiler();
+
 export function optiMAL(toplevel) {
     let glob = Object.create(toplevel);
     glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
