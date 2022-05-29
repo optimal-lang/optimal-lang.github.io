@@ -167,7 +167,7 @@ Deno.test("01L", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define list '())
-    (dotimes (i 3 list)
+    (dotimes (i 3 @list@)
       @list.push(i)@
       )
   `);
