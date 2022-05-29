@@ -67,12 +67,12 @@ Deno.test("01D", () => {
   var v1 = glob.runAll(`
     (define list '())
     (dotimes '3
-      @list.push(1)@
+      @list.push(index)@
       )
     list
   `);
   console.log(v1);
-  assertEquals(v1, [1,1,1]);
+  assertEquals(v1, [0,1,2]);
 });
 
 Deno.test("01E", () => {
@@ -80,12 +80,12 @@ Deno.test("01E", () => {
   var v1 = glob.runAll(`
     (define list '())
     (dotimes 3
-      @list.push(1)@
+      @list.push(index)@
       )
     list
   `);
   console.log(v1);
-  assertEquals(v1, [1,1,1]);
+  assertEquals(v1, [0,1,2]);
 });
 
 Deno.test("01F", () => {
@@ -161,4 +161,16 @@ Deno.test("01K", () => {
   `);
   console.log(v1);
   assertEquals(v1, 24);
+});
+
+Deno.test("01L", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '())
+    (dotimes (i 3 list)
+      @list.push(i)@
+      )
+  `);
+  console.log(v1);
+  assertEquals(v1, [0,1,2]);
 });

@@ -139,17 +139,15 @@ function compile_ast(ast) {
             let ast1 = ast[1];
             if (!is_array(ast1) || is_quoted(ast1))
                 ast1 = ["index", ast1];
-            //if (!(ast1 instanceof Array))
-            //    ast1 = ["__dotimes__", ast1];
             else if (ast1.length < 2)
-                //ast1 = ["__dotimes__", ast1[0]];
                 throw new Error("syntax error");
+            let result_exp = ast1.length < 3 ? "null" : ast1[2];
             let bind = [
                 ["__dotimes_cnt__", ast1[1]],
                 ["__dotimes_idx__", 0, ["+", "__dotimes_idx__", 1]],
                 [ast1[0], "__dotimes_idx__", "__dotimes_idx__"],
             ];
-            let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"]];
+            let exit = [[">=", "__dotimes_idx__", "__dotimes_cnt__"], result_exp];
             ast = ["do*", bind, exit].concat(ast.slice(2));
             return compile_ast(ast);
         }
