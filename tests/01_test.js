@@ -174,3 +174,23 @@ Deno.test("01L", () => {
   console.log(v1);
   assertEquals(v1, [0,1,2]);
 });
+
+Deno.test("01M", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '(1 2 3))
+    (length list)
+  `);
+  console.log(v1);
+  assertEquals(v1, 3);
+});
+
+Deno.test("01N", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '(1 2 3))
+    (nth 2 list)
+  `);
+  console.log(v1);
+  assertEquals(v1, 3);
+});

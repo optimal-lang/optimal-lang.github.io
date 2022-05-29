@@ -151,6 +151,36 @@ function compile_ast(ast) {
             ast = ["do*", bind, exit].concat(ast.slice(2));
             return compile_ast(ast);
         }
+        case "length": {
+            if (ast.length != 2) return new Error("syntax error");
+            let ast1 = ast[1];
+            ast = ["let*", [["__length__", ast1]], "__length__.length"];
+            return compile_ast(ast);
+        }
+        case "nth": {
+            if (ast.length != 3) return new Error("syntax error");
+            let ast1 = ast[1];
+            let ast2 = ast[2];
+            ast = ["let*", [["__nth1__", ast1], ["__nth2__", ast2]], "__nth2__[__nth1__]"];
+            return compile_ast(ast);
+        }
+        case "dolist": {
+            let ast1 = ast[1];
+            if (!is_array(ast1) || is_quoted(ast1))
+                ast1 = ["item", ast1];
+            else if (ast1.length < 2)
+                throw new Error("syntax error");
+            let result_exp = ast1.length < 3 ? "null" : ast1[2];
+            let bind = [
+                ["__dolist_list__", ast1[1]],
+                ["__dolist_cnt__", ["length", ast1[1]]],
+                ["__dolist_idx__", 0, ["+", "__dolist_idx__", 1]],
+                [ast1[0], ["aref", "__dotimes_list__", "__dotimes_idx__"], ["aref", "__dotimes_list__", "__dotimes_idx__"]],
+            ];
+            let exit = [[">=", "__dolist_idx__", "__dolist_cnt__"], result_exp];
+            ast = ["do*", bind, exit].concat(ast.slice(2));
+            return compile_ast(ast);
+        }
         case "if":
             return ("(" +
                 compile_ast(ast[1]) +
