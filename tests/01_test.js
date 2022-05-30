@@ -189,7 +189,7 @@ Deno.test("01N", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define list '(1 2 3))
-    (list-ref list 2)
+    (prop-get list 2)
   `);
   console.log(v1);
   assertEquals(v1, 3);
@@ -214,7 +214,7 @@ Deno.test("01P", () => {
     (defun fact (x)
       (do* ((n 2 (+ 1 n)) (result 1))
            ((< x n) result)
-        (setf result (* result n))))
+        (set! result (* result n))))
     (defvar n 4)
     (console.log (fact n))
     (fact 4)
@@ -228,7 +228,7 @@ Deno.test("01Q", () => {
   var v1 = glob.runAll(`
     (define list '())
     (dotimes (i 3 list)
-      (list-set! list i (* i 100]
+      (prop-set! list i (* i 100]
   `);
   console.log(v1);
   assertEquals(v1, [0, 100, 200]);
@@ -238,24 +238,24 @@ Deno.test("01R", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define dict (dict a 123]
-    (dict-ref dict "a")
+    (prop-get dict "a")
   `);
   console.log(v1);
   assertEquals(v1, 123);
 });
 
-Deno.test("01Q", () => {
+Deno.test("01S", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define dict @{}@)
     (dotimes (i 3 dict)
-      (dict-set! dict @"a"+i@ (* i 100]
+      (prop-set! dict @"a"+i@ (* i 100]
   `);
   console.log(v1);
   assertEquals(v1, {a0:0,a1:100,a2:200});
 });
 
-Deno.test("01R", () => {
+Deno.test("01T", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define list '(1 2 3))
@@ -267,4 +267,24 @@ Deno.test("01R", () => {
   `);
   console.log(v1);
   assertEquals(v1, [10, 20, 30]);
+});
+
+Deno.test("01U", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (let ([add2 (fn (a b) (+ a b])
+    (add2 11 22)
+  `);
+  console.log(v1);
+  assertEquals(v1, 33);
+});
+
+Deno.test("01V", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (let ([add2 (lambda (a b) (+ a b])
+    (add2 11 22)
+  `);
+  console.log(v1);
+  assertEquals(v1, 33);
 });

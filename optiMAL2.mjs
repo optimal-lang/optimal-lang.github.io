@@ -172,19 +172,11 @@ function compile_ast(ast) {
             if (ast.length != 2) return new Error("syntax error");
             return "(" + compile_ast(ast[1]) + ").length";
         }
-        case "dict-ref": {
+        case "prop-get": {
             if (ast.length != 3) return new Error("syntax error");
             return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]";
         }
-        case "dict-set!": {
-            if (ast.length != 4) return new Error("syntax error");
-            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]=" + compile_ast(ast[3]);
-        }
-        case "list-ref": {
-            if (ast.length != 3) return new Error("syntax error");
-            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]";
-        }
-        case "list-set!": {
+        case "prop-set!": {
             if (ast.length != 4) return new Error("syntax error");
             return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]=" + compile_ast(ast[3]);
         }
@@ -199,7 +191,7 @@ function compile_ast(ast) {
                 ["__dolist_list__", ast1[1]],
                 ["__dolist_cnt__", ["length", ast1[1]]],
                 ["__dolist_idx__", 0, ["+", "__dolist_idx__", 1]],
-                [ast1[0], ["list-ref", "__dolist_list__", "__dolist_idx__"], ["list-ref", "__dolist_list__", "__dolist_idx__"]],
+                [ast1[0], ["prop-get", "__dolist_list__", "__dolist_idx__"], ["prop-get", "__dolist_list__", "__dolist_idx__"]],
             ];
             let exit = [[">=", "__dolist_idx__", "__dolist_cnt__"], result_exp];
             ast = ["do*", bind, exit].concat(ast.slice(2));
@@ -286,7 +278,7 @@ function compile_ast(ast) {
             return result;
         }
         case "set!":
-        case "setf":
+        //case "setf":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
             return "(function(){throw " + compile_ast(ast[1]) + "})()";
