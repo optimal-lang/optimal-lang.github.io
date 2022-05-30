@@ -181,6 +181,14 @@ function compile_ast(ast) {
             ast = ["let*", [["__list_ref1__", ast1], ["__list_ref2__", ast2]], "__list_ref1__[__list_ref2__]"];
             return compile_ast(ast);
         }
+        case "list-set!": {
+            if (ast.length != 4) return new Error("syntax error");
+            let ast1 = ast[1];
+            let ast2 = ast[2];
+            let ast3 = ast[3];
+            ast = ["let*", [["__dict__", ast1], ["__idx__", ast2], ["__value__", ast3]], "__dict__[__idx__]=__value__"];
+            return compile_ast(ast);
+        }
         case "dolist": {
             let ast1 = ast[1];
             if (!is_array(ast1) || is_quoted(ast1))

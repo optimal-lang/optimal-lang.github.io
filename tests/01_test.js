@@ -222,3 +222,14 @@ Deno.test("01P", () => {
   console.log(v1);
   assertEquals(v1, 24);
 });
+
+Deno.test("01Q", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '())
+    (dotimes (i 3 list)
+      (list-set! list i (* i 100]
+  `);
+  console.log(v1);
+  assertEquals(v1, [0, 100, 200]);
+});
