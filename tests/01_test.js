@@ -288,3 +288,14 @@ Deno.test("01V", () => {
   console.log(v1);
   assertEquals(v1, 33);
 });
+
+Deno.test("01W", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (let ([add2 (lambda (a b) (+ a b])
+    ((prop-get console "log") (add2 11 22))
+    (add2 11 22)
+  `);
+  console["log"](v1);
+  assertEquals(v1, 33);
+});
