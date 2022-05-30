@@ -215,7 +215,8 @@ Deno.test("01P", () => {
       (do* ((n 2 (+ 1 n)) (result 1))
            ((< x n) result)
         (set! result (* result n))))
-    (console.log (fact 4))
+    (defvar n 4)
+    (console.log (fact n))
     (fact 4)
   `);
   console.log(v1);

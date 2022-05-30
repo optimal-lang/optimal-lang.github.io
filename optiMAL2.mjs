@@ -109,6 +109,7 @@ function compile_ast(ast) {
         }
         case "define": {
             if (ast[1] instanceof Array) {
+                if (ast.length < 2) throw new Error("sysntax error");
                 let new_ast = ast.slice(2);
                 new_ast.unshift(ast[1].slice(1));
                 new_ast.unshift("fn");
@@ -116,7 +117,10 @@ function compile_ast(ast) {
                 return compile_ast(new_ast);
             }
             else {
-                return compile_ast(["def", ast[1], ast[2]]);
+                if (ast.length < 2) throw new Error("sysntax error");
+                let ast1 = ast[1];
+                let ast2 = ast.length === 2 ? null : ast[2];
+                return compile_ast(["def", ast1, ast2]);
             }
         }
         case "defun": {
@@ -125,6 +129,12 @@ function compile_ast(ast) {
             new_ast.unshift("fn");
             new_ast = ["def", ast[1], new_ast];
             return compile_ast(new_ast);
+        }
+        case "defvar": {
+            if (ast.length < 2) throw new Error("sysntax error");
+            let ast1 = ast[1];
+            let ast2 = ast.length === 2 ? null : ast[2];
+            return compile_ast(["def", ast1, ast2]);
         }
         case "do":
         case "do*":
