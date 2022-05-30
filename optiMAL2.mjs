@@ -174,29 +174,29 @@ function compile_ast(ast) {
         }
         case "dict-ref": {
             if (ast.length != 3) return new Error("syntax error");
-            let ast1 = ast[1];
-            let ast2 = ast[2];
-            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]";
+            //let ast1 = ast[1];
+            //let ast2 = ast[2];
+            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]";
         }
         case "dict-set!": {
             if (ast.length != 4) return new Error("syntax error");
-            let ast1 = ast[1];
-            let ast2 = ast[2];
-            let ast3 = ast[3];
-            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]=" + compile_ast(ast3);
+            //let ast1 = ast[1];
+            //let ast2 = ast[2];
+            //let ast3 = ast[3];
+            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]=" + compile_ast(ast[3]);
         }
         case "list-ref": {
             if (ast.length != 3) return new Error("syntax error");
-            let ast1 = ast[1];
-            let ast2 = ast[2];
-            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]";
+            //let ast1 = ast[1];
+            //let ast2 = ast[2];
+            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]";
         }
         case "list-set!": {
             if (ast.length != 4) return new Error("syntax error");
-            let ast1 = ast[1];
-            let ast2 = ast[2];
-            let ast3 = ast[3];
-            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]=" + compile_ast(ast3);
+            //let ast1 = ast[1];
+            //let ast2 = ast[2];
+            //let ast3 = ast[3];
+            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]=" + compile_ast(ast[3]);
         }
         case "dolist": {
             let ast1 = ast[1];
