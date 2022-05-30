@@ -153,9 +153,9 @@ Deno.test("01K", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define (fact x)
-    (do ((n 2 (+ 1 n)) (result 1))
-        ((< x n) result)
-      (set! result (* result n))))
+      (do ((n 2 (+ 1 n)) (result 1))
+          ((< x n) result)
+        (set! result (* result n))))
     (console.log (fact 4))
     (fact 4)
   `);
@@ -206,4 +206,18 @@ Deno.test("01O", () => {
   `);
   console.log(v1);
   assertEquals(v1, [10, 20, 30]);
+});
+
+Deno.test("01P", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (defun fact (x)
+      (do* ((n 2 (+ 1 n)) (result 1))
+           ((< x n) result)
+        (set! result (* result n))))
+    (console.log (fact 4))
+    (fact 4)
+  `);
+  console.log(v1);
+  assertEquals(v1, 24);
 });

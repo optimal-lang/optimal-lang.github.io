@@ -119,6 +119,13 @@ function compile_ast(ast) {
                 return compile_ast(["def", ast[1], ast[2]]);
             }
         }
+        case "defun": {
+            let new_ast = ast.slice(3);
+            new_ast.unshift(ast[2]);
+            new_ast.unshift("fn");
+            new_ast = ["def", ast[1], new_ast];
+            return compile_ast(new_ast);
+        }
         case "do":
         case "do*":
             return compile_do(ast);
