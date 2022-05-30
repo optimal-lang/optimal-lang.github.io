@@ -174,11 +174,11 @@ function compile_ast(ast) {
             ast = ["let*", [["__length__", ast1]], "__length__.length"];
             return compile_ast(ast);
         }
-        case "nth": {
+        case "list-ref": {
             if (ast.length != 3) return new Error("syntax error");
             let ast1 = ast[1];
             let ast2 = ast[2];
-            ast = ["let*", [["__nth1__", ast1], ["__nth2__", ast2]], "__nth2__[__nth1__]"];
+            ast = ["let*", [["__list_ref1__", ast1], ["__list_ref2__", ast2]], "__list_ref1__[__list_ref2__]"];
             return compile_ast(ast);
         }
         case "dolist": {
@@ -192,7 +192,7 @@ function compile_ast(ast) {
                 ["__dolist_list__", ast1[1]],
                 ["__dolist_cnt__", ["length", ast1[1]]],
                 ["__dolist_idx__", 0, ["+", "__dolist_idx__", 1]],
-                [ast1[0], ["nth", "__dolist_idx__", "__dolist_list__"], ["nth", "__dolist_idx__", "__dolist_list__"]],
+                [ast1[0], ["list-ref", "__dolist_list__", "__dolist_idx__"], ["list-ref", "__dolist_list__", "__dolist_idx__"]],
             ];
             let exit = [[">=", "__dolist_idx__", "__dolist_cnt__"], result_exp];
             ast = ["do*", bind, exit].concat(ast.slice(2));

@@ -1,9 +1,10 @@
 function tokenize(str) {
-  let re = /[\s,]*([()\[\]'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|[^\s,()\[\]'"`;@]*)/g;
+  let re = /[\s,]*([()\[\]'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]'"`;@]*)/g;
   let result = [];
   let token;
   while ((token = re.exec(str)[1]) !== "") {
     if (token[0] === ";") continue;
+    if (token[0] === "#") continue;
     //if (token.match(/^-?[0-9][0-9.]*$/)) token = parseFloat(token, 10);
     if (isFinite(token)) token = parseFloat(token, 10);
     result.push(token);

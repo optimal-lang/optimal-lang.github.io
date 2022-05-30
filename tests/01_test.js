@@ -189,7 +189,7 @@ Deno.test("01N", () => {
   var glob = optiMAL(window);
   var v1 = glob.runAll(`
     (define list '(1 2 3))
-    (nth 2 list)
+    (list-ref list 2)
   `);
   console.log(v1);
   assertEquals(v1, 3);
