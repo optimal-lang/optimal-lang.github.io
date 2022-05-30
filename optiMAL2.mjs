@@ -170,39 +170,33 @@ function compile_ast(ast) {
         }
         case "length": {
             if (ast.length != 2) return new Error("syntax error");
-            let ast1 = ast[1];
-            ast = ["let*", [["__length__", ast1]], "__length__.length"];
-            return compile_ast(ast);
+            return "(" + compile_ast(ast[1]) + ").length";
         }
         case "dict-ref": {
             if (ast.length != 3) return new Error("syntax error");
             let ast1 = ast[1];
             let ast2 = ast[2];
-            ast = ["let*", [["__dict__", ast1], ["__attr__", ast2]], "__dict__[__attr__]"];
-            return compile_ast(ast);
+            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]";
         }
         case "dict-set!": {
             if (ast.length != 4) return new Error("syntax error");
             let ast1 = ast[1];
             let ast2 = ast[2];
             let ast3 = ast[3];
-            ast = ["let*", [["__dict__", ast1], ["__attr__", ast2], ["__value__", ast3]], "__dict__[__attr__]=__value__"];
-            return compile_ast(ast);
+            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]=" + compile_ast(ast3);
         }
         case "list-ref": {
             if (ast.length != 3) return new Error("syntax error");
             let ast1 = ast[1];
             let ast2 = ast[2];
-            ast = ["let*", [["__list_ref1__", ast1], ["__list_ref2__", ast2]], "__list_ref1__[__list_ref2__]"];
-            return compile_ast(ast);
+            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]";
         }
         case "list-set!": {
             if (ast.length != 4) return new Error("syntax error");
             let ast1 = ast[1];
             let ast2 = ast[2];
             let ast3 = ast[3];
-            ast = ["let*", [["__list__", ast1], ["__idx__", ast2], ["__value__", ast3]], "__list__[__idx__]=__value__"];
-            return compile_ast(ast);
+            return compile_ast(ast1) + "[" + compile_ast(ast2) + "]=" + compile_ast(ast3);
         }
         case "dolist": {
             let ast1 = ast[1];
