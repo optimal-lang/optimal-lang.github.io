@@ -155,7 +155,7 @@ function compile_ast(ast) {
         case "dotimes": {
             let ast1 = ast[1];
             if (!is_array(ast1) || is_quoted(ast1))
-                ast1 = ["index", ast1];
+                ast1 = ["$index", ast1];
             else if (ast1.length < 2)
                 throw new Error("syntax error");
             let result_exp = ast1.length < 3 ? "null" : ast1[2];
@@ -207,7 +207,7 @@ function compile_ast(ast) {
         case "dolist": {
             let ast1 = ast[1];
             if (!is_array(ast1) || is_quoted(ast1))
-                ast1 = ["item", ast1];
+                ast1 = ["$item", ast1];
             else if (ast1.length < 2)
                 throw new Error("syntax error");
             let result_exp = ast1.length < 3 ? "null" : ast1[2];

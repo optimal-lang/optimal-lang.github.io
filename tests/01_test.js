@@ -67,7 +67,7 @@ Deno.test("01D", () => {
   var v1 = glob.runAll(`
     (define list '())
     (dotimes '3
-      @list.push(index)@
+      @list.push($index)@
       )
     list
   `);
@@ -80,7 +80,7 @@ Deno.test("01E", () => {
   var v1 = glob.runAll(`
     (define list '())
     (dotimes 3
-      @list.push(index)@
+      @list.push($index)@
       )
     list
   `);
@@ -253,4 +253,18 @@ Deno.test("01Q", () => {
   `);
   console.log(v1);
   assertEquals(v1, {a0:0,a1:100,a2:200});
+});
+
+Deno.test("01R", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '(1 2 3))
+    (define result '())
+    (dolist list
+      @result.push($item * 10)@
+      )
+    result
+  `);
+  console.log(v1);
+  assertEquals(v1, [10, 20, 30]);
 });
