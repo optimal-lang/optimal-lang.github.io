@@ -174,6 +174,21 @@ function compile_ast(ast) {
             ast = ["let*", [["__length__", ast1]], "__length__.length"];
             return compile_ast(ast);
         }
+        case "dict-ref": {
+            if (ast.length != 3) return new Error("syntax error");
+            let ast1 = ast[1];
+            let ast2 = ast[2];
+            ast = ["let*", [["__dict__", ast1], ["__attr__", ast2]], "__dict__[__attr__]"];
+            return compile_ast(ast);
+        }
+        case "dict-set!": {
+            if (ast.length != 4) return new Error("syntax error");
+            let ast1 = ast[1];
+            let ast2 = ast[2];
+            let ast3 = ast[3];
+            ast = ["let*", [["__dict__", ast1], ["__attr__", ast2], ["__value__", ast3]], "__dict__[__attr__]=__value__"];
+            return compile_ast(ast);
+        }
         case "list-ref": {
             if (ast.length != 3) return new Error("syntax error");
             let ast1 = ast[1];
@@ -186,7 +201,7 @@ function compile_ast(ast) {
             let ast1 = ast[1];
             let ast2 = ast[2];
             let ast3 = ast[3];
-            ast = ["let*", [["__dict__", ast1], ["__idx__", ast2], ["__value__", ast3]], "__dict__[__idx__]=__value__"];
+            ast = ["let*", [["__list__", ast1], ["__idx__", ast2], ["__value__", ast3]], "__list__[__idx__]=__value__"];
             return compile_ast(ast);
         }
         case "dolist": {

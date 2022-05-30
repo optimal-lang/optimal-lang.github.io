@@ -233,3 +233,24 @@ Deno.test("01Q", () => {
   console.log(v1);
   assertEquals(v1, [0, 100, 200]);
 });
+
+Deno.test("01R", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define dict (dict a 123]
+    (dict-ref dict "a")
+  `);
+  console.log(v1);
+  assertEquals(v1, 123);
+});
+
+Deno.test("01Q", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define dict @{}@)
+    (dotimes (i 3 dict)
+      (dict-set! dict @"a"+i@ (* i 100]
+  `);
+  console.log(v1);
+  assertEquals(v1, {a0:0,a1:100,a2:200});
+});
