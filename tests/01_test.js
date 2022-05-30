@@ -214,7 +214,7 @@ Deno.test("01P", () => {
     (defun fact (x)
       (do* ((n 2 (+ 1 n)) (result 1))
            ((< x n) result)
-        (set! result (* result n))))
+        (setf result (* result n))))
     (defvar n 4)
     (console.log (fact n))
     (fact 4)

@@ -279,6 +279,7 @@ function compile_ast(ast) {
             return result;
         }
         case "set!":
+        case "setf":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
             return "(function(){throw " + compile_ast(ast[1]) + "})()";
