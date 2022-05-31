@@ -559,3 +559,13 @@ export function optiMAL(toplevel) {
     };
     return glob;
 }
+
+export function run(exp) {
+    let oml = optiMAL();
+    return oml.run(exp);
+}
+
+export function runAll(exp) {
+    let oml = optiMAL();
+    return oml.runAll(exp);
+}

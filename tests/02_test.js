@@ -6,11 +6,10 @@ import {
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
 
-import { optiMAL } from "../optiMAL2.mjs";
+import { optiMAL, run, runAll } from "../optiMAL2.mjs";
 
 Deno.test("02A", () => {
-  var glob = optiMAL();
-  var v1 = glob.run(`
+  var v1 = run(`
     (define x 11)
     (defvar y 22)
     (def z 33)
@@ -21,8 +20,7 @@ Deno.test("02A", () => {
 });
 
 Deno.test("02B", () => {
-  var glob = optiMAL();
-  var v1 = glob.run(`
+  var v1 = run(`
     (begin)
     `);
   console.log(v1);
@@ -30,8 +28,7 @@ Deno.test("02B", () => {
 });
 
 Deno.test("02C", () => {
-  var glob = optiMAL();
-  var v1 = glob.run(`
+  var v1 = run(`
     (begin
       (define x 11)
       )
@@ -41,8 +38,7 @@ Deno.test("02C", () => {
 });
 
 Deno.test("02D", () => {
-  var glob = optiMAL();
-  var v1 = glob.run(`
+  var v1 = run(`
     (begin
       (define x 11)
       (defvar y 22)
@@ -55,8 +51,7 @@ Deno.test("02D", () => {
 });
 
 Deno.test("02E", () => {
-  var glob = optiMAL();
-  var v1 = glob.run(`
+  var v1 = run(`
     (define list '(10 20 30]
     (begin
       (define x (length list))
@@ -71,8 +66,7 @@ Deno.test("02E", () => {
 Deno.test("02F", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (define list '(10 20 30]
         (let* [
           (x (length list))
@@ -90,8 +84,7 @@ Deno.test("02F", () => {
 Deno.test("02G", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (define x (+ 1 not_exist]
         (console.log x)
         x
@@ -105,8 +98,7 @@ Deno.test("02G", () => {
 Deno.test("02H", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (if (define x 1) 10 20)
         `);
     },
@@ -118,8 +110,7 @@ Deno.test("02H", () => {
 Deno.test("02I", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (cond ((define x 1) 10) (else 20]
         `);
     },
@@ -131,8 +122,7 @@ Deno.test("02I", () => {
 Deno.test("02J", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (throw (define x 1))
         `);
     },
@@ -144,8 +134,7 @@ Deno.test("02J", () => {
 Deno.test("02K", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (try (define x 1) (catch e))
         `);
     },
@@ -157,8 +146,7 @@ Deno.test("02K", () => {
 Deno.test("02K", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (while (define x 1) true)
         `);
     },
@@ -170,8 +158,7 @@ Deno.test("02K", () => {
 Deno.test("02L", () => {
   assertThrows(
     () => {
-      var glob = optiMAL();
-      var v1 = glob.run(`
+      var v1 = run(`
         (until (define x 1) true)
         `);
     },
@@ -181,8 +168,7 @@ Deno.test("02L", () => {
 });
 
 Deno.test("02M", () => {
-  var glob = optiMAL();
-  var v1 = glob.run(`
+  var v1 = run(`
     (defun f (n)
       (cond
         [(< n 0) (console.log "minus") "minus"]
