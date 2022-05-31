@@ -87,7 +87,6 @@ Deno.test("02F", () => {
   );
 });
 
-
 Deno.test("02G", () => {
   assertThrows(
     () => {
@@ -100,5 +99,83 @@ Deno.test("02G", () => {
     },
     ReferenceError,
     "not_exist is not defined",
+  );
+});
+
+Deno.test("02H", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL();
+      var v1 = glob.run(`
+        (if (define x 1) 10 20)
+        `);
+    },
+    Error,
+    "def is not allowed here",
+  );
+});
+
+Deno.test("02I", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL();
+      var v1 = glob.run(`
+        (cond ((define x 1) 10) (else 20]
+        `);
+    },
+    Error,
+    "def is not allowed here",
+  );
+});
+
+Deno.test("02J", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL();
+      var v1 = glob.run(`
+        (throw (define x 1))
+        `);
+    },
+    Error,
+    "def is not allowed here",
+  );
+});
+
+Deno.test("02K", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL();
+      var v1 = glob.run(`
+        (try (define x 1) (catch e))
+        `);
+    },
+    Error,
+    "def is not allowed here",
+  );
+});
+
+Deno.test("02K", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL();
+      var v1 = glob.run(`
+        (while (define x 1) true)
+        `);
+    },
+    Error,
+    "def is not allowed here",
+  );
+});
+
+Deno.test("02L", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL();
+      var v1 = glob.run(`
+        (until (define x 1) true)
+        `);
+    },
+    Error,
+    "def is not allowed here",
   );
 });

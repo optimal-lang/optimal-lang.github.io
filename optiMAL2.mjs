@@ -76,6 +76,15 @@ function compile_body(ast, start) {
     return compile_body_helper(body);
 }
 
+function compile_body1(ast) {
+    /*
+    let body = [ast];
+    return compile_body(body);
+    */
+    if (to_def(ast) !== null) throw Error("def is not allowed here");
+    return compile_ast(ast);
+}
+
 function compile_ast(ast) {
     if (ast === undefined)
         return "undefined";
@@ -227,9 +236,9 @@ function compile_ast(ast) {
         }
         case "if":
             return ("(" +
-                compile_ast(ast[1]) +
+                compile_body1(ast[1]) +
                 "?" +
-                compile_ast(ast[2]) +
+                compile_body1(ast[2]) +
                 ":" +
                 compile_body(ast, 3) +
                 ")");
@@ -306,13 +315,12 @@ function compile_ast(ast) {
             return result;
         }
         case "set!":
-            //case "setf":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
-            return "(function(){throw " + compile_ast(ast[1]) + "})()";
+            return "(function(){throw " + compile_body1(ast[1]) + "})()";
         }
         case "try": {
-            let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
+            let result = "(function(){try{return " + compile_body1(ast[1]) + "}catch(";
             if (ast[2][0] != "catch") throw "try without catch clause";
             result += ast[2][1] + "){return " + compile_body(ast[2], 2) + "}";
             result += "})()";
@@ -320,7 +328,7 @@ function compile_ast(ast) {
         }
         case "until":
         case "while": {
-            let condition = compile_ast(ast[1]);
+            let condition = compile_body1(ast[1]);
             if (ast[0] === "until")
                 condition = "!" + condition;
             return ("((function(){while(" +
