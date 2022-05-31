@@ -77,10 +77,6 @@ function compile_body(ast, start) {
 }
 
 function compile_body1(ast) {
-    /*
-    let body = [ast];
-    return compile_body(body);
-    */
     if (to_def(ast) !== null) throw Error("def is not allowed here");
     return compile_ast(ast);
 }
@@ -109,7 +105,7 @@ function compile_ast(ast) {
         case "begin":
             return compile_body(ast, 1);
         case "case": {
-            let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
+            let result = "(function(){switch(" + compile_body1(ast[1]) + "){";
             let rest = ast.slice(2);
             rest.forEach((x) => {
                 let val = x[0];
@@ -163,11 +159,11 @@ function compile_ast(ast) {
         case "inc!":
             let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
             let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
-            return compile_ast(ast[1]) + sign + "=" + val;
+            return compile_body1(ast[1]) + sign + "=" + val;
         case "def": {
             ast = to_def(ast);
-            //return "let " + ast[1] + "=" + compile_ast(ast[2]);
-            return "globalThis." + ast[1] + "=" + compile_ast(ast[2]);
+            //return "let " + ast[1] + "=" + compile_body1(ast[2]);
+            return "globalThis." + ast[1] + "=" + compile_body1(ast[2]);
         }
         case "define": case "defun": case "defvar": {
             ast = to_def(ast);
@@ -207,15 +203,15 @@ function compile_ast(ast) {
         }
         case "length": {
             if (ast.length != 2) return new Error("syntax error");
-            return "(" + compile_ast(ast[1]) + ").length";
+            return "(" + compile_body1(ast[1]) + ").length";
         }
         case "prop-get": {
             if (ast.length != 3) return new Error("syntax error");
-            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]";
+            return compile_body1(ast[1]) + "[" + compile_body1(ast[2]) + "]";
         }
         case "prop-set!": {
             if (ast.length != 4) return new Error("syntax error");
-            return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]=" + compile_ast(ast[3]);
+            return compile_body1(ast[1]) + "[" + compile_body1(ast[2]) + "]=" + compile_body1(ast[3]);
         }
         case "dolist": {
             let ast1 = ast[1];
@@ -268,7 +264,7 @@ function compile_ast(ast) {
                     if (i > 1)
                         vars += ",";
                     vars += ast[1][i - 1];
-                    let val = compile_ast(ast[1][i]);
+                    let val = compile_body1(ast[1][i]);
                     if (i > 1)
                         vals += ",";
                     vals += val;
@@ -298,7 +294,7 @@ function compile_ast(ast) {
             let result = "[";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1) result += ",";
-                result += compile_ast(ast[i]);
+                result += compile_body1(ast[i]);
             }
             result += "]";
             return result;
@@ -307,15 +303,15 @@ function compile_ast(ast) {
             let result = "{";
             for (let i = 1; i < ast.length; i += 2) {
                 if (i > 1) result += ",";
-                result += compile_ast(ast[i]);
+                result += compile_body1(ast[i]);
                 result += ":";
-                result += compile_ast(ast[i + 1]);
+                result += compile_body1(ast[i + 1]);
             }
             result += "}";
             return result;
         }
         case "set!":
-            return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
+            return compile_body1(ast[1]) + "=" + compile_body1(ast[2]);
         case "throw": {
             return "(function(){throw " + compile_body1(ast[1]) + "})()";
         }
@@ -348,7 +344,7 @@ function compile_ast(ast) {
         case ">":
         case "<=":
         case ">=":
-            return "(" + compile_ast(ast[1]) + ast[0] + compile_ast(ast[2]) + ")";
+            return "(" + compile_body1(ast[1]) + ast[0] + compile_body1(ast[2]) + ")";
         case "&&":
         case "||":
         case "&":
@@ -361,11 +357,11 @@ function compile_ast(ast) {
             return "(" + insert_op(ast[0], ast.slice(1)) + ")";
         }
         default:
-            let fcall = compile_ast(ast[0]) + "(";
+            let fcall = compile_body1(ast[0]) + "(";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1)
                     fcall += ",";
-                fcall += compile_ast(ast[i]);
+                fcall += compile_body1(ast[i]);
             }
             fcall += ")";
             return fcall;
@@ -374,11 +370,11 @@ function compile_ast(ast) {
 
 function insert_op(op, rest) {
     if (rest.length === 1)
-        return op + compile_ast(rest[0]);
-    let result = [compile_ast(rest[0])];
+        return op + compile_body1(rest[0]);
+    let result = [compile_body1(rest[0])];
     for (let i = 1; i < rest.length; i++) {
         result.push(op);
-        result.push(compile_ast(rest[i]));
+        result.push(compile_body1(rest[i]));
     }
     return result.join("");
 }
