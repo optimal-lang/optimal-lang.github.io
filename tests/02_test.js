@@ -9,8 +9,8 @@ import {
 import { optiMAL } from "../optiMAL2.mjs";
 
 Deno.test("02A", () => {
-  var glob = optiMAL(window);
-  var v1 = glob.runAll(`
+  var glob = optiMAL();
+  var v1 = glob.run(`
     (define x 11)
     (defvar y 22)
     (def z 33)
@@ -21,8 +21,8 @@ Deno.test("02A", () => {
 });
 
 Deno.test("02B", () => {
-  var glob = optiMAL(window);
-  var v1 = glob.runAll(`
+  var glob = optiMAL();
+  var v1 = glob.run(`
     (begin)
     `);
   console.log(v1);
@@ -30,8 +30,8 @@ Deno.test("02B", () => {
 });
 
 Deno.test("02C", () => {
-  var glob = optiMAL(window);
-  var v1 = glob.runAll(`
+  var glob = optiMAL();
+  var v1 = glob.run(`
     (begin
       (define x 11)
       )
@@ -41,8 +41,8 @@ Deno.test("02C", () => {
 });
 
 Deno.test("02D", () => {
-  var glob = optiMAL(window);
-  var v1 = glob.runAll(`
+  var glob = optiMAL();
+  var v1 = glob.run(`
     (begin
       (define x 11)
       (defvar y 22)
@@ -55,8 +55,8 @@ Deno.test("02D", () => {
 });
 
 Deno.test("02E", () => {
-  var glob = optiMAL(window);
-  var v1 = glob.runAll(`
+  var glob = optiMAL();
+  var v1 = glob.run(`
     (define list '(10 20 30]
     (begin
       (define x (length list))
@@ -71,8 +71,8 @@ Deno.test("02E", () => {
 Deno.test("02F", () => {
   assertThrows(
     () => {
-      var glob = optiMAL(window);
-      var v1 = glob.runAll(`
+      var glob = optiMAL();
+      var v1 = glob.run(`
         (define list '(10 20 30]
         (let* [
           (x (length list))
@@ -84,20 +84,5 @@ Deno.test("02F", () => {
     },
     TypeError,
     "Cannot read properties of undefined (reading 'length')",
-  );
-});
-
-Deno.test("02G", () => {
-  assertThrows(
-    () => {
-      var glob = optiMAL(window);
-      var v1 = glob.runAll(`
-        (define y (+ 1 x]
-        (console.log y)
-        y
-        `);
-    },
-    ReferenceError,
-    "x is not defined",
   );
 });

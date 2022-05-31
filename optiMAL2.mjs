@@ -157,7 +157,8 @@ function compile_ast(ast) {
             return compile_ast(ast[1]) + sign + "=" + val;
         case "def": {
             ast = to_def(ast);
-            return "let " + ast[1] + "=" + compile_ast(ast[2]);
+            //return "let " + ast[1] + "=" + compile_ast(ast[2]);
+            return "globalThis." + ast[1] + "=" + compile_ast(ast[2]);
         }
         case "define": case "defun": case "defvar": {
             ast = to_def(ast);
@@ -422,7 +423,7 @@ function compile_do(ast) {
 }
 
 export function optiMAL(toplevel) {
-    let glob = Object.create(toplevel);
+    let glob = {}; //Object.create(toplevel);
     glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
     glob.compile_ast = (ast, debug) => {
         if (debug)
