@@ -338,7 +338,7 @@ function compile_ast(ast) {
                 "}})(),null)");
         }
         case "=":
-            return "(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")";
+            return "(" + compile_body1(ast[1]) + "===" + compile_body1(ast[2]) + ")";
         case "%":
         case "==":
         case "===":
