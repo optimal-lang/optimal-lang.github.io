@@ -10,6 +10,42 @@ function is_quoted(x) {
     return x[0] === "`";
 }
 
+function to_def(ast) {
+    switch (ast[0]) {
+        case "def":
+            return ast;
+        case "defvar": {
+            if (ast.length < 2) throw new Error("sysntax error");
+            let ast1 = ast[1];
+            let ast2 = ast.length === 2 ? null : ast[2];
+            return ["def", ast1, ast2];
+        }
+        case "defun": {
+            let new_ast = ast.slice(3);
+            new_ast.unshift(ast[2]);
+            new_ast.unshift("fn");
+            return ["def", ast[1], new_ast];
+        }
+        case "define": {
+            if (ast[1] instanceof Array) {
+                if (ast.length < 2) throw new Error("sysntax error");
+                let new_ast = ast.slice(2);
+                new_ast.unshift(ast[1].slice(1));
+                new_ast.unshift("fn");
+                return ["def", ast[1][0], new_ast];
+            }
+            else {
+                if (ast.length < 2) throw new Error("sysntax error");
+                let ast1 = ast[1];
+                let ast2 = ast.length === 2 ? null : ast[2];
+                return ["def", ast1, ast2];
+            }
+        }
+        default:
+            throw new Error("can't convert to dev");
+    }
+}
+
 function compile_body(ast, start) {
     if (start === ast.length - 1)
         return compile_ast(ast[start]);
@@ -101,11 +137,11 @@ function compile_ast(ast) {
             let sign = ast[0] === "dec!" || ast[0] === "dec" ? "-" : "+";
             let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
             return compile_ast(ast[1]) + sign + "=" + val;
-        case "def":
-        case "def!": {
-            let v = ast[1];
-            //return "var " + v + "=" + compile_ast(ast[2]);
-            return "let " + v + "=" + compile_ast(ast[2]);
+        case "def": {
+            if (ast.length < 2) throw new Error("sysntax error");
+            let ast1 = ast[1];
+            let ast2 = ast.length === 2 ? null : ast[2];
+            return "let " + ast1 + "=" + compile_ast(ast2);
         }
         case "define": {
             if (ast[1] instanceof Array) {
@@ -278,7 +314,7 @@ function compile_ast(ast) {
             return result;
         }
         case "set!":
-        //case "setf":
+            //case "setf":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
             return "(function(){throw " + compile_ast(ast[1]) + "})()";
