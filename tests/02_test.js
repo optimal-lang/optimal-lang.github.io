@@ -185,9 +185,9 @@ Deno.test("02M", () => {
   var v1 = glob.run(`
     (defun f (n)
       (cond
-        [(< n 0) "minus"]
-        [(== n 0) "zero"]
-        [else "plus"]
+        [(< n 0) (console.log "minus") "minus"]
+        [(== n 0) (console.log "zero") "zero"]
+        [else (console.log "plus") "plus"]
         )
       )
     (list (f -1) (f 0) (f 1]
