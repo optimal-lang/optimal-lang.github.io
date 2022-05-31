@@ -6,7 +6,7 @@ import {
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
 
-import { optiMAL, run, runAll } from "../optiMAL2.mjs";
+import { oml, run, runAll } from "../oml.mjs";
 
 Deno.test("02A", () => {
   var v1 = run(`

@@ -12,9 +12,8 @@
 <div id="sx">SX: 0<br />SY: 0</div>
 
 <script type="module">
-import { optiMAL } from "./optiMAL2.mjs";
-var glob = optiMAL();
-glob.runAll(`
+import { run } from "../oml.mjs";
+run(`
 (define w 1024)
 (define h 768)
 (define starCount 2500)

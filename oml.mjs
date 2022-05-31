@@ -426,7 +426,7 @@ function compile_do(ast) {
     return compile_ast(new_ast);
 }
 
-export function optiMAL(toplevel) {
+export function oml() {
     let glob = {}; //Object.create(toplevel);
     glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
     glob.compile_ast = (ast, debug) => {
@@ -561,11 +561,11 @@ export function optiMAL(toplevel) {
 }
 
 export function run(exp) {
-    let oml = optiMAL();
-    return oml.run(exp);
+    let o = oml();
+    return o.run(exp);
 }
 
 export function runAll(exp) {
-    let oml = optiMAL();
-    return oml.runAll(exp);
+    let o = oml();
+    return o.runAll(exp);
 }
