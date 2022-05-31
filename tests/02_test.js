@@ -179,3 +179,19 @@ Deno.test("02L", () => {
     "def is not allowed here",
   );
 });
+
+Deno.test("02M", () => {
+  var glob = optiMAL();
+  var v1 = glob.run(`
+    (defun f (n)
+      (cond
+        [(< n 0) "minus"]
+        [(== n 0) "zero"]
+        [else "plus"]
+        )
+      )
+    (list (f -1) (f 0) (f 1]
+    `);
+  console.log(v1);
+  assertEquals(v1, ["minus","zero","plus"]);
+});
