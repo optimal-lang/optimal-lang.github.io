@@ -86,3 +86,18 @@ Deno.test("02F", () => {
     "Cannot read properties of undefined (reading 'length')",
   );
 });
+
+Deno.test("02G", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL(window);
+      var v1 = glob.runAll(`
+        (define y (+ 1 x]
+        (console.log y)
+        y
+        `);
+    },
+    ReferenceError,
+    "x is not defined",
+  );
+});

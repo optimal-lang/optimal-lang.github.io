@@ -539,7 +539,15 @@ export function optiMAL(toplevel) {
     };
     glob.execAll = (exp, debug) => {
         let text = glob.compileAll(exp, debug);
-        return eval(text);
+        try {
+            return eval(text);
+        } catch (e) {
+            if (e.stack)
+                console.log(e.stack);
+            else
+                console.log(e);
+            throw e;
+        }
     };
     glob.runAll = (exp) => {
         return glob.execAll(exp, true);
