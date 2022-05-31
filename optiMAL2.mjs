@@ -11,9 +11,15 @@ function is_quoted(x) {
 }
 
 function to_def(ast) {
+    if (!is_array(ast)) return null;
+    if (ast.length === 0) return null;
     switch (ast[0]) {
-        case "def":
-            return ast;
+        case "def": {
+            if (ast.length < 2) throw new Error("sysntax error");
+            let ast1 = ast[1];
+            let ast2 = ast.length === 2 ? null : ast[2];
+            return ["def", ast1, ast2];
+        }
         case "defvar": {
             if (ast.length < 2) throw new Error("sysntax error");
             let ast1 = ast[1];
@@ -42,20 +48,33 @@ function to_def(ast) {
             }
         }
         default:
-            throw new Error("can't convert to dev");
+            return null;
     }
 }
 
-function compile_body(ast, start) {
-    if (start === ast.length - 1)
-        return compile_ast(ast[start]);
+function compile_body_helper(body) {
+    if (body.length === 0) return null;
     let result = "(";
-    for (let i = start; i < ast.length; i++) {
-        if (i > start)
+    for (let i = 0; i < body.length; i++) {
+        if (i > 0)
             result += ",";
-        result += compile_ast(ast[i]);
+        let def = to_def(body[i]);
+        if (def !== null) {
+            let let_ast = ["let", [[def[1], def[2]]], ...body.slice(i + 1)];
+            console.log(let_ast);
+            return result + compile_ast(let_ast) + ")";
+        }
+        result += compile_ast(body[i]);
     }
     return result + ")";
+}
+
+function compile_body(ast, start) {
+    let body = [];
+    for (let i = start; i < ast.length; i++) {
+        body.push(ast[i]);
+    }
+    return compile_body_helper(body);
 }
 
 function compile_ast(ast) {
@@ -138,39 +157,12 @@ function compile_ast(ast) {
             let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
             return compile_ast(ast[1]) + sign + "=" + val;
         case "def": {
-            if (ast.length < 2) throw new Error("sysntax error");
-            let ast1 = ast[1];
-            let ast2 = ast.length === 2 ? null : ast[2];
-            return "let " + ast1 + "=" + compile_ast(ast2);
+            ast = to_def(ast);
+            return "let " + ast[1] + "=" + compile_ast(ast[2]);
         }
-        case "define": {
-            if (ast[1] instanceof Array) {
-                if (ast.length < 2) throw new Error("sysntax error");
-                let new_ast = ast.slice(2);
-                new_ast.unshift(ast[1].slice(1));
-                new_ast.unshift("fn");
-                new_ast = ["def", ast[1][0], new_ast];
-                return compile_ast(new_ast);
-            }
-            else {
-                if (ast.length < 2) throw new Error("sysntax error");
-                let ast1 = ast[1];
-                let ast2 = ast.length === 2 ? null : ast[2];
-                return compile_ast(["def", ast1, ast2]);
-            }
-        }
-        case "defun": {
-            let new_ast = ast.slice(3);
-            new_ast.unshift(ast[2]);
-            new_ast.unshift("fn");
-            new_ast = ["def", ast[1], new_ast];
-            return compile_ast(new_ast);
-        }
-        case "defvar": {
-            if (ast.length < 2) throw new Error("sysntax error");
-            let ast1 = ast[1];
-            let ast2 = ast.length === 2 ? null : ast[2];
-            return compile_ast(["def", ast1, ast2]);
+        case "define": case "defun": case "defvar": {
+            ast = to_def(ast);
+            return compile_ast(ast);
         }
         case "do":
         case "do*":

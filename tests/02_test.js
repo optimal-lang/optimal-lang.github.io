@@ -19,3 +19,37 @@ Deno.test("02A", () => {
   console.log(v1);
   assertEquals(v1, 66);
 });
+
+Deno.test("02B", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (begin)
+    `);
+  console.log(v1);
+  assertEquals(v1, null);
+});
+
+Deno.test("02C", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (begin
+      (define x 11)
+      )
+    `);
+  console.log(v1);
+  assertEquals(v1, null);
+});
+
+Deno.test("02D", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (begin
+      (define x 11)
+      (defvar y 22)
+      (def z 33)
+      (+ x y z)
+      )
+    `);
+  console.log(v1);
+  assertEquals(v1, 66);
+});
