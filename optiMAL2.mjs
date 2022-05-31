@@ -509,7 +509,7 @@ export function optiMAL(toplevel) {
                     console.log(" [AST] " + JSON.stringify(ast));
                 if (!debug)
                     console.log("[CODE] " + text);
-                console.log(" [EXCEPTION]");
+                console.log("[EXCEPTION]");
                 if (e.stack)
                     console.log(e.stack);
                 else
