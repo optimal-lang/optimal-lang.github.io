@@ -61,7 +61,6 @@ function compile_body_helper(body) {
         let def = to_def(body[i]);
         if (def !== null) {
             let let_ast = ["let", [[def[1], def[2]]], ...body.slice(i + 1)];
-            console.log(let_ast);
             return result + compile_ast(let_ast) + ")";
         }
         result += compile_ast(body[i]);

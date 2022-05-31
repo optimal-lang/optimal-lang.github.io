@@ -53,3 +53,17 @@ Deno.test("02D", () => {
   console.log(v1);
   assertEquals(v1, 66);
 });
+
+Deno.test("02E", () => {
+  var glob = optiMAL(window);
+  var v1 = glob.runAll(`
+    (define list '(10 20 30]
+    (begin
+      (define x (length list))
+      (defvar list (prop-get list 1))
+      (list x list)
+      )
+    `);
+  console.log(v1);
+  assertEquals(v1, [3, 20]);
+});
