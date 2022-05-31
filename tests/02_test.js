@@ -181,3 +181,13 @@ Deno.test("02M", () => {
   console.log(v1);
   assertEquals(v1, ["minus","zero","plus"]);
 });
+
+Deno.test("02N", () => {
+  var v1 = run(`
+    (begin
+      (define k "my-key")
+      (dict k 123 :kw 456]
+    `);
+  console.log(v1);
+  assertEquals(v1, {"my-key": 123,":kw": 456});
+});

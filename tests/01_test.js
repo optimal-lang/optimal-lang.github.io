@@ -237,7 +237,7 @@ Deno.test("01Q", () => {
 Deno.test("01R", () => {
   var glob = omljs();
   var v1 = glob.runAll(`
-    (define dict (dict a 123]
+    (define dict (dict "a" 123]
     (prop-get dict "a")
   `);
   console.log(v1);

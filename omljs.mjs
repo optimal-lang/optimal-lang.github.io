@@ -300,15 +300,13 @@ function compile_ast(ast) {
             return result;
         }
         case "dict": {
-            let result = "{";
+            let body = [];
             for (let i = 1; i < ast.length; i += 2) {
-                if (i > 1) result += ",";
-                result += compile_body1(ast[i]);
-                result += ":";
-                result += compile_body1(ast[i + 1]);
+                body.push(["prop-set!", "__dict__", ast[i], ast[i + 1]]);
             }
-            result += "}";
-            return result;
+            body.push("__dict__");
+            ast = ["let*", [["__dict__", "{}"]], ...body];
+            return compile_ast(ast);
         }
         case "set!":
             return compile_body1(ast[1]) + "=" + compile_body1(ast[2]);
@@ -445,7 +443,7 @@ export function omljs() {
             let exp = step[0];
             let ast = step[1];
             if (debug)
-                console.log("[LIST] " + exp);
+                console.log(" [OML] " + exp);
             if (debug)
                 console.log(" [AST] " + JSON.stringify(ast));
             let text = compile_ast(ast);
@@ -468,7 +466,7 @@ export function omljs() {
             var tm1 = new Date().getTime();
             try {
                 if (debug)
-                    console.log("[LIST] " + exp);
+                    console.log(" [OML] " + exp);
                 if (debug)
                     console.log(" [AST] " + JSON.stringify(ast));
                 text = compile_ast(ast);
@@ -508,7 +506,7 @@ export function omljs() {
             }
             catch (e) {
                 if (!debug)
-                    console.log("[LIST] " + exp);
+                    console.log(" [OML] " + exp);
                 if (!debug)
                     console.log(" [AST] " + JSON.stringify(ast));
                 if (!debug)
@@ -532,7 +530,7 @@ export function omljs() {
             let exp = step[0];
             let ast = step[1];
             if (debug)
-                console.log("[LIST] " + exp);
+                console.log(" [OML] " + exp);
             if (debug)
                 console.log(" [AST] " + JSON.stringify(ast));
             let text = compile_ast(ast);
