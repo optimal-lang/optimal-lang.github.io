@@ -1,4 +1,4 @@
-import { code2ary } from "./code2ary.mjs";
+import { oml2ast } from "./oml2ast.mjs";
 
 function is_array(x) {
     return (x instanceof Array);
@@ -427,7 +427,7 @@ function compile_do(ast) {
 }
 
 export function omljs() {
-    let glob = {}; //Object.create(toplevel);
+    let glob = {};
     glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
     glob.compile_ast = (ast, debug) => {
         if (debug)
@@ -439,7 +439,7 @@ export function omljs() {
     };
     glob.compile_d = (text) => glob.compile(text, true);
     glob.compile = (text, debug) => {
-        let steps = code2ary(text);
+        let steps = oml2ast(text);
         let result = "";
         for (let step of steps) {
             let exp = step[0];
@@ -459,7 +459,7 @@ export function omljs() {
     glob.exec_d = (exp) => glob.exec(exp, true);
     glob.exec = (exp, debug) => {
         let src = exp;
-        let steps = code2ary(src);
+        let steps = oml2ast(src);
         let last;
         let text = "";
         for (let step of steps) {
@@ -526,7 +526,7 @@ export function omljs() {
     };
     glob.compileAll = (exp, debug) => {
         let src = exp;
-        let steps = code2ary(src);
+        let steps = oml2ast(src);
         let result = "";
         for (let step of steps) {
             let exp = step[0];

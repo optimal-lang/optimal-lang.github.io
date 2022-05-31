@@ -92,7 +92,7 @@ function join_sexp(exp) {
   return result;
 }
 
-export function code2ary(text) {
+export function oml2ast(text) {
   let code = tokenize(text);
   let result = [];
   while (true) {
@@ -104,15 +104,4 @@ export function code2ary(text) {
     result.push([join_sexp(exp), ast]);
   }
   return result;
-}
-
-export function code2do(text) {
-  var ary = code2ary(text);
-  //console.log(JSON.stringify(ary));
-  var do_ = ["do"];
-  for (var x of ary) {
-    //console.log(JSON.stringify(x));
-    do_.push(x[1]);
-  }
-  return do_;
 }
