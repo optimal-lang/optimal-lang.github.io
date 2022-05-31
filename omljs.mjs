@@ -300,6 +300,7 @@ function compile_ast(ast) {
             return result;
         }
         case "dict": {
+            if ((ast.length % 2) !== 1) throw new Error("synatx error");
             let body = [];
             for (let i = 1; i < ast.length; i += 2) {
                 body.push(["prop-set!", "__dict__", ast[i], ast[i + 1]]);
