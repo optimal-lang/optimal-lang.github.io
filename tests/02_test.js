@@ -67,3 +67,22 @@ Deno.test("02E", () => {
   console.log(v1);
   assertEquals(v1, [3, 20]);
 });
+
+Deno.test("02F", () => {
+  assertThrows(
+    () => {
+      var glob = optiMAL(window);
+      var v1 = glob.runAll(`
+        (define list '(10 20 30]
+        (let* [
+          (x (length list))
+          (list (prop-get list 1))
+          ]
+          (list x list)
+          )
+        `);
+    },
+    TypeError,
+    "Cannot read properties of undefined (reading 'length')",
+  );
+});
