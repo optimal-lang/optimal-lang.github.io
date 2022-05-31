@@ -426,7 +426,7 @@ function compile_do(ast) {
     return compile_ast(new_ast);
 }
 
-export function oml() {
+export function omljs() {
     let glob = {}; //Object.create(toplevel);
     glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
     glob.compile_ast = (ast, debug) => {
@@ -561,11 +561,11 @@ export function oml() {
 }
 
 export function run(exp) {
-    let o = oml();
+    let o = omljs();
     return o.run(exp);
 }
 
 export function runAll(exp) {
-    let o = oml();
+    let o = omljs();
     return o.runAll(exp);
 }
