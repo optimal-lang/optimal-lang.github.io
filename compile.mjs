@@ -15,8 +15,10 @@ var om2 = omlcpp();
 var v2 = om2.compile(`
 (defun add2 (a b) (+ a b]
 (console.log (add2 11 22]
-;(console.log (add2 77]
 (console.log (* 5 (+ 2 3) 10]
+(defvar x (add2 100 23]
+(defun add_x (n) (+ n x]
+(console.log (add_x 10]
 `, true);
 console.log(v2);
 Deno.writeTextFileSync("tmp.cpp", v2);

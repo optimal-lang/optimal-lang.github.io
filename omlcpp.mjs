@@ -39,9 +39,9 @@ function to_def(ast) {
         }
         case "defvar": {
             if (ast.length < 2) throw new Error("sysntax error");
-            let ast1 = ast[1];
-            let ast2 = ast.length === 2 ? null : ast[2];
-            return ["def", ast1, ast2];
+            let vname = ast[1];
+            let value = ast.length === 2 ? "0" : compile_ast(ast[2]);
+            return "static double " + vname + " = " + value;
         }
         case "defun": {
             if (ast.length < 3) throw new Error("sysntax error");
