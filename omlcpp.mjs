@@ -421,7 +421,7 @@ function compile_do(ast) {
     return compile_ast(new_ast);
 }
 
-export function omljs() {
+export function omlcpp() {
     let glob = {};
     glob.compile_ast = (ast, debug) => {
         if (debug)
@@ -535,12 +535,7 @@ export function omljs() {
     return glob;
 }
 
-export function run(exp) {
-    let o = omljs();
-    return o.run(exp);
-}
-
-export function runAll(exp) {
-    let o = omljs();
-    return o.runAll(exp);
+export function compile(text, debug) {
+    let o = omlcpp();
+    return o.compile(text, debug);
 }
