@@ -425,7 +425,6 @@ function compile_do(ast) {
 
 export function omljs() {
     let glob = {};
-    //glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
     glob.compile_ast = (ast, debug) => {
         if (debug)
             console.log(" [AST] " + JSON.stringify(ast));
@@ -434,7 +433,6 @@ export function omljs() {
             console.log("[CODE] " + code);
         return code;
     };
-    //glob.compile_d = (text) => glob.compile(text, true);
     glob.compile = (text, debug) => {
         let steps = oml2ast(text);
         let result = "";
