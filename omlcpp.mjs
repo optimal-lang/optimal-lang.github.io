@@ -52,7 +52,7 @@ function to_def(ast) {
             code += fname;
             code += " = [=](";
             code += args.map((x, index)=>"double " + x).join(",")
-            code += ") {";
+            code += ")->double {";
             code += "return " + compile_body(ast, 3) + ";";
             code += "}";
             return code;

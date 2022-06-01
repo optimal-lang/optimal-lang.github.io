@@ -1,7 +1,7 @@
 deno run --allow-all compile.mjs
 deno fmt tmp.js
 cat tmp.js
-deno run tmp.js
+deno run --check tmp.js
 astyle --style=allman tmp.cpp
 cat tmp.cpp
 rem clang++ -std=c++17 tmp.cpp
