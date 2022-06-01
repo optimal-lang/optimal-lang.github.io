@@ -1,10 +1,13 @@
 #include <iostream>
 #include <functional>
+#include <vector>
 
 void console_log(double x)
 {
     std::cerr << x << std::endl;
 }
+
+static std::vector<double> __do__(4096);
 
 int main()
 {
@@ -24,6 +27,16 @@ int main()
         y=22;
         return ((x+y));
     })(0,0));
+    static std::function< double(double) > fact = [=](double x)->double {return (([=](double n,double rlt)
+    {
+        n=2;
+        rlt=1;
+        return ((([&]()->void {while(!(x<n))
+    {
+        (rlt=(rlt*n),n=(1+n));
+        }})(),0),rlt);
+    })(0,0));};
+    console_log(fact(4));
 
     return 0;
 }

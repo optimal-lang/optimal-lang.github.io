@@ -16,3 +16,15 @@ console.log((function (x, y) {
   y = 22;
   return (x + y);
 })());
+globalThis.fact = function (x) {
+  return ((function (n, rlt) {
+    n = 2;
+    rlt = 1;
+    return (((function () {
+      while (!(x < n)) (rlt = rlt * n, n = 1 + n);
+    })(),
+      null),
+      rlt);
+  })());
+};
+console.log(fact(4));

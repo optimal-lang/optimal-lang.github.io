@@ -3,10 +3,13 @@ import { oml2ast } from "./oml2ast.mjs";
 const CPP_HEAD = 
 `#include <iostream>
 #include <functional>
+#include <vector>
 
 void console_log(double x) {
     std::cerr << x << std::endl;
 }
+
+static std::vector<double> __do__(4096);
 
 int main() {
 `;
@@ -287,7 +290,10 @@ function compile_ast(ast) {
                 if (i % 2) {
                     if (i > 1)
                         vars += ",";
-                    vars += "double " + ast[1][i - 1];
+                    if (ast[1][i - 1] == "__do__")
+                        vars += "std::vector<double> &" + ast[1][i - 1];
+                    else
+                        vars += "double " + ast[1][i - 1];
                     let val = compile_body1(ast[1][i]);
                     if (i > 1)
                         vals += ",";
@@ -354,11 +360,11 @@ function compile_ast(ast) {
             let condition = compile_body1(ast[1]);
             if (ast[0] === "until")
                 condition = "!" + condition;
-            return ("((function(){while(" +
+            return ("(([&]()->void {while(" +
                 condition +
                 "){" +
                 compile_body(ast, 2) +
-                "}})(),null)");
+                ";}})(),0)");
         }
         case "=":
             return "(" + compile_body1(ast[1]) + "===" + compile_body1(ast[2]) + ")";
@@ -413,8 +419,7 @@ function compile_do(ast) {
     let ast1_vars = [];
     if (parallel) {
         ast1_vars.push("__do__");
-        //ast1_vars.push(["@", "new Array(" + ast1_len + ").fill(null)"]);
-        ast1_vars.push("new Array(" + ast1_len + ").fill(null)");
+        ast1_vars.push("*(new std::vector<double>(" + ast1_len + "))");
     }
     ast1.forEach((x) => {
         ast1_vars.push(x[0]);
