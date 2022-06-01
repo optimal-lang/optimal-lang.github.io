@@ -1,6 +1,5 @@
-import { optiMAL } from "./optiMAL2.mjs";
-var glob = optiMAL(window);
-glob.runAll(`
+import { run } from "./omljs.mjs";
+run(`
 (console.log "ハロー©")
 [dotimes (i 3) (console.log i]
 [dotimes (i 3) (dotimes (j 2) (console.log (list i j]
@@ -28,6 +27,4 @@ glob.runAll(`
 (console.log (&& (< 2 4) (> 3 4]
   (try (throw 123)
   (catch ex (console.log ex]
-(try (throw 123)
-  (catchX ex (console.log ex]
-  `); // glob.runAll()
+`); // glob.runAll()
