@@ -281,37 +281,42 @@ function compile_ast(ast) {
         case "_let*": {
             let vars = "(";
             let vals = "(";
+            let voids = "(";
             let assigns = "";
             for (let i = 0; i < ast[1].length; i++) {
                 if (i % 2) {
                     if (i > 1)
                         vars += ",";
-                    vars += ast[1][i - 1];
+                    vars += "double " + ast[1][i - 1];
                     let val = compile_body1(ast[1][i]);
                     if (i > 1)
                         vals += ",";
                     vals += val;
+                    if (i > 1)
+                        voids += ",";
+                    voids += "0";
                     assigns += ast[1][i - 1] + "=" + val + ";";
                 }
             }
             vars += ")";
             vals += ")";
+            voids += ")";
             if (ast[0] === "_let")
-                return ("((function" +
+                return ("([=]" +
                     vars +
                     "{return " +
                     compile_body(ast, 2) +
-                    "})" +
-                    vals +
-                    ")");
+                    ";})" +
+                    vals);
             else
-                return ("((function" +
+                return ("([=]" +
                     vars +
                     "{" +
                     assigns +
                     "return " +
                     compile_body(ast, 2) +
-                    "})())");
+                    ";})" +
+                    voids);
         }
         case "list": {
             let result = "[";
