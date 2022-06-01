@@ -20,6 +20,12 @@ const code = `
       ((< x n) rlt)
     (set! rlt (* rlt n))))
 (console.log (fact2 4))
+(defun dummy ()
+  (define a 22)
+  (defvar b 33)
+  (console.log (+ a b))
+  )
+(dummy)
 `;
 
 var om = omljs();

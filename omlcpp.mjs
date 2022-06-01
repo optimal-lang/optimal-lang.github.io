@@ -5,8 +5,9 @@ const CPP_HEAD =
 #include <functional>
 #include <vector>
 
-void console_log(double x) {
+double console_log(double x) {
     std::cerr << x << std::endl;
+    return x;
 }
 
 static std::vector<double> __do__(4096);
@@ -42,23 +43,15 @@ function to_def(ast) {
         }
         case "defvar": {
             if (ast.length < 2) throw new Error("sysntax error");
-            let vname = ast[1];
-            let value = ast.length === 2 ? "0" : compile_ast(ast[2]);
-            return "static double " + vname + " = " + value;
+            let ast1 = ast[1];
+            let ast2 = ast.length === 2 ? null : ast[2];
+            return ["def", ast1, ast2];
         }
         case "defun": {
-            if (ast.length < 3) throw new Error("sysntax error");
-            let fname = ast[1];
-            let args = ast[2];
-            let args_types = new Array(args.length).fill("double");
-            let code = "static std::function< double(" + args_types.join(",") + ") > ";
-            code += fname;
-            code += " = [=](";
-            code += args.map((x, index)=>"double " + x).join(",")
-            code += ")->double {";
-            code += "return " + compile_body(ast, 3) + ";";
-            code += "}";
-            return code;
+            let new_ast = ast.slice(3);
+            new_ast.unshift(ast[2]);
+            new_ast.unshift("fn");
+            return ["def", ast[1], new_ast];
         }
         case "define": {
             if (ast[1] instanceof Array) {
@@ -191,9 +184,38 @@ function compile_ast(ast) {
             //return "let " + ast[1] + "=" + compile_body1(ast[2]);
             return "globalThis." + ast[1] + "=" + compile_body1(ast[2]);
         }
-        case "define": case "defun": case "defvar": {
-            ast = to_def(ast);
-            return compile_ast(ast);
+        case "defvar": {
+            if (ast.length < 2) throw new Error("sysntax error");
+            let vname = ast[1];
+            let value = ast.length === 2 ? "0" : compile_ast(ast[2]);
+            return "static double " + vname + " = " + value;
+        }
+        case "defun": {
+            if (ast.length < 3) throw new Error("sysntax error");
+            let fname = ast[1];
+            let args = ast[2];
+            let args_types = new Array(args.length).fill("double");
+            let code = "static std::function< double(" + args_types.join(",") + ") > ";
+            code += fname;
+            code += " = [=](";
+            code += args.map((x, index)=>"double " + x).join(",")
+            code += ")->double {";
+            code += "return " + compile_body(ast, 3) + ";";
+            code += "}";
+            return code;
+        }
+        case "define": {
+            if (ast[1] instanceof Array) {
+                if (ast.length < 2) throw new Error("sysntax error");
+                let new_ast = ast.slice(2);
+                return compile_ast(["defun", ast[1][0], ast[1].slice(1), ...new_ast]);
+            }
+            else {
+                if (ast.length < 2) throw new Error("sysntax error");
+                let ast1 = ast[1];
+                let ast2 = ast.length === 2 ? null : ast[2];
+                return compile_ast(["defvar", ast1, ast2]);
+            }
         }
         case "do":
         case "do*":

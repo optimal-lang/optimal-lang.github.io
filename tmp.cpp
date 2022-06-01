@@ -2,9 +2,10 @@
 #include <functional>
 #include <vector>
 
-void console_log(double x)
+double console_log(double x)
 {
     std::cerr << x << std::endl;
+    return x;
 }
 
 static std::vector<double> __do__(4096);
@@ -45,6 +46,14 @@ int main()
         }})(),0),rlt);
     })(*(new std::vector<double>(2)),2,1));};
     console_log(fact2(4));
+    static std::function< double() > dummy = [=]()->double {return (([=](double a)
+    {
+        return (([=](double b)
+        {
+            return (console_log((a+b)));
+        })(33));
+    })(22));};
+    dummy();
 
     return 0;
 }
