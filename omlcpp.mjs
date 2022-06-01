@@ -1,5 +1,22 @@
 import { oml2ast } from "./oml2ast.mjs";
 
+const CPP_HEAD = 
+`#include <iostream>
+#include <functional>
+
+void console_log(double x) {
+    std::cerr << x << std::endl;
+}
+
+int main() {
+`;
+
+const CPP_TAIL =
+`
+    return 0;
+}
+`
+
 function is_array(x) {
     return (x instanceof Array);
 }
@@ -27,10 +44,18 @@ function to_def(ast) {
             return ["def", ast1, ast2];
         }
         case "defun": {
-            let new_ast = ast.slice(3);
-            new_ast.unshift(ast[2]);
-            new_ast.unshift("fn");
-            return ["def", ast[1], new_ast];
+            if (ast.length < 3) throw new Error("sysntax error");
+            let fname = ast[1];
+            let args = ast[2];
+            let args_types = new Array(args.length).fill("double");
+            let code = "static std::function< double(" + args_types.join(",") + ") > ";
+            code += fname;
+            code += " = [=](";
+            code += args.map((x, index)=>"double " + x).join(",")
+            code += ") {";
+            code += "return " + compile_body(ast, 3) + ";";
+            code += "}";
+            return code;
         }
         case "define": {
             if (ast[1] instanceof Array) {
@@ -354,7 +379,7 @@ function compile_ast(ast) {
             return "(" + insert_op(ast[0], ast.slice(1)) + ")";
         }
         default:
-            let fcall = compile_body1(ast[0]) + "(";
+            let fcall = compile_body1(ast[0].replaceAll(".", "_")) + "(";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1)
                     fcall += ",";
@@ -433,7 +458,7 @@ export function omlcpp() {
     };
     glob.compile = (text, debug) => {
         let steps = oml2ast(text);
-        let result = "";
+        let result = CPP_HEAD;
         for (let step of steps) {
             let exp = step[0];
             let ast = step[1];
@@ -446,91 +471,8 @@ export function omlcpp() {
                 console.log("[CODE] " + code);
             result += code + ";\n";
         }
+        result += CPP_TAIL;
         return result;
-    };
-    glob.exec_d = (exp) => glob.exec(exp, true);
-    glob.exec = (exp, debug) => {
-        let src = exp;
-        let steps = oml2ast(src);
-        let last;
-        let text = "";
-        for (let step of steps) {
-            let exp = step[0];
-            let ast = step[1];
-            var tm1 = new Date().getTime();
-            try {
-                if (debug)
-                    console.log(" [OML] " + exp);
-                if (debug)
-                    console.log(" [AST] " + JSON.stringify(ast));
-                text = compile_ast(ast);
-                if (debug)
-                    console.log("[CODE] " + text);
-                let val = eval(text);
-                last = val;
-                let output;
-                if (typeof val === "function") {
-                    output = "function";
-                }
-                else if (!(val instanceof Array) &&
-                    val instanceof Object &&
-                    Object.prototype.toString.call(val) !== "[object Object]") {
-                    try {
-                        output =
-                            Object.prototype.toString.call(val) + " " + JSON.stringify(val);
-                    }
-                    catch (e) { }
-                }
-                else {
-                    try {
-                        output = JSON.stringify(val);
-                    }
-                    catch (e) { }
-                }
-                var tm2 = new Date().getTime();
-                if (debug) {
-                    if (output === undefined) {
-                        console.log("==> (" + (tm2 - tm1) + " ms)");
-                        console.log(val);
-                    }
-                    else {
-                        console.log("==> " + output + " (" + (tm2 - tm1) + " ms)");
-                    }
-                }
-            }
-            catch (e) {
-                if (!debug)
-                    console.log(" [OML] " + exp);
-                if (!debug)
-                    console.log(" [AST] " + JSON.stringify(ast));
-                if (!debug)
-                    console.log("[CODE] " + text);
-                console.log("[EXCEPTION]");
-                if (e.stack)
-                    console.log(e.stack);
-                else
-                    console.log(e);
-                throw e;
-                break;
-            }
-        }
-        return last;
-    };
-    glob.run = (exp) => glob.exec(exp, true);
-    glob.execAll = (exp, debug) => {
-        let text = glob.compile(exp, debug);
-        try {
-            return eval(text);
-        } catch (e) {
-            if (e.stack)
-                console.log(e.stack);
-            else
-                console.log(e);
-            throw e;
-        }
-    };
-    glob.runAll = (exp) => {
-        return glob.execAll(exp, true);
     };
     return glob;
 }
