@@ -57,13 +57,13 @@ function to_def(ast) {
             if (ast[1] instanceof Array) {
                 if (ast.length < 2) throw new Error("sysntax error");
                 let new_ast = ast.slice(2);
-                return ["defun", ast[1][0], ast[1].slice(1), ...new_ast];
+                return to_def(["defun", ast[1][0], ast[1].slice(1), ...new_ast]);
             }
             else {
                 if (ast.length < 2) throw new Error("sysntax error");
                 let ast1 = ast[1];
                 let ast2 = ast.length === 2 ? null : ast[2];
-                return ["defvar", ast1, ast2];
+                return to_def(["defvar", ast1, ast2]);
             }
         }
         default:
@@ -182,7 +182,7 @@ function compile_ast(ast) {
         case "def": {
             ast = to_def(ast);
             //return "let " + ast[1] + "=" + compile_body1(ast[2]);
-            return "globalThis." + ast[1] + "=" + compile_body1(ast[2]);
+            return "static auto " + ast[1] + "=" + compile_body1(ast[2]);
         }
         case "defvar": {
             if (ast.length < 2) throw new Error("sysntax error");

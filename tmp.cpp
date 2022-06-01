@@ -46,14 +46,14 @@ int main()
         }})(),0),rlt);
     })(*(new std::vector<double>(2)),2,1));};
     console_log(fact2(4));
-    static std::function< double() > dummy = [=]()->double {return (([=](double a)
+    static std::function< double() > dummy1 = [=]()->double {return (([=](double a)
     {
         return (([=](double b)
         {
             return (console_log((a+b)));
         })(33));
     })(22));};
-    dummy();
+    dummy1();
 
     return 0;
 }

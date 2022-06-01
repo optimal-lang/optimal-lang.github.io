@@ -38,11 +38,11 @@ globalThis.fact2 = function (x) {
   })(new Array(2).fill(null), 2, 1));
 };
 console.log(fact2(4));
-globalThis.dummy = function () {
+globalThis.dummy1 = function () {
   return ((function (a) {
     return ((function (b) {
       return (console.log(a + b));
     })(33));
   })(22));
 };
-dummy();
+dummy1();
