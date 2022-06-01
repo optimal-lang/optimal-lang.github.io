@@ -28,3 +28,13 @@ globalThis.fact = function (x) {
   })());
 };
 console.log(fact(4));
+globalThis.fact2 = function (x) {
+  return ((function (__do__, n, rlt) {
+    return (((function () {
+      while (!(x < n)) (rlt = rlt * n, __do__[0] = 1 + n, n = __do__[0]);
+    })(),
+      null),
+      rlt);
+  })(new Array(2).fill(null), 2, 1));
+};
+console.log(fact2(4));

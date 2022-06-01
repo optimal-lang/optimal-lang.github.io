@@ -37,6 +37,14 @@ int main()
         }})(),0),rlt);
     })(0,0));};
     console_log(fact(4));
+    static std::function< double(double) > fact2 = [=](double x)->double {return (([=](std::vector<double> &__do__,double n,double rlt)
+    {
+        return ((([&]()->void {while(!(x<n))
+    {
+        (rlt=(rlt*n),__do__[0]=(1+n),n=__do__[0]);
+        }})(),0),rlt);
+    })(*(new std::vector<double>(2)),2,1));};
+    console_log(fact2(4));
 
     return 0;
 }
