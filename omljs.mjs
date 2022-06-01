@@ -400,14 +400,12 @@ function compile_do(ast) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            //let next_step = ["set!", ["@", "__do__[" + i + "]"], x[2]];
             let next_step = ["set!", "__do__[" + i + "]", x[2]];
             until_ast.push(next_step);
         });
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            //let next_step = ["set!", x[0], ["@", "__do__[" + i + "]"]];
             let next_step = ["set!", x[0], "__do__[" + i + "]"];
             until_ast.push(next_step);
         });
@@ -427,7 +425,7 @@ function compile_do(ast) {
 
 export function omljs() {
     let glob = {};
-    glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
+    //glob.compile_ast_d = (ast) => glob.compile_ast(ast, true);
     glob.compile_ast = (ast, debug) => {
         if (debug)
             console.log(" [AST] " + JSON.stringify(ast));
@@ -436,7 +434,7 @@ export function omljs() {
             console.log("[CODE] " + text);
         return text;
     };
-    glob.compile_d = (text) => glob.compile(text, true);
+    //glob.compile_d = (text) => glob.compile(text, true);
     glob.compile = (text, debug) => {
         let steps = oml2ast(text);
         let result = "";
@@ -447,14 +445,13 @@ export function omljs() {
                 console.log(" [OML] " + exp);
             if (debug)
                 console.log(" [AST] " + JSON.stringify(ast));
-            let text = compile_ast(ast);
+            let code = compile_ast(ast);
             if (debug)
-                console.log("[CODE] " + text);
-            result += text + ";\n";
+                console.log("[CODE] " + code);
+            result += code + ";\n";
         }
         return result;
     };
-    glob.run = (exp) => glob.exec(exp, true);
     glob.exec_d = (exp) => glob.exec(exp, true);
     glob.exec = (exp, debug) => {
         let src = exp;
@@ -523,26 +520,9 @@ export function omljs() {
         }
         return last;
     };
-    glob.compileAll = (exp, debug) => {
-        let src = exp;
-        let steps = oml2ast(src);
-        let result = "";
-        for (let step of steps) {
-            let exp = step[0];
-            let ast = step[1];
-            if (debug)
-                console.log(" [OML] " + exp);
-            if (debug)
-                console.log(" [AST] " + JSON.stringify(ast));
-            let text = compile_ast(ast);
-            if (debug)
-                console.log("[CODE] " + text);
-            result += text + ";\n";
-        }
-        return result;
-    };
+    glob.run = (exp) => glob.exec(exp, true);
     glob.execAll = (exp, debug) => {
-        let text = glob.compileAll(exp, debug);
+        let text = glob.compile(exp, debug);
         try {
             return eval(text);
         } catch (e) {
