@@ -429,10 +429,10 @@ export function omljs() {
     glob.compile_ast = (ast, debug) => {
         if (debug)
             console.log(" [AST] " + JSON.stringify(ast));
-        let text = compile_ast(ast);
+        let code = compile_ast(ast);
         if (debug)
-            console.log("[CODE] " + text);
-        return text;
+            console.log("[CODE] " + code);
+        return code;
     };
     //glob.compile_d = (text) => glob.compile(text, true);
     glob.compile = (text, debug) => {
