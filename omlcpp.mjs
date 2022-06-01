@@ -13,6 +13,10 @@ double console_log(double x) {
 static std::vector<double> __do__(4096);
 
 int main() {
+    class Dummy {
+    public:
+        int a = 0;
+    };
 `;
 
 const CPP_TAIL =
