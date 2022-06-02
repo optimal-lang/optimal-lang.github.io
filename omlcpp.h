@@ -5,7 +5,10 @@
 class oml_root: public gc_cleanup
 {
 public:
-    virtual double number_value() = 0;
+    virtual double number_value()
+    {
+        return 0;
+    }
 };
 
 static oml_root* undefined = (oml_root*)-1;
