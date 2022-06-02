@@ -5,6 +5,7 @@ const CPP_HEAD =
 #include <functional>
 #include <vector>
 #include <gc/gc.h>
+#include <gc/gc_cpp.h>
 
 double console_log(double x) {
     std::cerr << x << std::endl;
