@@ -22,7 +22,7 @@ static inline oml_root* new_number(double n)
     return new(GC) oml_root(n);
 }
 
-static inline double to_number(oml_root* n)
+static inline double number_value(oml_root* n)
 {
     return n==nullptr ? 0 : n->value;
 }

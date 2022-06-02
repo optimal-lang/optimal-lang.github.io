@@ -84,7 +84,7 @@ function to_def(ast) {
 
 function compile_number(ast) {
     if (is_number(ast)) return ast.toString();
-    return `to_number(${compile_body1(ast)})`;
+    return `number_value(${compile_body1(ast)})`;
 }
 
 function compile_body_helper(body) {
