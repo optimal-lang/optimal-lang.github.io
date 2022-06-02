@@ -452,12 +452,6 @@ function compile_do(ast) {
     let parallel = ast[0] === "do";
     let ast1_len = ast1.length;
     let ast1_vars = [];
-    /*
-    if (parallel) {
-        ast1_vars.push("__do__");
-        ast1_vars.push("*(new std::vector<double>(" + ast1_len + "))");
-    }
-    */
     ast1.forEach((x) => {
         ast1_vars.push(x[0]);
         ast1_vars.push(x[1]);
