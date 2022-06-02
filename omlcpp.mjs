@@ -407,7 +407,7 @@ function compile_ast(ast) {
             let condition = compile_body1(ast[1]);
             if (ast[0] === "until")
                 condition = "!" + condition;
-            return ("(([&]()->void {while(" +
+            return ("(([=]()->void {while(" +
                 condition +
                 "){" +
                 compile_body(ast, 2) +
