@@ -148,3 +148,4 @@ console.log(
     return (typeof __number__ !== "number" ? 0 : (__number__));
   })()) + 3,
 );
+console.log("abc");

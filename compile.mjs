@@ -33,6 +33,7 @@ const code = `
 (dummy2)
 (console.log (* 2 3]
 (console.log (+ 2 null undefined 3]
+(console.log "abc")
     `;
 
 var om = omljs();

@@ -91,6 +91,10 @@ function compile_number(ast) {
     return `number_value(${compile_body1(ast)})`;
 }
 
+function compile_string(ast) {
+    return `string_value(${compile_body1(ast)})`;
+}
+
 function compile_body_helper(body) {
     if (body.length === 0) return null;
     let result = "(";
@@ -155,8 +159,11 @@ function compile_ast(ast) {
     if (ast.length === 0)
         return "[]";
     switch (ast[0]) {
-        case "`":
+        case "`": {
+            if (is_strging(ast[1]))
+                return `new_string(${JSON.stringify(ast[1])})`;
             return JSON.stringify(ast[1]);
+        }
         case "@":
             return ast[1];
         case "begin":
