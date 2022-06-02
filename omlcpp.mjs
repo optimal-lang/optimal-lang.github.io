@@ -1,7 +1,8 @@
 import { oml2ast } from "./oml2ast.mjs";
 
 const CPP_HEAD =
-    `#include <iostream>
+    `#include "omlcpp.h"
+#include <iostream>
 #include <functional>
 #include <vector>
 #include <gc/gc.h>

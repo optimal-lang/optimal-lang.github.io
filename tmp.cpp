@@ -1,3 +1,4 @@
+#include "omlcpp.h"
 #include <iostream>
 #include <functional>
 #include <vector>
