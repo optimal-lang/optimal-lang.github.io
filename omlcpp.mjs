@@ -8,11 +8,6 @@ const CPP_HEAD =
 #include <gc/gc.h>
 #include <gc/gc_cpp.h>
 
-double console_log(double x) {
-    std::cerr << x << std::endl;
-    return x;
-}
-
 int main() {
     GC_INIT();
 `;
@@ -94,8 +89,8 @@ function compile_body_helper(body) {
             if (is_fn(def[2])) {
                 //throw new Error(def[1] + ": local function is not allowed in C++");
                 let args = def[2][1];
-                let args_types = new Array(args.length).fill("double");
-                let proto = "std::function< double(" + args_types.join(",") + ") >";
+                let args_types = new Array(args.length).fill("oml_root*");
+                let proto = "std::function< oml_root*(" + args_types.join(",") + ") >";
                 let let_ast = ["let*", [[def[1], def[2], proto]], ...body.slice(i + 1)];
                 return result + compile_ast(let_ast) + ")";
                 }
@@ -130,6 +125,9 @@ function compile_ast(ast) {
         return "undefined";
     if (!ast) {
         return JSON.stringify(ast);
+    }
+    if (typeof ast === "number") {
+        return `new_number(${ast})`;
     }
     if (typeof ast === "string") {
         if (ast.match(/^:.+$/) || ast.match(/^#.+$/))
@@ -212,18 +210,18 @@ function compile_ast(ast) {
             if (ast.length < 2) throw new Error("sysntax error");
             let vname = ast[1];
             let value = ast.length === 2 ? "0" : compile_ast(ast[2]);
-            return "static double " + vname + " = " + value;
+            return "static oml_root* " + vname + " = " + value;
         }
         case "defun": {
             if (ast.length < 3) throw new Error("sysntax error");
             let fname = ast[1];
             let args = ast[2];
-            let args_types = new Array(args.length).fill("double");
-            let code = "static std::function< double(" + args_types.join(",") + ") > ";
+            let args_types = new Array(args.length).fill("oml_root*");
+            let code = "static std::function< oml_root*(" + args_types.join(",") + ") > ";
             code += fname;
             code += " = [=](";
-            code += args.map((x, index) => "double " + x).join(",")
-            code += ")->double {";
+            code += args.map((x, index) => "oml_root* " + x).join(",")
+            code += ")->oml_root* {";
             code += "return " + compile_body(ast, 3) + ";";
             code += "}";
             return code;
@@ -250,7 +248,7 @@ function compile_ast(ast) {
             for (let i = 0; i < ast[1].length; i++) {
                 if (i > 0)
                     args += ",";
-                args += "double " + ast[1][i];
+                args += "oml_root* " + ast[1][i];
             }
             args += ")";
             if (ast.length < 3)
@@ -316,7 +314,7 @@ function compile_ast(ast) {
             let new_ast1 = [];
             for (let x of ast1) {
                 if (typeof x === "string") {
-                    new_ast1.push("double");
+                    new_ast1.push("oml_root*");
                     new_ast1.push(x);
                     new_ast1.push("0");
                 } else if (x.length >= 3) {
@@ -324,7 +322,7 @@ function compile_ast(ast) {
                     new_ast1.push(x[0]);
                     new_ast1.push(x[1]);
                 } else {
-                    new_ast1.push("double");
+                    new_ast1.push("oml_root*");
                     new_ast1.push(x[0]);
                     new_ast1.push(x[1]);
                 }
@@ -452,13 +450,15 @@ function compile_ast(ast) {
 
 function insert_op(op, rest) {
     if (rest.length === 1)
-        return op + compile_body1(rest[0]);
-    let result = [compile_body1(rest[0])];
-    for (let i = 1; i < rest.length; i++) {
-        result.push(op);
-        result.push(compile_body1(rest[i]));
+        //return op + compile_body1(rest[0]);
+        return op + `to_number(${compile_body1(rest[0])})`;
+    //let result = [compile_body1(rest[0])];
+    let result = [];
+    for (let i = 0; i < rest.length; i++) {
+        if (i>0) result.push(op);
+        result.push(`to_number(${compile_body1(rest[i])})`);
     }
-    return result.join("");
+    return `new_number(${result.join("")})`;
 }
 
 function compile_do(ast) {
@@ -467,14 +467,14 @@ function compile_do(ast) {
     let ast1_len = ast1.length;
     let ast1_vars = [];
     ast1.forEach((x) => {
-        ast1_vars.push("double");
+        ast1_vars.push("oml_root*");
         ast1_vars.push(x[0]);
         ast1_vars.push(x[1]);
     });
     let ast2 = ast[2];
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
-    let until_ast = parallel ? ["until", ast2[0], "#double __do__[" + ast1_len + "];", ...ast.slice(3)] : ["until", ast2[0], ...ast.slice(3)];
+    let until_ast = parallel ? ["until", ast2[0], "#oml_root* __do__[" + ast1_len + "];", ...ast.slice(3)] : ["until", ast2[0], ...ast.slice(3)];
     if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
