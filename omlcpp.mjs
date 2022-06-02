@@ -29,6 +29,10 @@ function is_array(x) {
     return (x instanceof Array);
 }
 
+function is_strging(x) {
+    return (typeof x) === "string";
+}
+
 function is_quoted(x) {
     if (!is_array(x)) return false;
     if (x.length === 0) return false;
@@ -93,10 +97,15 @@ function compile_body_helper(body) {
 
 function compile_body(ast, start) {
     let body = [];
+    let prologue = "";
     for (let i = start; i < ast.length; i++) {
+        if (is_strging(ast[i]) && ast[i][0] == "#") {
+            prologue += ast[i].substr(1);
+            continue;
+        }
         body.push(ast[i]);
     }
-    return compile_body_helper(body);
+    return prologue + compile_body_helper(body);
 }
 
 function compile_body1(ast) {
@@ -443,10 +452,12 @@ function compile_do(ast) {
     let parallel = ast[0] === "do";
     let ast1_len = ast1.length;
     let ast1_vars = [];
+    /*
     if (parallel) {
         ast1_vars.push("__do__");
         ast1_vars.push("*(new std::vector<double>(" + ast1_len + "))");
     }
+    */
     ast1.forEach((x) => {
         ast1_vars.push(x[0]);
         ast1_vars.push(x[1]);
@@ -454,8 +465,10 @@ function compile_do(ast) {
     let ast2 = ast[2];
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
-    let until_ast = ["until", ast2[0]].concat(ast.slice(3));
-    if (parallel) {
+        //let until_ast = ["until", ast2[0]].concat(ast.slice(3));
+        //let until_ast = ["until", ast2[0], ...ast.slice(3)];
+        let until_ast = parallel ? ["until", ast2[0], "#double __do__[" + ast1_len + "];", ...ast.slice(3)] : ["until", ast2[0], ...ast.slice(3)];
+        if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
