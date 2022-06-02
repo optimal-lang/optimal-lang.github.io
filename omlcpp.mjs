@@ -95,11 +95,11 @@ function compile_body_helper(body) {
                 //throw new Error(def[1] + ": local function is not allowed in C++");
                 let args = def[2][1];
                 let args_types = new Array(args.length).fill("double");
-                let proto = "static std::function< double(" + args_types.join(",") + ") >";
-                let let_ast = ["let", [[def[1], def[2], proto]], ...body.slice(i + 1)];
+                let proto = "std::function< double(" + args_types.join(",") + ") >";
+                let let_ast = ["let*", [[def[1], def[2], proto]], ...body.slice(i + 1)];
                 return result + compile_ast(let_ast) + ")";
                 }
-            let let_ast = ["let", [[def[1], def[2]]], ...body.slice(i + 1)];
+            let let_ast = ["let*", [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
         result += compile_ast(body[i]);
@@ -250,12 +250,12 @@ function compile_ast(ast) {
             for (let i = 0; i < ast[1].length; i++) {
                 if (i > 0)
                     args += ",";
-                args += ast[1][i];
+                args += "double " + ast[1][i];
             }
             args += ")";
             if (ast.length < 3)
-                return "function" + args + "{}";
-            return "function" + args + "{return " + compile_body(ast, 2) + "}";
+                return "[=]" + args + "{}";
+            return "[=]" + args + "{return " + compile_body(ast, 2) + ";}";
         }
         case "dotimes": {
             let ast1 = ast[1];

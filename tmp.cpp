@@ -52,12 +52,23 @@ int main()
     console_log(fact2(4));
     static std::function< double() > dummy1 = [=]()->double {return (([=](double a)
     {
+        a=22;
         return (([=](double b)
         {
+            b=33;
             return (console_log((a+b)));
-        })(33));
-    })(22));};
+        })(0));
+    })(0));};
     dummy1();
+    static std::function< double() > dummy2 = [=]()->double {return (([=](std::function< double(double,double) > my_add2)
+    {
+        my_add2=[=](double a,double b)
+        {
+            return ((a+b));
+        };
+        return (console_log(my_add2(33,44)));
+    })(0));};
+    dummy2();
 
     return 0;
 }

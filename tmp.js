@@ -46,3 +46,11 @@ globalThis.dummy1 = function () {
   })(22));
 };
 dummy1();
+globalThis.dummy2 = function () {
+  return ((function (my_add2) {
+    return (console.log(my_add2(33, 44)));
+  })(function (a, b) {
+    return (a + b);
+  }));
+};
+dummy2();
