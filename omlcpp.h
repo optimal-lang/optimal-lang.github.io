@@ -11,11 +11,7 @@ public:
     }
 };
 
-/*
-oml_root* operator+(oml_root* a, oml_root* b) {
-    return new(GC) oml_root( a==nullptr?0:a->value + b==nullptr?0:b->value );
-}
-*/
+static oml_root* undefined = (oml_root*)-1;
 
 static inline oml_root* new_number(double n)
 {
@@ -24,6 +20,7 @@ static inline oml_root* new_number(double n)
 
 static inline double number_value(oml_root* n)
 {
+    if (n==undefined) return 0;
     return n==nullptr ? 0 : n->value;
 }
 

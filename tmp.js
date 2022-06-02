@@ -139,3 +139,12 @@ globalThis.dummy2 = function () {
 };
 dummy2();
 console.log(2 * 3);
+console.log(
+  2 + ((function (__number__) {
+    __number__ = null;
+    return (typeof __number__ !== "number" ? 0 : (__number__));
+  })()) + ((function (__number__) {
+    __number__ = undefined;
+    return (typeof __number__ !== "number" ? 0 : (__number__));
+  })()) + 3,
+);

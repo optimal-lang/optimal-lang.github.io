@@ -32,7 +32,8 @@ const code = `
   (console.log (my_add2 33 44]
 (dummy2)
 (console.log (* 2 3]
-`;
+(console.log (+ 2 null undefined 3]
+    `;
 
 var om = omljs();
 var v1 = om.compile(code, true);

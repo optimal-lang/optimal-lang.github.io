@@ -67,6 +67,7 @@ int main()
                                                                   };
     dummy2();
     console_log((new_number(2*3)));
+    console_log((new_number(2+number_value(nullptr)+number_value(undefined)+3)));
 
     return 0;
 }

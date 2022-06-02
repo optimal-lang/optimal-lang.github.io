@@ -18,6 +18,10 @@ const CPP_TAIL =
 }
 `
 
+function is_null(x) {
+    return x === null;
+}
+
 function is_array(x) {
     return (x instanceof Array);
 }
@@ -132,6 +136,8 @@ function compile_body1(ast) {
 function compile_ast(ast) {
     if (ast === undefined)
         return "undefined";
+    if (ast === null)
+        return "nullptr";
     if (!ast) {
         return JSON.stringify(ast);
     }
