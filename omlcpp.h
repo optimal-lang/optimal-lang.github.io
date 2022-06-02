@@ -27,7 +27,8 @@ static inline double number_value(oml_root* n)
     return n==nullptr ? 0 : n->value;
 }
 
-oml_root* console_log(oml_root* x) {
-    std::cerr << to_number(x) << std::endl;
+oml_root* console_log(oml_root* x)
+{
+    std::cerr << number_value(x) << std::endl;
     return x;
 }
