@@ -26,10 +26,10 @@ const code = `
   (console.log (+ a b))
   )
 (dummy1)
-;(defun dummy2 ()
-;  [define (my_add2 a b) (+ a b]
-;  (console.log (my_add2 33 44]
-;(dummy2)
+(defun dummy2 ()
+  [define (my_add2 a b) (+ a b]
+  (console.log (my_add2 33 44]
+(dummy2)
 `;
 
 var om = omljs();

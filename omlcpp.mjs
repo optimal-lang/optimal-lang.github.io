@@ -92,8 +92,13 @@ function compile_body_helper(body) {
         let def = to_def(body[i]);
         if (def !== null) {
             if (is_fn(def[2])) {
-                throw new Error(def[1] + ": local function is not allowed in C++");
-            }
+                //throw new Error(def[1] + ": local function is not allowed in C++");
+                let args = def[2][1];
+                let args_types = new Array(args.length).fill("double");
+                let proto = "static std::function< double(" + args_types.join(",") + ") >";
+                let let_ast = ["let", [[def[1], def[2], proto]], ...body.slice(i + 1)];
+                return result + compile_ast(let_ast) + ")";
+                }
             let let_ast = ["let", [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
