@@ -60,7 +60,7 @@ function to_def(ast) {
 
 function compile_number(ast) {
     if (is_number(ast)) return ast.toString();
-    let new_ast = ["let", [["__number__", ast]], ["if", 'typeof __number__!=="number"', 0, "__number__"]];
+    let new_ast = ["let*", [["__number__", ast]], ["if", 'typeof __number__!=="number"', 0, "__number__"]];
     return compile_body1(new_ast);
 }
 
@@ -271,17 +271,15 @@ function compile_ast(ast) {
             let vars = "(";
             let vals = "(";
             let assigns = "";
-            for (let i = 0; i < ast[1].length; i++) {
-                if (i % 2) {
-                    if (i > 1)
-                        vars += ",";
-                    vars += ast[1][i - 1];
-                    let val = compile_body1(ast[1][i]);
-                    if (i > 1)
-                        vals += ",";
-                    vals += val;
-                    assigns += ast[1][i - 1] + "=" + val + ";";
-                }
+            for (let i = 1; i < ast[1].length; i += 2) {
+                if (i > 1)
+                    vars += ",";
+                vars += ast[1][i - 1];
+                let val = compile_body1(ast[1][i]);
+                if (i > 1)
+                    vals += ",";
+                vals += val;
+                assigns += ast[1][i - 1] + "=" + val + ";";
             }
             vars += ")";
             vals += ")";
@@ -384,7 +382,7 @@ function insert_op(op, rest) {
         return op + compile_number(rest[0]);
     let result = [];
     for (let i = 0; i < rest.length; i++) {
-        if (i>0) result.push(op);
+        if (i > 0) result.push(op);
         result.push(compile_number(rest[i]));
     }
     return result.join("");
