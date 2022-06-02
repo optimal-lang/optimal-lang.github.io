@@ -465,8 +465,6 @@ function compile_do(ast) {
     let ast2 = ast[2];
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
-        //let until_ast = ["until", ast2[0]].concat(ast.slice(3));
-        //let until_ast = ["until", ast2[0], ...ast.slice(3)];
         let until_ast = parallel ? ["until", ast2[0], "#double __do__[" + ast1_len + "];", ...ast.slice(3)] : ["until", ast2[0], ...ast.slice(3)];
         if (parallel) {
         ast1.forEach((x, i) => {
