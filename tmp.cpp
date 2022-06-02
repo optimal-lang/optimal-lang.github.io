@@ -8,8 +8,6 @@ double console_log(double x)
     return x;
 }
 
-static std::vector<double> __do__(4096);
-
 int main()
 {
     class Dummy

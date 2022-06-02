@@ -1,7 +1,7 @@
 import { oml2ast } from "./oml2ast.mjs";
 
-const CPP_HEAD = 
-`#include <iostream>
+const CPP_HEAD =
+    `#include <iostream>
 #include <functional>
 #include <vector>
 
@@ -9,8 +9,6 @@ double console_log(double x) {
     std::cerr << x << std::endl;
     return x;
 }
-
-static std::vector<double> __do__(4096);
 
 int main() {
     class Dummy {
@@ -20,7 +18,7 @@ int main() {
 `;
 
 const CPP_TAIL =
-`
+    `
     return 0;
 }
 `
@@ -31,6 +29,12 @@ function is_array(x) {
 
 function is_strging(x) {
     return (typeof x) === "string";
+}
+
+function is_fn(x) {
+    if (!is_array(x)) return false;
+    if (x.length === 0) return false;
+    return x[0] === "fn" || x[0] === "lambda";
 }
 
 function is_quoted(x) {
@@ -87,6 +91,9 @@ function compile_body_helper(body) {
             result += ",";
         let def = to_def(body[i]);
         if (def !== null) {
+            if (is_fn(def[2])) {
+                throw new Error(def[1] + ": local function is not allowed in C++");
+            }
             let let_ast = ["let", [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
@@ -194,7 +201,6 @@ function compile_ast(ast) {
             return compile_body1(ast[1]) + sign + "=" + val;
         case "def": {
             ast = to_def(ast);
-            //return "let " + ast[1] + "=" + compile_body1(ast[2]);
             return "static auto " + ast[1] + "=" + compile_body1(ast[2]);
         }
         case "defvar": {
@@ -211,7 +217,7 @@ function compile_ast(ast) {
             let code = "static std::function< double(" + args_types.join(",") + ") > ";
             code += fname;
             code += " = [=](";
-            code += args.map((x, index)=>"double " + x).join(",")
+            code += args.map((x, index) => "double " + x).join(",")
             code += ")->double {";
             code += "return " + compile_body(ast, 3) + ";";
             code += "}";
@@ -305,10 +311,15 @@ function compile_ast(ast) {
             let new_ast1 = [];
             for (let x of ast1) {
                 if (typeof x === "string") {
+                    new_ast1.push("double");
                     new_ast1.push(x);
-                    new_ast1.push(undefined);
-                }
-                else {
+                    new_ast1.push("0");
+                } else if (x.length >= 3) {
+                    new_ast1.push(x[2]);
+                    new_ast1.push(x[0]);
+                    new_ast1.push(x[1]);
+                } else {
+                    new_ast1.push("double");
                     new_ast1.push(x[0]);
                     new_ast1.push(x[1]);
                 }
@@ -321,23 +332,21 @@ function compile_ast(ast) {
             let vals = "(";
             let voids = "(";
             let assigns = "";
-            for (let i = 0; i < ast[1].length; i++) {
-                if (i % 2) {
-                    if (i > 1)
-                        vars += ",";
-                    if (ast[1][i - 1] == "__do__")
-                        vars += "std::vector<double> &" + ast[1][i - 1];
-                    else
-                        vars += "double " + ast[1][i - 1];
-                    let val = compile_body1(ast[1][i]);
-                    if (i > 1)
-                        vals += ",";
-                    vals += val;
-                    if (i > 1)
-                        voids += ",";
-                    voids += "0";
-                    assigns += ast[1][i - 1] + "=" + val + ";";
-                }
+            console.log("ast=" + JSON.stringify(ast));
+            console.log("ast[1]=" + JSON.stringify(ast[1]));
+            for (let i = 2; i <= ast[1].length; i += 3) {
+                console.log("i=" + i);
+                if (i > 2)
+                    vars += ",";
+                vars += ast[1][i - 2] + " " + ast[1][i - 1];
+                let val = compile_body1(ast[1][i]);
+                if (i > 2)
+                    vals += ",";
+                vals += val;
+                if (i > 2)
+                    voids += ",";
+                voids += "0";
+                assigns += ast[1][i - 1] + "=" + val + ";";
             }
             vars += ")";
             vals += ")";
@@ -453,14 +462,15 @@ function compile_do(ast) {
     let ast1_len = ast1.length;
     let ast1_vars = [];
     ast1.forEach((x) => {
+        ast1_vars.push("double");
         ast1_vars.push(x[0]);
         ast1_vars.push(x[1]);
     });
     let ast2 = ast[2];
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
-        let until_ast = parallel ? ["until", ast2[0], "#double __do__[" + ast1_len + "];", ...ast.slice(3)] : ["until", ast2[0], ...ast.slice(3)];
-        if (parallel) {
+    let until_ast = parallel ? ["until", ast2[0], "#double __do__[" + ast1_len + "];", ...ast.slice(3)] : ["until", ast2[0], ...ast.slice(3)];
+    if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
