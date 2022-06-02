@@ -22,6 +22,10 @@ function is_array(x) {
     return (x instanceof Array);
 }
 
+function is_number(x) {
+    return (typeof x) === "number";
+}
+
 function is_strging(x) {
     return (typeof x) === "string";
 }
@@ -76,6 +80,11 @@ function to_def(ast) {
         default:
             return null;
     }
+}
+
+function compile_number(ast) {
+    if (is_number(ast)) return ast.toString();
+    return `to_number(${compile_body1(ast)})`;
 }
 
 function compile_body_helper(body) {
@@ -424,7 +433,7 @@ function compile_ast(ast) {
         case ">":
         case "<=":
         case ">=":
-            return "(" + `to_number(${compile_body1(ast[1])})` + ast[0] + `to_number(${compile_body1(ast[2])})` + ")";
+            return "(" + compile_number(ast[1]) + ast[0] + compile_number(ast[2]) + ")";
         case "&&":
         case "||":
         case "&":
@@ -451,12 +460,12 @@ function compile_ast(ast) {
 function insert_op(op, rest) {
     if (rest.length === 1)
         //return op + compile_body1(rest[0]);
-        return op + `to_number(${compile_body1(rest[0])})`;
+        return op + compile_number(rest[0]);
     //let result = [compile_body1(rest[0])];
     let result = [];
     for (let i = 0; i < rest.length; i++) {
         if (i>0) result.push(op);
-        result.push(`to_number(${compile_body1(rest[i])})`);
+        result.push(compile_number(rest[i]));
     }
     return `new_number(${result.join("")})`;
 }

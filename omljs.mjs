@@ -61,7 +61,7 @@ function to_def(ast) {
 function compile_number(ast) {
     if (is_number(ast)) return ast.toString();
     let new_ast = ["let", [["__number__", ast]], ["if", 'typeof __number__!=="number"', 0, "__number__"]];
-    return compile_ast(new_ast);
+    return compile_body1(new_ast);
 }
 
 function compile_body_helper(body) {
