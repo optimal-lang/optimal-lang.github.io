@@ -194,8 +194,16 @@ Deno.test("02N", () => {
 
 Deno.test("02O", () => {
   var v1 = run(`
-    (+ 11 "22")
+    (+ 11 undefined null "22")
     `);
   console.log(v1);
   assertEquals(v1, 11);
+});
+
+Deno.test("02P", () => {
+  var v1 = run(`
+    (. 11 undefined null "22")
+    `);
+  console.log(v1);
+  assertEquals(v1, "11undefinednull22");
 });

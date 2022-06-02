@@ -64,6 +64,11 @@ function compile_number(ast) {
     return compile_body1(new_ast);
 }
 
+function compile_string(ast) {
+    //if (is_number(ast)) return JSON.stringify(ast.toString());
+    return `String(${compile_body1(ast)})`;
+}
+
 function compile_body_helper(body) {
     if (body.length === 0) return null;
     let result = "(";
@@ -341,6 +346,16 @@ function compile_ast(ast) {
                 "){" +
                 compile_body(ast, 2) +
                 "}})(),null)");
+        }
+        case ".": {
+            let op = "+";
+            let rest = ast.slice(1);
+            let result = [];
+            for (let i = 0; i < rest.length; i++) {
+                if (i > 0) result.push(op);
+                result.push(compile_string(rest[i]));
+            }
+            return result.join("");
         }
         case "=":
             return "(" + compile_body1(ast[1]) + "===" + compile_body1(ast[2]) + ")";

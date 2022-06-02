@@ -1,40 +1,49 @@
 globalThis.add2 = function (a, b) {
   return (((function (__number__) {
+    __number__ = a;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(a)) + ((function (__number__) {
+  })()) + ((function (__number__) {
+    __number__ = b;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(b)));
+  })()));
 };
 console.log(add2(11, 22));
 console.log(
   5 * ((function (__number__) {
+    __number__ = 2 + 3;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(2 + 3)) * 10,
+  })()) * 10,
 );
 globalThis.x = add2(100, 23);
 globalThis.add_x = function (n) {
   return (((function (__number__) {
+    __number__ = n;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(n)) + ((function (__number__) {
+  })()) + ((function (__number__) {
+    __number__ = x;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(x)));
+  })()));
 };
 console.log(add_x(10));
 console.log((function (x, y) {
   return (((function (__number__) {
+    __number__ = x;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(x)) + ((function (__number__) {
+  })()) + ((function (__number__) {
+    __number__ = y;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(y)));
+  })()));
 })(11, 22));
 console.log((function (x, y) {
   x = 11;
   y = 22;
   return (((function (__number__) {
+    __number__ = x;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(x)) + ((function (__number__) {
+  })()) + ((function (__number__) {
+    __number__ = y;
     return (typeof __number__ !== "number" ? 0 : (__number__));
-  })(y)));
+  })()));
 })());
 globalThis.fact = function (x) {
   return ((function (n, rlt) {
@@ -43,19 +52,24 @@ globalThis.fact = function (x) {
     return (((function () {
       while (
         !(((function (__number__) {
+          __number__ = x;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(x)) < ((function (__number__) {
+        })()) < ((function (__number__) {
+          __number__ = n;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(n)))
+        })()))
       ) {
         (rlt = ((function (__number__) {
+          __number__ = rlt;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(rlt)) * ((function (__number__) {
+        })()) * ((function (__number__) {
+          __number__ = n;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(n)),
+        })()),
           n = 1 + ((function (__number__) {
+            __number__ = n;
             return (typeof __number__ !== "number" ? 0 : (__number__));
-          })(n)));
+          })()));
       }
     })(),
       null),
@@ -68,19 +82,24 @@ globalThis.fact2 = function (x) {
     return (((function () {
       while (
         !(((function (__number__) {
+          __number__ = x;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(x)) < ((function (__number__) {
+        })()) < ((function (__number__) {
+          __number__ = n;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(n)))
+        })()))
       ) {
         (rlt = ((function (__number__) {
+          __number__ = rlt;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(rlt)) * ((function (__number__) {
+        })()) * ((function (__number__) {
+          __number__ = n;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(n)),
+        })()),
           __do__[0] = 1 + ((function (__number__) {
+            __number__ = n;
             return (typeof __number__ !== "number" ? 0 : (__number__));
-          })(n)),
+          })()),
           n = __do__[0]);
       }
     })(),
@@ -94,10 +113,12 @@ globalThis.dummy1 = function () {
     return ((function (b) {
       return (console.log(
         ((function (__number__) {
+          __number__ = a;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(a)) + ((function (__number__) {
+        })()) + ((function (__number__) {
+          __number__ = b;
           return (typeof __number__ !== "number" ? 0 : (__number__));
-        })(b)),
+        })()),
       ));
     })(33));
   })(22));
@@ -108,10 +129,12 @@ globalThis.dummy2 = function () {
     return (console.log(my_add2(33, 44)));
   })(function (a, b) {
     return (((function (__number__) {
+      __number__ = a;
       return (typeof __number__ !== "number" ? 0 : (__number__));
-    })(a)) + ((function (__number__) {
+    })()) + ((function (__number__) {
+      __number__ = b;
       return (typeof __number__ !== "number" ? 0 : (__number__));
-    })(b)));
+    })()));
   }));
 };
 dummy2();
