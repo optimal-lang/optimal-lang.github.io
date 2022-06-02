@@ -28,7 +28,7 @@ int main()
     {
         n=new_number(2);
         rlt=new_number(1);
-        return ((([&]()->void {while(!(x<n))
+        return ((([&]()->void {while(!(to_number(x)<to_number(n)))
     {
         (rlt=(new_number(to_number(rlt)*to_number(n))),n=(new_number(to_number(new_number(1))+to_number(n))));
         }})(),0),rlt);
@@ -37,7 +37,7 @@ int main()
     console_log(fact(new_number(4)));
     static std::function< oml_root*(oml_root*) > fact2 = [=](oml_root* x)->oml_root* {return (([=](oml_root* n,oml_root* rlt)
     {
-        return ((([&]()->void {while(!(x<n))
+        return ((([&]()->void {while(!(to_number(x)<to_number(n)))
     {
         oml_root* __do__[2];
             (rlt=(new_number(to_number(rlt)*to_number(n))),__do__[0]=(new_number(to_number(new_number(1))+to_number(n))),n=__do__[0]);
@@ -66,6 +66,7 @@ int main()
     })(0));
                                                                   };
     dummy2();
+    console_log((new_number(to_number(new_number(2))*to_number(new_number(3)))));
 
     return 0;
 }

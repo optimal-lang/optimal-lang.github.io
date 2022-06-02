@@ -54,3 +54,4 @@ globalThis.dummy2 = function () {
   }));
 };
 dummy2();
+console.log(2 * 3);

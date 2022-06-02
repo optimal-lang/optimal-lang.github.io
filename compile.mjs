@@ -13,6 +13,7 @@ const code = `
 (define (fact x)
   (do* ((n 2 (+ 1 n)) (rlt 1))
        ((< x n) rlt)
+    #(console.log n)
     (set! rlt (* rlt n))))
 (console.log (fact 4))
 (define (fact2 x)
@@ -30,6 +31,7 @@ const code = `
   [define (my_add2 a b) (+ a b]
   (console.log (my_add2 33 44]
 (dummy2)
+(console.log (* 2 3]
 `;
 
 var om = omljs();
