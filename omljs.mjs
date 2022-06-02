@@ -4,6 +4,14 @@ function is_array(x) {
     return (x instanceof Array);
 }
 
+function is_number(x) {
+    return (typeof x) === "number";
+}
+
+function is_strging(x) {
+    return (typeof x) === "string";
+}
+
 function is_quoted(x) {
     if (!is_array(x)) return false;
     if (x.length === 0) return false;
@@ -48,6 +56,12 @@ function to_def(ast) {
         default:
             return null;
     }
+}
+
+function compile_number(ast) {
+    if (is_number(ast)) return ast.toString();
+    let new_ast = ["let", [["__number__", ast]], ["if", 'typeof __number__!=="number"', 0, "__number__"]];
+    return compile_ast(new_ast);
 }
 
 function compile_body_helper(body) {
@@ -341,7 +355,7 @@ function compile_ast(ast) {
         case ">":
         case "<=":
         case ">=":
-            return "(" + compile_body1(ast[1]) + ast[0] + compile_body1(ast[2]) + ")";
+            return "(" + compile_number(ast[1]) + ast[0] + compile_number(ast[2]) + ")";
         case "&&":
         case "||":
         case "&":
@@ -367,11 +381,11 @@ function compile_ast(ast) {
 
 function insert_op(op, rest) {
     if (rest.length === 1)
-        return op + compile_body1(rest[0]);
-    let result = [compile_body1(rest[0])];
-    for (let i = 1; i < rest.length; i++) {
-        result.push(op);
-        result.push(compile_body1(rest[i]));
+        return op + compile_number(rest[0]);
+    let result = [];
+    for (let i = 0; i < rest.length; i++) {
+        if (i>0) result.push(op);
+        result.push(compile_number(rest[i]));
     }
     return result.join("");
 }

@@ -191,3 +191,11 @@ Deno.test("02N", () => {
   console.log(v1);
   assertEquals(v1, {"my-key": 123,":kw": 456});
 });
+
+Deno.test("02O", () => {
+  var v1 = run(`
+    (+ 11 "22")
+    `);
+  console.log(v1);
+  assertEquals(v1, 11);
+});
