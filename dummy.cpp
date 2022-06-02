@@ -1,31 +1,14 @@
 #include <iostream>
 #include <vector>
 
-class test {
-public:
-    enum funcs {
-        A,
-        B,
-        C
-    };
-    double call(funcs f, std::vector<double> &args)
-    {
-        return 0;
-    }
-};
-
-class test2 {
-public:
-    enum funcs {
-        A,
-        B,
-        C
-    };
-};
-
 int main()
 {
-    test *t = new test();
-    std::cerr << t->A << std::endl;
+    std::vector<double> v;
+    v.resize(3);
+    v[2] = 123;
+    for (std::size_t i = 0; i < v.size(); i++)
+    {
+        std::cerr << i << ":" << v[i] << std::endl;
+    }
     return 0;
 }
