@@ -65,7 +65,6 @@ function compile_number(ast) {
 }
 
 function compile_string(ast) {
-    //if (is_number(ast)) return JSON.stringify(ast.toString());
     return `String(${compile_body1(ast)})`;
 }
 

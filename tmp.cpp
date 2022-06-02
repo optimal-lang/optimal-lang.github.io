@@ -69,6 +69,8 @@ int main()
     console_log((new_number(2*3)));
     console_log((new_number(2+number_value(nullptr)+number_value(undefined)+3)));
     console_log(new_string("abc"));
+    console_log(new_string(string_value(new_number(11))+string_value(undefined)+string_value(nullptr)+std::string("22")));
+    console_log((new_number(11+number_value(undefined)+number_value(nullptr)+number_value(new_string("22")))));
 
     return 0;
 }

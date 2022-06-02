@@ -149,3 +149,16 @@ console.log(
   })()) + 3,
 );
 console.log("abc");
+console.log(String(11) + String(undefined) + String(null) + String("22"));
+console.log(
+  11 + ((function (__number__) {
+    __number__ = undefined;
+    return (typeof __number__ !== "number" ? 0 : (__number__));
+  })()) + ((function (__number__) {
+    __number__ = null;
+    return (typeof __number__ !== "number" ? 0 : (__number__));
+  })()) + ((function (__number__) {
+    __number__ = "22";
+    return (typeof __number__ !== "number" ? 0 : (__number__));
+  })()),
+);

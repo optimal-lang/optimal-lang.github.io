@@ -34,6 +34,8 @@ const code = `
 (console.log (* 2 3]
 (console.log (+ 2 null undefined 3]
 (console.log "abc")
+(console.log (. 11 undefined null "22"))
+(console.log (+ 11 undefined null "22"))
     `;
 
 var om = omljs();

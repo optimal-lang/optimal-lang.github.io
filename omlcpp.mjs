@@ -30,8 +30,15 @@ function is_number(x) {
     return (typeof x) === "number";
 }
 
-function is_strging(x) {
+function is_string(x) {
     return (typeof x) === "string";
+}
+
+function is_string_constant(x) {
+    if (!is_array(x)) return false;
+    if (x.length < 2) return false;
+    if (x[0] !== "`") return false;
+    return is_string(x[1]);
 }
 
 function is_fn(x) {
@@ -92,6 +99,8 @@ function compile_number(ast) {
 }
 
 function compile_string(ast) {
+    if (is_string_constant(ast))
+        return `std::string(${JSON.stringify(ast[1])})`
     return `string_value(${compile_body1(ast)})`;
 }
 
@@ -123,7 +132,7 @@ function compile_body(ast, start) {
     let body = [];
     let prologue = "";
     for (let i = start; i < ast.length; i++) {
-        if (is_strging(ast[i]) && ast[i][0] == "#") {
+        if (is_string(ast[i]) && ast[i][0] == "#") {
             prologue += ast[i].substr(1);
             continue;
         }
@@ -160,7 +169,7 @@ function compile_ast(ast) {
         return "[]";
     switch (ast[0]) {
         case "`": {
-            if (is_strging(ast[1]))
+            if (is_string(ast[1]))
                 return `new_string(${JSON.stringify(ast[1])})`;
             return JSON.stringify(ast[1]);
         }
@@ -434,6 +443,16 @@ function compile_ast(ast) {
                 "){" +
                 compile_body(ast, 2) +
                 ";}})(),0)");
+        }
+        case ".": {
+            let op = "+";
+            let rest = ast.slice(1);
+            let result = [];
+            for (let i = 0; i < rest.length; i++) {
+                if (i > 0) result.push(op);
+                result.push(compile_string(rest[i]));
+            }
+            return `new_string(${result.join("")})`;
         }
         case "=":
             return "(" + compile_body1(ast[1]) + "===" + compile_body1(ast[2]) + ")";
