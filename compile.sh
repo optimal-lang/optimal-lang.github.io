@@ -6,5 +6,5 @@ cat tmp.js
 deno run --check tmp.js
 astyle --style=allman tmp.cpp
 cat tmp.cpp
-mingwx.cmd g++.exe tmp.cpp -static
+mingwx.cmd g++.exe tmp.cpp -static -lgc -lgccpp
 ./a.exe

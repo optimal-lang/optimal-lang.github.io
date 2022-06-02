@@ -4,6 +4,7 @@ const CPP_HEAD =
     `#include <iostream>
 #include <functional>
 #include <vector>
+#include <gc/gc.h>
 
 double console_log(double x) {
     std::cerr << x << std::endl;
@@ -11,10 +12,7 @@ double console_log(double x) {
 }
 
 int main() {
-    class Dummy {
-    public:
-        int a = 0;
-    };
+    GC_INIT();
 `;
 
 const CPP_TAIL =

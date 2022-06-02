@@ -1,6 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <vector>
+#include <gc/gc.h>
 
 double console_log(double x)
 {
@@ -10,11 +11,7 @@ double console_log(double x)
 
 int main()
 {
-    class Dummy
-    {
-    public:
-        int a = 0;
-    };
+    GC_INIT();
     static std::function< double(double,double) > add2 = [=](double a,double b)->double {return ((a+b));};
     console_log(add2(11,22));
     console_log((5*(2+3)*10));
