@@ -88,6 +88,6 @@ static inline const std::string &string_value(oml_root *x)
 
 oml_root *console_log(oml_root *x)
 {
-    std::cerr << string_value(x) << std::endl;
+    std::cout << string_value(x) << std::endl;
     return x;
 }
