@@ -213,7 +213,7 @@ Deno.test("02Q", () => {
     {:key1 undefined "key2" 22}
     `);
   console.log(v1);
-  assertEquals(v1, {":key1": undefined,key2: 22});
+  assertEquals(v1, {":key1": undefined, key2: 22});
 });
 
 Deno.test("02Q", () => {
@@ -221,5 +221,5 @@ Deno.test("02Q", () => {
     {:key1 "abc" "key2"
     `);
   console.log(v1);
-  assertEquals(v1, {":key1": undefined,key2: 22});
+  assertEquals(v1, {":key1": "abc", key2: undefined});
 });
