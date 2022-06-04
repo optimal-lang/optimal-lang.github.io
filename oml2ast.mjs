@@ -12,34 +12,6 @@ function tokenize(str) {
   return result;
 }
 
-function is_null(x) {
-  return x === null;
-}
-
-function is_array(x) {
-  return (x instanceof Array);
-}
-
-function is_number(x) {
-  return (typeof x) === "number";
-}
-
-function is_string(x) {
-  return (typeof x) === "string";
-}
-
-function is_quoted(x) {
-  if (!is_array(x)) return false;
-  if (x.length === 0) return false;
-  return x[0] === "`";
-}
-
-function is_at_quoted(x) {
-  if (!is_array(x)) return false;
-  if (x.length === 0) return false;
-  return x[0] === "@";
-}
-
 function read_token(code, exp) {
   if (code.length === 0) return undefined;
   let token = code.shift();
