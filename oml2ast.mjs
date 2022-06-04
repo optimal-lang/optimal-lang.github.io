@@ -23,7 +23,7 @@ function read_list(code, exp, ch, data) {
   let result = [];
   if (data) result.push("list");
   let ast;
-  while ((ast = read_sexp(code, exp, data)) !== undefined) {
+  while ((ast = read_sexp(code, exp, false)) !== undefined) {
     if (ast === "]") {
       if (ch !== "[") code.unshift("]");
       break;
@@ -35,7 +35,7 @@ function read_list(code, exp, ch, data) {
   return result;
 }
 
-function read_dict(code, exp, ch) {
+function read_dict(code, exp, data) {
   let result = ["dict"];
   let ast1;
   let ast2;
@@ -72,10 +72,15 @@ function read_sexp(code, exp, data) {
     case "]":
       return ch;
     case "{":
-      return read_dict(code, exp);
-    case "'":
-      let ast = read_sexp(code, exp);
+      return read_dict(code, exp, data);
+    case "'": {
+      let ast = read_sexp(code, exp, false);
       return ["`", ast];
+    }
+    case "&": {
+      let ast = read_sexp(code, exp, true);
+      return ast;
+    }
     case '"':
       token = JSON.parse(token);
       return ["`", token];

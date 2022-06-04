@@ -240,3 +240,19 @@ Deno.test("02T", () => {
   assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
 });
 
+Deno.test("02U", () => {
+  var v1 = run(`
+    &{:key1 undefined "key2" 22, :key3 (1 2 3]}
+    `);
+  console.log(v1);
+  assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
+});
+
+Deno.test("02U", () => {
+  var v1 = run(`
+    &(1 (+ 22 33) 2)
+    `);
+  console.log(v1);
+  assertEquals(v1, [1, 55, 2]);
+});
+
