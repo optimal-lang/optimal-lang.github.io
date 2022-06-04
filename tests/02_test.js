@@ -210,10 +210,10 @@ Deno.test("02P", () => {
 
 Deno.test("02Q", () => {
   var v1 = run(`
-    {:key1 undefined "key2" 22}
+    {:key1 undefined "key2" 22, :key3 (1 2 3)}
     `);
   console.log(v1);
-  assertEquals(v1, {":key1": undefined, key2: 22});
+  assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
 });
 
 Deno.test("02R", () => {
@@ -223,3 +223,20 @@ Deno.test("02R", () => {
   console.log(v1);
   assertEquals(v1, {":key1": "abc", key2: undefined});
 });
+
+Deno.test("02S", () => {
+  var v1 = run(`
+    {:key1 undefined "key2" 22, :key3 [1 2 3]}
+    `);
+  console.log(v1);
+  assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
+});
+
+Deno.test("02T", () => {
+  var v1 = run(`
+    {:key1 undefined "key2" 22, :key3 (1 2 3]}
+    `);
+  console.log(v1);
+  assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
+});
+

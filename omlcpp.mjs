@@ -17,7 +17,6 @@ const CPP_TAIL =
     return 0;
 }
 `
-
 function is_null(x) {
     return x === null;
 }

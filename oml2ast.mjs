@@ -1,5 +1,5 @@
 function tokenize(str) {
-  let re = /[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]{}'"`;@]*)/g;
+  let re = /[\s,]*([()\[\]{}&'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]{}&'"`;@]*)/g;
   let result = [];
   let token;
   while ((token = re.exec(str)[1]) !== "") {
@@ -19,10 +19,11 @@ function read_token(code, exp) {
   return token;
 }
 
-function read_list(code, exp, ch) {
+function read_list(code, exp, ch, data) {
   let result = [];
+  if (data) result.push("list");
   let ast;
-  while ((ast = read_sexp(code, exp)) !== undefined) {
+  while ((ast = read_sexp(code, exp, data)) !== undefined) {
     if (ast === "]") {
       if (ch !== "[") code.unshift("]");
       break;
@@ -39,15 +40,16 @@ function read_dict(code, exp, ch) {
   let ast1;
   let ast2;
   while ((ast1 = read_sexp(code, exp)) !== undefined) {
+    if (ast1 === "]") continue;
     if (ast1 === "}") break;
-    ast2 = read_sexp(code, exp);
+    ast2 = read_sexp(code, exp, true);
     result.push(ast1);
     result.push(ast2);
   }
   return result;
 }
 
-function read_sexp(code, exp) {
+function read_sexp(code, exp, data) {
   let token = read_token(code, exp);
   if (token === undefined) return undefined;
   switch (token) {
@@ -64,7 +66,7 @@ function read_sexp(code, exp) {
   switch (ch) {
     case "(":
     case "[":
-      let lst = read_list(code, exp, ch);
+      let lst = read_list(code, exp, ch, data);
       return lst;
     case ")":
     case "]":
