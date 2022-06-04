@@ -1,6 +1,7 @@
 #! bash -uvx
 set -e
-deno run --allow-all compile1.mjs > compile1.txt
+deno run --allow-all compile1.mjs | tee compile1.txt
+sleep 3
 deno run --allow-all compile2.mjs
 astyle --style=allman tmp.cpp
 cat tmp.cpp
