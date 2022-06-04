@@ -409,7 +409,6 @@ function compile_do(ast) {
     let ast1_vars = [];
     if (parallel) {
         ast1_vars.push("__do__");
-        //ast1_vars.push(["@", "new Array(" + ast1_len + ").fill(null)"]);
         ast1_vars.push("new Array(" + ast1_len + ").fill(null)");
     }
     ast1.forEach((x) => {
@@ -570,3 +569,7 @@ export function runAll(exp) {
     let o = omljs();
     return o.runAll(exp);
 }
+
+globalThis.print = function(x) {
+    console.log(x);
+};

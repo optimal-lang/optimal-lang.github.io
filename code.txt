@@ -33,3 +33,4 @@
 (console.log (. 11 undefined null "22"))
 (console.log (+ 11 undefined null "22"))
 (console.log "abc\nxyz")
+(print (. 11 undefined null "22"))
