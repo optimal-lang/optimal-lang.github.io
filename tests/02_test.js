@@ -207,3 +207,11 @@ Deno.test("02P", () => {
   console.log(v1);
   assertEquals(v1, "11undefinednull22");
 });
+
+Deno.test("02Q", () => {
+  var v1 = run(`
+    {:key1 undefined "key2" 22}
+    `);
+  console.log(v1);
+  assertEquals(v1, {":key1": undefined,key2: 22});
+});

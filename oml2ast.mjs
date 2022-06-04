@@ -1,5 +1,5 @@
 function tokenize(str) {
-  let re = /[\s,]*([()\[\]'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]'"`;@]*)/g;
+  let re = /[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]{}'"`;@]*)/g;
   let result = [];
   let token;
   while ((token = re.exec(str)[1]) !== "") {
@@ -10,6 +10,34 @@ function tokenize(str) {
     result.push(token);
   }
   return result;
+}
+
+function is_null(x) {
+  return x === null;
+}
+
+function is_array(x) {
+  return (x instanceof Array);
+}
+
+function is_number(x) {
+  return (typeof x) === "number";
+}
+
+function is_string(x) {
+  return (typeof x) === "string";
+}
+
+function is_quoted(x) {
+  if (!is_array(x)) return false;
+  if (x.length === 0) return false;
+  return x[0] === "`";
+}
+
+function is_at_quoted(x) {
+  if (!is_array(x)) return false;
+  if (x.length === 0) return false;
+  return x[0] === "@";
 }
 
 function read_token(code, exp) {
@@ -34,10 +62,23 @@ function read_list(code, exp, ch) {
   return result;
 }
 
+function read_dict(code, exp, ch) {
+  let result = ["dict"];
+  let ast1;
+  let ast2;
+  while ((ast1 = read_sexp(code, exp)) !== undefined) {
+    if (ast1 === "}") break;
+    ast2 = read_sexp(code, exp);
+    result.push(ast1);
+    result.push(ast2);
+  }
+  return result;
+}
+
 function read_sexp(code, exp) {
   let token = read_token(code, exp);
   if (token === undefined) return undefined;
-  switch(token) {
+  switch (token) {
     case "false":
       return false;
     case "true":
@@ -56,6 +97,8 @@ function read_sexp(code, exp) {
     case ")":
     case "]":
       return ch;
+    case "{":
+      return read_dict(code, exp);
     case "'":
       let ast = read_sexp(code, exp);
       return ["`", ast];

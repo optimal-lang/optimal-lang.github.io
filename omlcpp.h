@@ -18,6 +18,7 @@ public:
     }
 };
 
+static oml_root *null = (oml_root *)nullptr;
 static oml_root *undefined = (oml_root *)-1;
 
 class oml_number : public oml_root
@@ -87,6 +88,12 @@ static inline const std::string &string_value(oml_root *x)
 }
 
 oml_root *console_log(oml_root *x)
+{
+    std::cout << string_value(x) << std::endl;
+    return null;
+}
+
+oml_root *print(oml_root *x)
 {
     std::cout << string_value(x) << std::endl;
     return x;
