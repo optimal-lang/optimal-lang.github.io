@@ -570,6 +570,7 @@ export function runAll(exp) {
     return o.runAll(exp);
 }
 
-globalThis.print = function(x) {
+function print(x) {
     console.log(x);
 };
+globalThis.print = print;
