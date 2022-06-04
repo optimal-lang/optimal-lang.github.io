@@ -216,7 +216,7 @@ Deno.test("02Q", () => {
   assertEquals(v1, {":key1": undefined, key2: 22});
 });
 
-Deno.test("02Q", () => {
+Deno.test("02R", () => {
   var v1 = run(`
     {:key1 "abc" "key2"
     `);
