@@ -19,9 +19,8 @@ function read_token(code, exp) {
   return token;
 }
 
-function read_list(code, exp, ch, data) {
+function read_list(code, exp, ch) {
   let result = [];
-  if (data) result.push("list");
   let ast;
   while ((ast = read_sexp(code, exp, false)) !== undefined) {
     if (ast === "]") {
@@ -35,23 +34,25 @@ function read_list(code, exp, ch, data) {
   return result;
 }
 
-function read_dict(code, exp, data) {
-  let result = ["dict"];
+function read_dict(code, exp) {
+  let result = [["#", "dict"]];
   let ast1;
   let ast2;
   while ((ast1 = read_sexp(code, exp)) !== undefined) {
+    console.log("read_dict: " + ast1)
     if (ast1 === "]") continue;
     if (ast1 === "}") break;
-    ast2 = read_sexp(code, exp, true);
+    ast2 = read_sexp(code, exp);
     result.push(ast1);
     result.push(ast2);
   }
   return result;
 }
 
-function read_sexp(code, exp, data) {
+function read_sexp(code, exp) {
   let token = read_token(code, exp);
   if (token === undefined) return undefined;
+  if ((typeof token)==="number") return token;
   switch (token) {
     case "false":
       return false;
@@ -66,13 +67,16 @@ function read_sexp(code, exp, data) {
   switch (ch) {
     case "(":
     case "[":
-      let lst = read_list(code, exp, ch, data);
+      let lst = read_list(code, exp, ch);
       return lst;
     case ")":
     case "]":
       return ch;
     case "{":
-      return read_dict(code, exp, data);
+      return read_dict(code, exp);
+    case "}":
+      return ch;
+    /*
     case "'": {
       let ast = read_sexp(code, exp, false);
       return ["`", ast];
@@ -81,15 +85,24 @@ function read_sexp(code, exp, data) {
       let ast = read_sexp(code, exp, true);
       return ast;
     }
+    */
     case '"':
+      //token = JSON.parse(token);
+      //return ["`", token];
       token = JSON.parse(token);
-      return ["`", token];
+      return token;
     case "@":
       token = token.replace(/(^@|@$)/g, "");
       token = token.replace(/(@@)/g, "@");
       return ["@", token];
-    default:
-      return token;
+    default: {
+      if (token[0]===":") return token;
+      //return token;
+      //let ids = token.toString().split(".");
+      let ids = token.split(".");
+      //console.log(ids);
+      return ["#",...ids];
+    }
   }
 }
 

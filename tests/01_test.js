@@ -10,14 +10,14 @@ import { omljs } from "../omljs.mjs";
 
 Deno.test("01A", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`(+ 11 22]`);
+  var v1 = glob.run(`(+ 11 22]`);
   console.log(v1);
   assert(v1 == 33);
 });
 
-Deno.test("01B", () => {
+Deno.test("01B1", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (define x 123)
     (begin
       (set! x (+ 1 x))
@@ -28,9 +28,9 @@ Deno.test("01B", () => {
   assert(v1 == 126);
 });
 
-Deno.test("01B", () => {
+Deno.test("01B2", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (define x 123)
     (cond
       [ (== x -1)
@@ -47,7 +47,7 @@ Deno.test("01B", () => {
 
 Deno.test("01C", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (define x 123)
     (case x
       [ -1
@@ -64,9 +64,9 @@ Deno.test("01C", () => {
 
 Deno.test("01D", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '())
-    (dotimes '3
+  var v1 = glob.run(`
+    (define list ())
+    (dotimes 3
       @list.push($index)@
       )
     list
@@ -77,8 +77,8 @@ Deno.test("01D", () => {
 
 Deno.test("01E", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '())
+  var v1 = glob.run(`
+    (define list ())
     (dotimes 3
       @list.push($index)@
       )
@@ -90,8 +90,8 @@ Deno.test("01E", () => {
 
 Deno.test("01F", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '())
+  var v1 = glob.run(`
+    (define list ())
     (dotimes (i 3)
       @list.push(i)@
       )
@@ -103,7 +103,7 @@ Deno.test("01F", () => {
 
 Deno.test("01G", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (try 123
       (catch ex (+ 1 ex]
   `);
@@ -113,7 +113,7 @@ Deno.test("01G", () => {
 
 Deno.test("01H", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (try (throw 123)
       (catch ex (+ 1 ex]
   `);
@@ -125,7 +125,7 @@ Deno.test("01I", () => {
   assertThrows(
     () => {
       var glob = omljs();
-      var v1 = glob.runAll(`
+      var v1 = glob.run(`
         (try (throw 123)
           (catch ex (let ((msg "Panic!")) (throw @new Error(msg)@]
       `);
@@ -139,7 +139,7 @@ Deno.test("01J", () => {
   var v1;
   try {
     var glob = omljs();
-    v1 = glob.runAll(`
+    v1 = glob.run(`
       (throw 123)
     `);
   } catch (ex) {
@@ -151,7 +151,7 @@ Deno.test("01J", () => {
 
 Deno.test("01K", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (define (fact x)
       (do ((n 2 (+ 1 n)) (result 1))
           ((< x n) result)
@@ -165,8 +165,8 @@ Deno.test("01K", () => {
 
 Deno.test("01L", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '())
+  var v1 = glob.run(`
+    (define list ())
     (dotimes (i 3 @list@)
       @list.push(i)@
       )
@@ -177,8 +177,8 @@ Deno.test("01L", () => {
 
 Deno.test("01M", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '(1 2 3))
+  var v1 = glob.run(`
+    (define list (1 2 3))
     (length list)
   `);
   console.log(v1);
@@ -187,8 +187,8 @@ Deno.test("01M", () => {
 
 Deno.test("01N", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '(1 2 3))
+  var v1 = glob.run(`
+    (define list (1 2 3))
     (prop-get list 2)
   `);
   console.log(v1);
@@ -197,9 +197,9 @@ Deno.test("01N", () => {
 
 Deno.test("01O", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '(1 2 3))
-    (define result '())
+  var v1 = glob.run(`
+    (define list (1 2 3))
+    (define result ())
     (dolist (i list result)
       @result.push(i * 10)@
       )
@@ -210,7 +210,7 @@ Deno.test("01O", () => {
 
 Deno.test("01P", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (defun fact (x)
       (do* ((n 2 (+ 1 n)) (result 1))
            ((< x n) result)
@@ -225,8 +225,8 @@ Deno.test("01P", () => {
 
 Deno.test("01Q", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '())
+  var v1 = glob.run(`
+    (define list ())
     (dotimes (i 3 list)
       (prop-set! list i (* i 100]
   `);
@@ -236,7 +236,7 @@ Deno.test("01Q", () => {
 
 Deno.test("01R", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (define dict (dict "a" 123]
     (prop-get dict "a")
   `);
@@ -246,7 +246,7 @@ Deno.test("01R", () => {
 
 Deno.test("01S", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (define dict @{}@)
     (dotimes (i 3 dict)
       (prop-set! dict @"a"+i@ (* i 100]
@@ -257,9 +257,9 @@ Deno.test("01S", () => {
 
 Deno.test("01T", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
-    (define list '(1 2 3))
-    (define result '())
+  var v1 = glob.run(`
+    (define list (1 2 3))
+    (define result ())
     (dolist list
       @result.push($item * 10)@
       )
@@ -271,7 +271,7 @@ Deno.test("01T", () => {
 
 Deno.test("01U", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (let ([add2 (fn (a b) (+ a b])
     (add2 11 22)
   `);
@@ -281,7 +281,7 @@ Deno.test("01U", () => {
 
 Deno.test("01V", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (let ([add2 (lambda (a b) (+ a b])
     (add2 11 22)
   `);
@@ -291,7 +291,7 @@ Deno.test("01V", () => {
 
 Deno.test("01W", () => {
   var glob = omljs();
-  var v1 = glob.runAll(`
+  var v1 = glob.run(`
     (let ([add2 (lambda (a b) (+ a b])
     ((prop-get console "log") (add2 11 22))
     (add2 11 22)

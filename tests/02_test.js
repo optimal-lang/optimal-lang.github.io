@@ -52,7 +52,7 @@ Deno.test("02D", () => {
 
 Deno.test("02E", () => {
   var v1 = run(`
-    (define list '(10 20 30]
+    (define list (10 20 30]
     (begin
       (define x (length list))
       (defvar list (prop-get list 1))
@@ -67,7 +67,7 @@ Deno.test("02F", () => {
   assertThrows(
     () => {
       var v1 = run(`
-        (define list '(10 20 30]
+        (define list (10 20 30]
         (let* [
           (x (length list))
           (list (prop-get list 1))
@@ -92,78 +92,6 @@ Deno.test("02G", () => {
     },
     ReferenceError,
     "not_exist is not defined",
-  );
-});
-
-Deno.test("02H", () => {
-  assertThrows(
-    () => {
-      var v1 = run(`
-        (if (define x 1) 10 20)
-        `);
-    },
-    Error,
-    "def is not allowed here",
-  );
-});
-
-Deno.test("02I", () => {
-  assertThrows(
-    () => {
-      var v1 = run(`
-        (cond ((define x 1) 10) (else 20]
-        `);
-    },
-    Error,
-    "def is not allowed here",
-  );
-});
-
-Deno.test("02J", () => {
-  assertThrows(
-    () => {
-      var v1 = run(`
-        (throw (define x 1))
-        `);
-    },
-    Error,
-    "def is not allowed here",
-  );
-});
-
-Deno.test("02K", () => {
-  assertThrows(
-    () => {
-      var v1 = run(`
-        (try (define x 1) (catch e))
-        `);
-    },
-    Error,
-    "def is not allowed here",
-  );
-});
-
-Deno.test("02K", () => {
-  assertThrows(
-    () => {
-      var v1 = run(`
-        (while (define x 1) true)
-        `);
-    },
-    Error,
-    "def is not allowed here",
-  );
-});
-
-Deno.test("02L", () => {
-  assertThrows(
-    () => {
-      var v1 = run(`
-        (until (define x 1) true)
-        `);
-    },
-    Error,
-    "def is not allowed here",
   );
 });
 
@@ -240,19 +168,18 @@ Deno.test("02T", () => {
   assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
 });
 
-Deno.test("02U", () => {
+Deno.test("02U1", () => {
   var v1 = run(`
-    &{:key1 undefined "key2" 22, :key3 (1 2 3]}
+    {:key1 undefined "key2" 22, :key3 (1 2 3]}
     `);
   console.log(v1);
   assertEquals(v1, {":key1": undefined, key2: 22, ":key3": [1, 2, 3]});
 });
 
-Deno.test("02U", () => {
+Deno.test("02U2", () => {
   var v1 = run(`
-    &(1 (+ 22 33) 2)
+    (1 (+ 22 33) 2)
     `);
   console.log(v1);
   assertEquals(v1, [1, 55, 2]);
 });
-

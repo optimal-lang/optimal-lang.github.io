@@ -1,6 +1,19 @@
 import { run } from "./omljs.mjs";
 run(`
+(console.log "str")
 (console.log "ハロー©")
+(define xyz 777)
+(console.log xyz)
+(console.log 123)
+(console.log (+ 11 22]
+
+(define x 123)
+(begin
+  (set! x (+ 1 x))
+  (set! x (+ 2 x))
+  (console.log x]
+
+(Deno.exit 0)
 [dotimes (i 3) (console.log i]
 [dotimes (i 3) (dotimes (j 2) (console.log (list i j]
 (define x 11)
