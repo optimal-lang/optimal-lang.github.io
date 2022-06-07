@@ -58,9 +58,9 @@ class OMLCommon {
     }
     
     to_def(ast) {
-        if (!common.is_array(ast)) return null;
+        if (!this.is_array(ast)) return null;
         if (ast.length === 0) return null;
-        switch (common.to_id(ast[0])) {
+        switch (this.to_id(ast[0])) {
             case "def": {
                 if (ast.length < 2) throw new Error("sysntax error");
                 let ast1 = ast[1];
@@ -76,11 +76,11 @@ class OMLCommon {
             case "defun": {
                 let new_ast = ast.slice(3);
                 new_ast.unshift(ast[2]);
-                new_ast.unshift(common.id("fn"));
+                new_ast.unshift(this.id("fn"));
                 return [this.id("def"), ast[1], new_ast];
             }
             case "define": {
-                let ast1 = common.to_id(ast[1]);
+                let ast1 = this.to_id(ast[1]);
                 if (ast1 instanceof Array) {
                     if (ast.length < 2) throw new Error("sysntax error");
                     let new_ast = ast.slice(2);
