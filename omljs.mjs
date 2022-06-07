@@ -1,101 +1,106 @@
 import { oml2ast } from "./oml2ast.mjs";
 
-function is_array(x) {
-    return (x instanceof Array);
-}
-
-function is_number(x) {
-    return (typeof x) === "number";
-}
-
-function is_strging(x) {
-    return (typeof x) === "string";
-}
-
-function is_quoted(x) {
-    if (!is_array(x)) return false;
-    if (x.length === 0) return false;
-    return x[0] === "`";
-}
-
-function is_id(ast) {
-    return ast instanceof Array && ast[0] === "#";
-}
-
-function is_variable(ast) {
-    if (!(ast instanceof Array)) false;
-    if (ast.length === 0) return false;
-    return ast[0] === "#";
-}
-
-function is_script(ast) {
-    if (!(ast instanceof Array)) false;
-    if (ast.length === 0) return false;
-    return ast[0] === "@";
-}
-
-function is_callable(ast) {
-    if (!(ast instanceof Array)) false;
-    if (ast.length === 0) return false;
-    if (ast[0] === "#") return false;
-    if (ast[0] === "@") return false;
-    return is_id(ast[0]) || is_script(ast[0]);
-}
-
-function to_id(ast) {
-    if (is_id(ast)) {
-        let ids = ast.slice(1);
-        return ids.join(".");
-    } else if(is_script(ast)) {
-        return "@";
+class OMLCommon {
+    is_array(x) {
+        return (x instanceof Array);
     }
-    return ast;
-}
-
-function id(x) {
-    return ["#", x];
-}
-
-function to_def(ast) {
-    if (!is_array(ast)) return null;
-    if (ast.length === 0) return null;
-    switch (to_id(ast[0])) {
-        case "def": {
-            if (ast.length < 2) throw new Error("sysntax error");
-            let ast1 = ast[1];
-            let ast2 = ast.length === 2 ? null : ast[2];
-            return [id("def"), ast1, ast2];
+    
+    is_number(x) {
+        return (typeof x) === "number";
+    }
+    
+    is_strging(x) {
+        return (typeof x) === "string";
+    }
+    
+    is_quoted(x) {
+        if (!this.is_array(x)) return false;
+        if (x.length === 0) return false;
+        return x[0] === "`";
+    }
+    
+    is_id(ast) {
+        return ast instanceof Array && ast[0] === "#";
+    }
+    
+    is_variable(ast) {
+        if (!(ast instanceof Array)) false;
+        if (ast.length === 0) return false;
+        return ast[0] === "#";
+    }
+    
+    is_script(ast) {
+        if (!(ast instanceof Array)) false;
+        if (ast.length === 0) return false;
+        return ast[0] === "@";
+    }
+    
+    is_callable(ast) {
+        if (!(ast instanceof Array)) false;
+        if (ast.length === 0) return false;
+        if (ast[0] === "#") return false;
+        if (ast[0] === "@") return false;
+        return common.is_id(ast[0]) || common.is_script(ast[0]);
+    }
+    
+    to_id(ast) {
+        if (common.is_id(ast)) {
+            let ids = ast.slice(1);
+            return ids.join(".");
+        } else if (common.is_script(ast)) {
+            return "@";
         }
-        case "defvar": {
-            if (ast.length < 2) throw new Error("sysntax error");
-            let ast1 = ast[1];
-            let ast2 = ast.length === 2 ? null : ast[2];
-            return [id("def"), ast1, ast2];
-        }
-        case "defun": {
-            let new_ast = ast.slice(3);
-            new_ast.unshift(ast[2]);
-            new_ast.unshift(id("fn"));
-            return [id("def"), ast[1], new_ast];
-        }
-        case "define": {
-            let ast1 = to_id(ast[1]);
-            if (ast1 instanceof Array) {
-                if (ast.length < 2) throw new Error("sysntax error");
-                let new_ast = ast.slice(2);
-                return to_def([id("defun"), ast[1][0], ast[1].slice(1), ...new_ast]);
-            }
-            else {
+        return ast;
+    }
+    
+    id(x) {
+        return ["#", x];
+    }
+    
+    to_def(ast) {
+        if (!common.is_array(ast)) return null;
+        if (ast.length === 0) return null;
+        switch (common.to_id(ast[0])) {
+            case "def": {
                 if (ast.length < 2) throw new Error("sysntax error");
                 let ast1 = ast[1];
                 let ast2 = ast.length === 2 ? null : ast[2];
-                return to_def([id("defvar"), ast1, ast2]);
+                return [this.id("def"), ast1, ast2];
             }
+            case "defvar": {
+                if (ast.length < 2) throw new Error("sysntax error");
+                let ast1 = ast[1];
+                let ast2 = ast.length === 2 ? null : ast[2];
+                return [this.id("def"), ast1, ast2];
+            }
+            case "defun": {
+                let new_ast = ast.slice(3);
+                new_ast.unshift(ast[2]);
+                new_ast.unshift(common.id("fn"));
+                return [this.id("def"), ast[1], new_ast];
+            }
+            case "define": {
+                let ast1 = common.to_id(ast[1]);
+                if (ast1 instanceof Array) {
+                    if (ast.length < 2) throw new Error("sysntax error");
+                    let new_ast = ast.slice(2);
+                    return this.to_def([this.id("defun"), ast[1][0], ast[1].slice(1), ...new_ast]);
+                }
+                else {
+                    if (ast.length < 2) throw new Error("sysntax error");
+                    let ast1 = ast[1];
+                    let ast2 = ast.length === 2 ? null : ast[2];
+                    return this.to_def([this.id("defvar"), ast1, ast2]);
+                }
+            }
+            default:
+                return null;
         }
-        default:
-            return null;
     }
+    
 }
+
+let common = new OMLCommon();
 
 function compile_number(ast) {
     //if (is_number(ast)) return ast.toString();
@@ -114,9 +119,9 @@ function compile_body_helper(body) {
     for (let i = 0; i < body.length; i++) {
         if (i > 0)
             result += ",";
-        let def = to_def(body[i]);
+        let def = common.to_def(body[i]);
         if (def !== null) {
-            let let_ast = [id("let"), [[def[1], def[2]]], ...body.slice(i + 1)];
+            let let_ast = [common.id("let"), [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
         result += compile_ast(body[i]);
@@ -151,16 +156,16 @@ function compile_ast(ast) {
     }
     if (ast.length === 0)
         return "[]";
-    if (is_variable(ast)) {
+    if (common.is_variable(ast)) {
         return ast.slice(1).join(".");
     }
-    if (is_script(ast)) {
+    if (common.is_script(ast)) {
         return ast[1];
     }
-    if (!is_callable(ast)) {
-        return compile_ast([id("list"),...ast]);
+    if (!common.is_callable(ast)) {
+        return compile_ast([common.id("list"), ...ast]);
     }
-    switch (to_id(ast[0])) {
+    switch (common.to_id(ast[0])) {
         case "@": {
             let fcall = ast[0][1] + "(";
             for (let i = 1; i < ast.length; i++) {
@@ -177,7 +182,7 @@ function compile_ast(ast) {
             let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
             let rest = ast.slice(2);
             rest.forEach((x) => {
-                let val = to_id(x[0]);
+                let val = common.to_id(x[0]);
                 switch (val) {
                     case ":else":
                     case "else":
@@ -201,7 +206,7 @@ function compile_ast(ast) {
                 if (rest.length === 0)
                     return null;
                 let condition = rest.shift();
-                condition = to_id(condition);
+                condition = common.to_id(condition);
                 let action = rest.shift();
                 switch (condition) {
                     case true:
@@ -211,7 +216,7 @@ function compile_ast(ast) {
                     case ":otherwise":
                         return action;
                 }
-                return [id("if"), condition, action, _cond_builder(rest)];
+                return [common.id("if"), condition, action, _cond_builder(rest)];
             }
             ast = _cond_builder(ast.slice(1));
             return compile_ast(ast);
@@ -227,15 +232,15 @@ function compile_ast(ast) {
         }
         case "dec!":
         case "inc!":
-            let sign = to_id(ast[0]) === "dec!" ? "-" : "+";
+            let sign = common.to_id(ast[0]) === "dec!" ? "-" : "+";
             let val = ast.length < 3 ? 1 : compile_ast(ast[2]);
             return compile_ast(ast[1]) + sign + "=" + val;
         case "def": {
-            ast = to_def(ast);
-            return "globalThis." + to_id(ast[1]) + "=" + compile_ast(ast[2]);
+            ast = common.to_def(ast);
+            return "globalThis." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
         }
         case "define": case "defun": case "defvar": {
-            ast = to_def(ast);
+            ast = common.to_def(ast);
             return compile_ast(ast);
         }
         case "do":
@@ -247,7 +252,7 @@ function compile_ast(ast) {
             for (let i = 0; i < ast[1].length; i++) {
                 if (i > 0)
                     args += ",";
-                args += to_id(ast[1][i]);
+                args += common.to_id(ast[1][i]);
             }
             args += ")";
             if (ast.length < 3)
@@ -256,18 +261,18 @@ function compile_ast(ast) {
         }
         case "dotimes": {
             let ast1 = ast[1];
-            if (!is_array(ast1) || is_quoted(ast1))
-                ast1 = [id("$index"), ast1];
+            if (!common.is_array(ast1) || common.is_quoted(ast1))
+                ast1 = [common.id("$index"), ast1];
             else if (ast1.length < 2)
                 throw new Error("syntax error");
-            let result_exp = ast1.length < 3 ? id("null") : ast1[2];
+            let result_exp = ast1.length < 3 ? common.id("null") : ast1[2];
             let bind = [
-                [id("__dotimes_cnt__"), ast1[1]],
-                [id("__dotimes_idx__"), 0, [id("+"), id("__dotimes_idx__"), 1]],
-                [ast1[0], id("__dotimes_idx__"), id("__dotimes_idx__")],
+                [common.id("__dotimes_cnt__"), ast1[1]],
+                [common.id("__dotimes_idx__"), 0, [common.id("+"), common.id("__dotimes_idx__"), 1]],
+                [ast1[0], common.id("__dotimes_idx__"), common.id("__dotimes_idx__")],
             ];
-            let exit = [[id(">="), id("__dotimes_idx__"), id("__dotimes_cnt__")], result_exp];
-            ast = [id("do*"), bind, exit].concat(ast.slice(2));
+            let exit = [[common.id(">="), common.id("__dotimes_idx__"), common.id("__dotimes_cnt__")], result_exp];
+            ast = [common.id("do*"), bind, exit].concat(ast.slice(2));
             return compile_ast(ast);
         }
         case "length": {
@@ -284,19 +289,19 @@ function compile_ast(ast) {
         }
         case "dolist": {
             let ast1 = ast[1];
-            if (is_variable(ast1) || !is_array(ast1) || is_quoted(ast1))
-                ast1 = [id("$item"), ast1];
+            if (common.is_variable(ast1) || !common.is_array(ast1) || common.is_quoted(ast1))
+                ast1 = [common.id("$item"), ast1];
             else if (ast1.length < 2)
                 throw new Error("syntax error");
-            let result_exp = ast1.length < 3 ? id("null") : ast1[2];
+            let result_exp = ast1.length < 3 ? common.id("null") : ast1[2];
             let bind = [
-                [id("__dolist_list__"), ast1[1]],
-                [id("__dolist_cnt__"), [id("length"), id("__dolist_list__")]],
-                [id("__dolist_idx__"), 0, [id("+"), id("__dolist_idx__"), 1]],
-                [ast1[0], [id("prop-get"), id("__dolist_list__"), id("__dolist_idx__")], [id("prop-get"), id("__dolist_list__"), id("__dolist_idx__")]],
+                [common.id("__dolist_list__"), ast1[1]],
+                [common.id("__dolist_cnt__"), [common.id("length"), common.id("__dolist_list__")]],
+                [common.id("__dolist_idx__"), 0, [common.id("+"), common.id("__dolist_idx__"), 1]],
+                [ast1[0], [common.id("prop-get"), common.id("__dolist_list__"), common.id("__dolist_idx__")], [common.id("prop-get"), common.id("__dolist_list__"), common.id("__dolist_idx__")]],
             ];
-            let exit = [[id(">="), id("__dolist_idx__"), id("__dolist_cnt__")], result_exp];
-            ast = [id("do*"), bind, exit].concat(ast.slice(2));
+            let exit = [[common.id(">="), common.id("__dolist_idx__"), common.id("__dolist_cnt__")], result_exp];
+            ast = [common.id("do*"), bind, exit].concat(ast.slice(2));
             return compile_ast(ast);
         }
         case "if":
@@ -321,7 +326,7 @@ function compile_ast(ast) {
                     new_ast1.push(x[1]);
                 }
             }
-            return compile_ast([id("_" + to_id(ast[0])), new_ast1].concat(ast.slice(2)));
+            return compile_ast([common.id("_" + common.to_id(ast[0])), new_ast1].concat(ast.slice(2)));
         }
         case "_let":
         case "_let*": {
@@ -331,16 +336,16 @@ function compile_ast(ast) {
             for (let i = 1; i < ast[1].length; i += 2) {
                 if (i > 1)
                     vars += ",";
-                vars += to_id(ast[1][i - 1]);
+                vars += common.to_id(ast[1][i - 1]);
                 let val = compile_ast(ast[1][i]);
                 if (i > 1)
                     vals += ",";
                 vals += val;
-                assigns += to_id(ast[1][i - 1]) + "=" + val + ";";
+                assigns += common.to_id(ast[1][i - 1]) + "=" + val + ";";
             }
             vars += ")";
             vals += ")";
-            if (to_id(ast[0]) === "_let")
+            if (common.to_id(ast[0]) === "_let")
                 return ("((function" +
                     vars +
                     "{return " +
@@ -370,10 +375,10 @@ function compile_ast(ast) {
             if ((ast.length % 2) !== 1) throw new Error("synatx error");
             let body = [];
             for (let i = 1; i < ast.length; i += 2) {
-                body.push([id("prop-set!"), id("__dict__"), ast[i], ast[i + 1]]);
+                body.push([common.id("prop-set!"), common.id("__dict__"), ast[i], ast[i + 1]]);
             }
-            body.push(id("__dict__"));
-            ast = [id("let*"), [[id("__dict__"), ["@", "{}"]]], ...body];
+            body.push(common.id("__dict__"));
+            ast = [common.id("let*"), [[common.id("__dict__"), ["@", "{}"]]], ...body];
             return compile_ast(ast);
         }
         case "set!":
@@ -383,15 +388,15 @@ function compile_ast(ast) {
         }
         case "try": {
             let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
-            if (to_id(ast[2][0]) != "catch") throw "try without catch clause";
-            result += to_id(ast[2][1]) + "){return " + compile_body(ast[2], 2) + "}";
+            if (common.to_id(ast[2][0]) != "catch") throw "try without catch clause";
+            result += common.to_id(ast[2][1]) + "){return " + compile_body(ast[2], 2) + "}";
             result += "})()";
             return result;
         }
         case "until":
         case "while": {
             let condition = compile_ast(ast[1]);
-            if (to_id(ast[0]) === "until")
+            if (common.to_id(ast[0]) === "until")
                 condition = "!" + condition;
             return ("((function(){while(" +
                 condition +
@@ -420,7 +425,7 @@ function compile_ast(ast) {
         case ">":
         case "<=":
         case ">=":
-            return "(" + compile_number(ast[1]) + to_id(ast[0]) + compile_number(ast[2]) + ")";
+            return "(" + compile_number(ast[1]) + common.to_id(ast[0]) + compile_number(ast[2]) + ")";
         case "&&":
         case "||":
         case "&":
@@ -430,10 +435,10 @@ function compile_ast(ast) {
         case "*":
         case "**":
         case "/": {
-            return "(" + insert_op(to_id(ast[0]), ast.slice(1)) + ")";
+            return "(" + insert_op(common.to_id(ast[0]), ast.slice(1)) + ")";
         }
         default: {
-            let fcall = to_id(ast[0]) + "(";
+            let fcall = common.to_id(ast[0]) + "(";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1)
                     fcall += ",";
@@ -472,7 +477,7 @@ function compile_do(ast) {
     let ast2 = ast[2];
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
-    let until_ast = [id("until"), ast2[0]].concat(ast.slice(3));
+    let until_ast = [common.id("until"), ast2[0]].concat(ast.slice(3));
     if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
@@ -491,11 +496,11 @@ function compile_do(ast) {
         ast1.forEach((x) => {
             if (x.length < 3)
                 return;
-            let next_step = [id("set!"), x[0], x[2]];
+            let next_step = [common.id("set!"), x[0], x[2]];
             until_ast.push(next_step);
         });
     }
-    let new_ast = [parallel ? id("_let") : id("_let*"), ast1_vars].concat([until_ast]);
+    let new_ast = [parallel ? common.id("_let") : common.id("_let*"), ast1_vars].concat([until_ast]);
     new_ast.push(ast2[1]);
     return compile_ast(new_ast);
 }
@@ -630,6 +635,6 @@ function print(x) {
 globalThis.print = print;
 
 function to_number(x) {
-    return typeof x!=="number" ? 0 : x;
+    return typeof x !== "number" ? 0 : x;
 }
 globalThis.to_number = to_number;
