@@ -7,7 +7,7 @@ export class OMLCommon {
         return (typeof x) === "number";
     }
     
-    is_strging(x) {
+    is_string(x) {
         return (typeof x) === "string";
     }
     

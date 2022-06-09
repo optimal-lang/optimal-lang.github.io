@@ -63,7 +63,7 @@ function compile_number(ast) {
 }
 
 function compile_string(ast) {
-    if (common.is_strging(ast))
+    if (common.is_string(ast))
         return `std::string(${JSON.stringify(ast)})`
     return `string_value(${compile_ast(ast)})`;
 }
@@ -93,10 +93,15 @@ function compile_body_helper(body) {
 
 function compile_body(ast, start) {
     let body = [];
+    let prologue = "";
     for (let i = start; i < ast.length; i++) {
+        if (common.is_string(ast[i]) && ast[i][0] == "#") {
+            prologue += ast[i].substr(1);
+            continue;
+        }
         body.push(ast[i]);
     }
-    return compile_body_helper(body);
+    return prologue + compile_body_helper(body);
 }
 
 function compile_ast(ast) {
@@ -437,13 +442,13 @@ function compile_do(ast) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = [common.id("set!"), "__do__[" + i + "]", x[2]];
+            let next_step = [common.id("set!"), ["@", "__do__[" + i + "]"], x[2]];
             until_ast.push(next_step);
         });
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = [common.id("set!"), x[0], "__do__[" + i + "]"];
+            let next_step = [common.id("set!"), x[0], ["@", "__do__[" + i + "]"]];
             until_ast.push(next_step);
         });
     }
