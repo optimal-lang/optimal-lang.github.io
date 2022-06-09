@@ -13,7 +13,28 @@ class OMLCppCommon extends OMLCommon {
     }
     val_type(ast) {
         if (!this.is_fn(ast)) return "oml_root*";
-        return "?";
+        let result = "std::function<oml_root*(";
+        let args = ast[1];
+        for (let i=0; i<args.length; i++) {
+            if (i>0) result += ",";
+            result += "oml_root*";
+        }
+        result += ")>";
+        return result;
+    }
+    val_body(ast) {
+        if (!this.is_fn(ast)) return compile_ast(ast);
+        let result = "[=](";
+        let args = ast[1];
+        for (let i=0; i<args.length; i++) {
+            if (i>0) result += ",";
+            result += "oml_root* ";
+            result += this.to_id(args[i]);
+        }
+        result += ")->oml_root*{";
+        result += ("return " + compile_body(ast, 2) + ";");
+        result += "}";
+        return result;
     }
 }
 let common = new OMLCppCommon();
@@ -37,7 +58,8 @@ const CPP_TAIL =
 `
 
 function compile_number(ast) {
-    return `to_number(${compile_ast(ast)})`;
+    if (common.is_number(ast)) return ast.toString();
+    return `number_value(${compile_ast(ast)})`;
 }
 
 function compile_string(ast) {
@@ -166,7 +188,7 @@ function compile_ast(ast) {
             return compile_ast(ast[1]) + sign + "=" + val;
         case "def": {
             ast = common.to_def(ast);
-            return common.val_type(ast[2]) + " " + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
+            return common.val_type(ast[2]) + " " + common.to_id(ast[1]) + "=" + common.val_body(ast[2]);
         }
         case "define": case "defun": case "defvar": {
             ast = common.to_def(ast);
@@ -387,7 +409,8 @@ function insert_op(op, rest) {
         if (i > 0) result.push(op);
         result.push(compile_number(rest[i]));
     }
-    return result.join("");
+    //return result.join("");
+    return `new_number(${result.join("")})`;
 }
 
 function compile_do(ast) {

@@ -4,10 +4,7 @@ import { OMLCommon } from "./omlcommon.mjs";
 let common = new OMLCommon();
 
 function compile_number(ast) {
-    //if (is_number(ast)) return ast.toString();
-    //let new_ast = ["let*", [["__number__", ast]], ["if", 'typeof __number__!=="number"', 0, "__number__"]];
-    //return compile_ast(new_ast);
-    return `to_number(${compile_ast(ast)})`;
+    return `number_value(${compile_ast(ast)})`;
 }
 
 function compile_string(ast) {
@@ -535,7 +532,7 @@ function print(x) {
 };
 globalThis.print = print;
 
-function to_number(x) {
+function number_value(x) {
     return typeof x !== "number" ? 0 : x;
 }
-globalThis.to_number = to_number;
+globalThis.number_value = number_value;

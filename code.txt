@@ -1,3 +1,8 @@
 (console.log 123)
 (define n 777)
 (console.log n)
+
+(defun add2 (a b) (+ a b]
+(console.log (add2 11 22]
+
+(console.log (+ n 12]
