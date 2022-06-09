@@ -1,1 +1,3 @@
 (console.log 123)
+(define n 777)
+(console.log n)

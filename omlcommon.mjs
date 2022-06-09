@@ -40,6 +40,12 @@ export class OMLCommon {
         if (ast[0] === "@") return false;
         return this.is_id(ast[0]) || this.is_script(ast[0]);
     }
+
+    is_fn(ast) {
+        if (!(ast instanceof Array)) false;
+        if (ast.length === 0) return false;
+        return this.is_id(ast[0]) && this.to_id(ast[0])==="fn";
+    }
     
     to_id(ast) {
         if (this.is_id(ast)) {

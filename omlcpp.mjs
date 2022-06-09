@@ -11,6 +11,10 @@ class OMLCppCommon extends OMLCommon {
         }
         return ast;
     }
+    val_type(ast) {
+        if (!this.is_fn(ast)) return "oml_root*";
+        return "?";
+    }
 }
 let common = new OMLCppCommon();
 
@@ -33,9 +37,6 @@ const CPP_TAIL =
 `
 
 function compile_number(ast) {
-    //if (is_number(ast)) return ast.toString();
-    //let new_ast = ["let*", [["__number__", ast]], ["if", 'typeof __number__!=="number"', 0, "__number__"]];
-    //return compile_ast(new_ast);
     return `to_number(${compile_ast(ast)})`;
 }
 
@@ -165,7 +166,7 @@ function compile_ast(ast) {
             return compile_ast(ast[1]) + sign + "=" + val;
         case "def": {
             ast = common.to_def(ast);
-            return "globalThis." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
+            return common.val_type(ast[2]) + " " + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
         }
         case "define": case "defun": case "defvar": {
             ast = common.to_def(ast);
