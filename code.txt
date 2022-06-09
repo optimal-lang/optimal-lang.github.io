@@ -6,3 +6,6 @@
 (console.log (add2 11 22]
 
 (console.log (+ n 12]
+
+(let [(a 11) (b 22)]
+  (console.log (+ a b]

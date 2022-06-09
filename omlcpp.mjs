@@ -15,8 +15,8 @@ class OMLCppCommon extends OMLCommon {
         if (!this.is_fn(ast)) return "oml_root*";
         let result = "std::function<oml_root*(";
         let args = ast[1];
-        for (let i=0; i<args.length; i++) {
-            if (i>0) result += ",";
+        for (let i = 0; i < args.length; i++) {
+            if (i > 0) result += ",";
             result += "oml_root*";
         }
         result += ")>";
@@ -26,8 +26,8 @@ class OMLCppCommon extends OMLCommon {
         if (!this.is_fn(ast)) return compile_ast(ast);
         let result = "[=](";
         let args = ast[1];
-        for (let i=0; i<args.length; i++) {
-            if (i>0) result += ",";
+        for (let i = 0; i < args.length; i++) {
+            if (i > 0) result += ",";
             result += "oml_root* ";
             result += this.to_id(args[i]);
         }
@@ -269,10 +269,15 @@ function compile_ast(ast) {
             let new_ast1 = [];
             for (let x of ast1) {
                 if (typeof x === "string") {
+                    new_ast1.push("oml_root*");
                     new_ast1.push(x);
-                    new_ast1.push(undefined);
-                }
-                else {
+                    new_ast1.push("0");
+                } else if (x.length >= 3) {
+                    new_ast1.push(x[2]);
+                    new_ast1.push(x[0]);
+                    new_ast1.push(x[1]);
+                } else {
+                    new_ast1.push("oml_root*");
                     new_ast1.push(x[0]);
                     new_ast1.push(x[1]);
                 }
@@ -283,44 +288,43 @@ function compile_ast(ast) {
         case "_let*": {
             let vars = "(";
             let vals = "(";
+            let voids = "(";
             let assigns = "";
-            for (let i = 1; i < ast[1].length; i += 2) {
-                if (i > 1)
+            console.log("ast=" + JSON.stringify(ast));
+            console.log("ast[1]=" + JSON.stringify(ast[1]));
+            for (let i = 2; i <= ast[1].length; i += 3) {
+                console.log("i=" + i);
+                if (i > 2)
                     vars += ",";
-                vars += common.to_id(ast[1][i - 1]);
+                vars += common.to_id(ast[1][i - 2]) + " " + common.to_id(ast[1][i - 1]);
                 let val = compile_ast(ast[1][i]);
-                if (i > 1)
+                if (i > 2)
                     vals += ",";
                 vals += val;
+                if (i > 2)
+                    voids += ",";
+                voids += "0";
                 assigns += common.to_id(ast[1][i - 1]) + "=" + val + ";";
             }
             vars += ")";
             vals += ")";
-            if (common.to_id(ast[0]) === "_let")
-                return ("((function" +
+            voids += ")";
+            if (ast[0] === "_let")
+                return ("([=]" +
                     vars +
                     "{return " +
                     compile_body(ast, 2) +
-                    "})" +
-                    vals +
-                    ")");
+                    ";})" +
+                    vals);
             else
-                return ("((function" +
+                return ("([=]" +
                     vars +
                     "{" +
                     assigns +
                     "return " +
                     compile_body(ast, 2) +
-                    "})())");
-        }
-        case "list": {
-            let result = "[";
-            for (let i = 1; i < ast.length; i++) {
-                if (i > 1) result += ",";
-                result += compile_ast(ast[i]);
-            }
-            result += "]";
-            return result;
+                    ";})" +
+                    voids);
         }
         case "dict": {
             if ((ast.length % 2) !== 1) throw new Error("synatx error");

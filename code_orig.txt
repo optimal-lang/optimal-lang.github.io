@@ -9,7 +9,6 @@
 (define (fact x)
   (do* ((n 2 (+ 1 n)) (rlt 1))
        ((< x n) rlt)
-    #(console.log n)
     (set! rlt (* rlt n))))
 (console.log (fact 4))
 (define (fact2 x)
