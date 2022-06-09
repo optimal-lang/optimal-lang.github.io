@@ -78,11 +78,10 @@ function compile_body_helper(body) {
         if (def !== null) {
             if (common.is_fn(def[2])) {
                 let args = def[2][1];
-                let args_types = new Array(args.length).fill("oml_root*");
-                let proto = "std::function< oml_root*(" + args_types.join(",") + ") >";
+                let proto = common.val_type(def[2]);
                 let let_ast = [common.id("let*"), [[def[1], def[2], proto]], ...body.slice(i + 1)];
                 return result + compile_ast(let_ast) + ")";
-                }
+            }
             let let_ast = [common.id("let*"), [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
