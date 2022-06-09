@@ -1,5 +1,5 @@
 function tokenize(str) {
-  let re = /[\s,]*([()\[\]{}&'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]{}&'"`;@]*)/g;
+  let re = /[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|@(?:@@|[^@])*@|;.*|#.*|[^\s,()\[\]{}'"`;@]*)/g;
   let result = [];
   let token;
   while ((token = re.exec(str)[1]) !== "") {
@@ -76,19 +76,7 @@ function read_sexp(code, exp) {
       return read_dict(code, exp);
     case "}":
       return ch;
-    /*
-    case "'": {
-      let ast = read_sexp(code, exp, false);
-      return ["`", ast];
-    }
-    case "&": {
-      let ast = read_sexp(code, exp, true);
-      return ast;
-    }
-    */
     case '"':
-      //token = JSON.parse(token);
-      //return ["`", token];
       token = JSON.parse(token);
       return token;
     case "@":
@@ -97,10 +85,8 @@ function read_sexp(code, exp) {
       return ["@", token];
     default: {
       if (token[0]===":") return token;
-      //return token;
-      //let ids = token.toString().split(".");
-      let ids = token.split(".");
-      //console.log(ids);
+      if (token[0]==="&") return token;
+      let ids = token[0]==="." ? [ token ] : token.split(".");
       return ["#",...ids];
     }
   }
