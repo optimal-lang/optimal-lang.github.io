@@ -64,7 +64,7 @@ function compile_number(ast) {
 
 function compile_string(ast) {
     if (common.is_strging(ast))
-        return `std::string(${JSON.stringify(ast[1])})`
+        return `std::string(${JSON.stringify(ast)})`
     return `string_value(${compile_ast(ast)})`;
 }
 
@@ -209,18 +209,6 @@ function compile_ast(ast) {
         case "fn":
         case "lambda": {
             return common.val_body(ast);
-            /*
-            let args = "(";
-            for (let i = 0; i < ast[1].length; i++) {
-                if (i > 0)
-                    args += ",";
-                args += common.to_id(ast[1][i]);
-            }
-            args += ")";
-            if (ast.length < 3)
-                return "function" + args + "{}";
-            return "function" + args + "{return " + compile_body(ast, 2) + "}";
-            */
         }
         case "dotimes": {
             let ast1 = ast[1];
