@@ -11,7 +11,7 @@ public:
     {
         return 0;
     }
-    virtual const std::string &string_value()
+    virtual const std::string string_value()
     {
         static std::string empty = "";
         return empty;
@@ -33,7 +33,7 @@ public:
     {
         return this->value;
     }
-    virtual const std::string &string_value()
+    virtual const std::string string_value()
     {
         static std::string s;
         std::ostringstream stream;
@@ -51,7 +51,7 @@ public:
     oml_string(const std::string &s) : value(s)
     {
     }
-    virtual const std::string &string_value()
+    virtual const std::string string_value()
     {
         return this->value;
     }
@@ -76,7 +76,7 @@ static inline double number_value(oml_root *x)
     return x->number_value();
 }
 
-static inline const std::string &string_value(oml_root *x)
+static inline const std::string string_value(oml_root *x)
 {
     static std::string null_ = "null";
     static std::string undefined_ = "undefined";
