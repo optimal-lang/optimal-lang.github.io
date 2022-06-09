@@ -31,6 +31,18 @@ int main()
     })(0,0));
                                                                          };
     console_log(fact(new_number(4)));
+    oml_root* x=new_number(-2);
+    (function()
+    {
+        switch(x)
+        {
+        case -1:
+            return (console_log("(case1)"),new_number(1));
+        default:
+            return (console_log("(case2)"),new_number(2));
+        }
+        return null
+    })();
 
     return 0;
 }

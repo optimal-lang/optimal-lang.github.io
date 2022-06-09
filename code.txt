@@ -15,3 +15,13 @@
        ((< x n) rlt)
     (set! rlt (* rlt n))))
 (console.log (fact 4))
+
+(define x -2)
+(case x
+  [ -1
+    (console.log "(case1)")
+    1 ]
+  [ :else
+    (console.log "(case2)")
+    2 ]
+  ]
