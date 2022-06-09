@@ -58,7 +58,7 @@ function compile_ast(ast) {
     if (ast.length === 0)
         return "[]";
     if (common.is_variable(ast)) {
-        return ast.slice(1).join(".");
+        return common.to_id(ast);
     }
     if (common.is_script(ast)) {
         return ast[1];
