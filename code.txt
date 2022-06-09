@@ -9,3 +9,9 @@
 
 (let [(a 11) (b 22)]
   (console.log (+ a b]
+
+(define (fact x)
+  (do* ((n 2 (+ 1 n)) (rlt 1))
+       ((< x n) rlt)
+    (set! rlt (* rlt n))))
+(console.log (fact 4))
