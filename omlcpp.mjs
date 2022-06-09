@@ -353,11 +353,11 @@ function compile_ast(ast) {
             let condition = compile_ast(ast[1]);
             if (common.to_id(ast[0]) === "until")
                 condition = "!" + condition;
-            return ("((function(){while(" +
+            return ("(([&]()->void {while(" +
                 condition +
                 "){" +
                 compile_body(ast, 2) +
-                "}})(),null)");
+                ";}})(),0)");
         }
         case ".": {
             let op = "+";
@@ -419,32 +419,31 @@ function insert_op(op, rest) {
 
 function compile_do(ast) {
     let ast1 = ast[1];
-    let parallel = ast[0] === "do";
+    let parallel = common.to_id(ast[0]) === "do";
     let ast1_len = ast1.length;
     let ast1_vars = [];
-    if (parallel) {
-        ast1_vars.push("__do__");
-        ast1_vars.push("new Array(" + ast1_len + ").fill(null)");
-    }
     ast1.forEach((x) => {
+        ast1_vars.push("oml_root*");
         ast1_vars.push(x[0]);
         ast1_vars.push(x[1]);
     });
     let ast2 = ast[2];
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
-    let until_ast = [common.id("until"), ast2[0]].concat(ast.slice(3));
+    let until_ast = parallel ?
+        [common.id("until"), ast2[0], "#oml_root* __do__[" + ast1_len + "];", ...ast.slice(3)] :
+        [common.id("until"), ast2[0], ...ast.slice(3)];
     if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = [id("set!"), "__do__[" + i + "]", x[2]];
+            let next_step = [common.id("set!"), "__do__[" + i + "]", x[2]];
             until_ast.push(next_step);
         });
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = [id("set!"), x[0], "__do__[" + i + "]"];
+            let next_step = [common.id("set!"), x[0], "__do__[" + i + "]"];
             until_ast.push(next_step);
         });
     }
@@ -456,7 +455,7 @@ function compile_do(ast) {
             until_ast.push(next_step);
         });
     }
-    let new_ast = [parallel ? common.id("_let") : common.id("_let*"), ast1_vars].concat([until_ast]);
+    let new_ast = [common.id(parallel ? "_let" : "_let*"), ast1_vars].concat([until_ast]);
     new_ast.push(ast2[1]);
     return compile_ast(new_ast);
 }

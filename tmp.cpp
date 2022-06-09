@@ -20,6 +20,17 @@ int main()
         b=new_number(22);
         return (console_log((new_number(number_value(a)+number_value(b)))));
     })(0,0);
+    std::function<oml_root*(oml_root*)> fact=[=](oml_root* x)->oml_root* {return (([=](oml_root* n,oml_root* rlt)
+    {
+        n=new_number(2);
+        rlt=new_number(1);
+        return ((([&]()->void {while(!(number_value(x)<number_value(n)))
+    {
+        (rlt=(new_number(number_value(rlt)*number_value(n))),n=(new_number(1+number_value(n))));
+        }})(),0),rlt);
+    })(0,0));
+                                                                         };
+    console_log(fact(new_number(4)));
 
     return 0;
 }
