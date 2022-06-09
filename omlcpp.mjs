@@ -63,7 +63,9 @@ function compile_number(ast) {
 }
 
 function compile_string(ast) {
-    return `String(${compile_ast(ast)})`;
+    if (common.is_strging(ast))
+        return `std::string(${JSON.stringify(ast[1])})`
+    return `string_value(${compile_ast(ast)})`;
 }
 
 function compile_body_helper(body) {
@@ -74,7 +76,14 @@ function compile_body_helper(body) {
             result += ",";
         let def = common.to_def(body[i]);
         if (def !== null) {
-            let let_ast = [common.id("let"), [[def[1], def[2]]], ...body.slice(i + 1)];
+            if (common.is_fn(def[2])) {
+                let args = def[2][1];
+                let args_types = new Array(args.length).fill("oml_root*");
+                let proto = "std::function< oml_root*(" + args_types.join(",") + ") >";
+                let let_ast = [common.id("let*"), [[def[1], def[2], proto]], ...body.slice(i + 1)];
+                return result + compile_ast(let_ast) + ")";
+                }
+            let let_ast = [common.id("let*"), [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
         result += compile_ast(body[i]);
@@ -100,7 +109,7 @@ function compile_ast(ast) {
         return `new_number(${ast})`;
     }
     if (typeof ast === "string") {
-        return JSON.stringify(ast);
+        return `new_string(${JSON.stringify(ast)})`;
     }
     if (!(ast instanceof Array)) {
         return ast.toString();
@@ -199,6 +208,8 @@ function compile_ast(ast) {
             return compile_do(ast);
         case "fn":
         case "lambda": {
+            return common.val_body(ast);
+            /*
             let args = "(";
             for (let i = 0; i < ast[1].length; i++) {
                 if (i > 0)
@@ -209,6 +220,7 @@ function compile_ast(ast) {
             if (ast.length < 3)
                 return "function" + args + "{}";
             return "function" + args + "{return " + compile_body(ast, 2) + "}";
+            */
         }
         case "dotimes": {
             let ast1 = ast[1];
@@ -367,7 +379,7 @@ function compile_ast(ast) {
                 if (i > 0) result.push(op);
                 result.push(compile_string(rest[i]));
             }
-            return result.join("");
+            return `new_string(${result.join("")})`;
         }
         case "=":
             return "(" + compile_ast(ast[1]) + "===" + compile_ast(ast[2]) + ")";

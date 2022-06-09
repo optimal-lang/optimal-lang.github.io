@@ -1,27 +1,11 @@
-(console.log 123)
-(define n 777)
-(console.log n)
-
-(defun add2 (a b) (+ a b]
-(console.log (add2 11 22]
-
-(console.log (+ n 12]
-
-(let [(a 11) (b 22)]
-  (console.log (+ a b]
-
-(define (fact x)
-  (do* ((n 2 (+ 1 n)) (rlt 1))
-       ((< x n) rlt)
-    (set! rlt (* rlt n))))
-(console.log (fact 4))
-
-(define x -2)
-(case x
-  [ -1
-    (console.log "(case1)")
-    1 ]
-  [ :else
-    (console.log "(case2)")
-    2 ]
-  ]
+(defun dummy2 ()
+  [define (my_add2 a b) (+ a b]
+  (console.log (my_add2 33 44]
+(dummy2)
+(console.log (* 2 3]
+(console.log (+ 2 null undefined 3]
+;(console.log "abc")
+;(console.log (. 11 undefined null "22"))
+;(console.log (+ 11 undefined null "22"))
+;(console.log "abc\nxyz")
+;(print (. 11 undefined null "22"))
