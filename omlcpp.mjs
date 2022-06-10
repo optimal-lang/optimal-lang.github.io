@@ -108,10 +108,12 @@ function compile_ast(ast) {
         return "null";
     if (ast === undefined)
         return "undefined";
+    /*
     if (!ast) {
         //return JSON.stringify(ast);
         return `new_string(${JSON.stringify(ast)})`;
     }
+    */
     if (typeof ast === "number") {
         return `new_number(${ast})`;
     }

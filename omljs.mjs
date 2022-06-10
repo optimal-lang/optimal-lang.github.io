@@ -36,11 +36,15 @@ function compile_body(ast, start) {
 }
 
 function compile_ast(ast) {
+    if (ast === null)
+        return "null";
     if (ast === undefined)
         return "undefined";
+    /*
     if (!ast) {
         return JSON.stringify(ast);
     }
+    */
     if (typeof ast === "string") {
         /*
         if (ast.match(/^:.+$/) || ast.match(/^#.+$/))

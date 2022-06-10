@@ -78,6 +78,8 @@ int main()
     console_log((bool_value(new_string(""))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_string(""))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value((1<2))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(new_number(1))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(new_number(0))?new_string("ok"):(new_string("ng"))));
 
     return 0;
 }
