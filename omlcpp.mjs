@@ -317,14 +317,14 @@ function compile_ast(ast) {
             vals += ")";
             voids += ")";
             if (ast[0] === "_let")
-                return ("([=]" +
+                return ("([&]" +
                     vars +
                     "{return " +
                     compile_body(ast, 2) +
                     ";})" +
                     vals);
             else
-                return ("([=]" +
+                return ("([&]" +
                     vars +
                     "{" +
                     assigns +

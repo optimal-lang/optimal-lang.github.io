@@ -3,25 +3,25 @@
 int main()
 {
     GC_INIT();
-    std::function<oml_root*(oml_root*,oml_root*)> add2=[=](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
+    std::function<oml_root*(oml_root*,oml_root*)> add2=[&](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
     console_log(add2(new_number(11),new_number(22)));
     console_log((new_number(5*number_value((new_number(2+3)))*10)));
     oml_root* x=add2(new_number(100),new_number(23));
-    std::function<oml_root*(oml_root*)> add_x=[=](oml_root* n)->oml_root* {return ((new_number(number_value(n)+number_value(x))));};
+    std::function<oml_root*(oml_root*)> add_x=[&](oml_root* n)->oml_root* {return ((new_number(number_value(n)+number_value(x))));};
     console_log(add_x(new_number(10)));
-    console_log(([=](oml_root* x,oml_root* y)
+    console_log(([&](oml_root* x,oml_root* y)
     {
         x=new_number(11);
         y=new_number(22);
         return ((new_number(number_value(x)+number_value(y))));
     })(0,0));
-    console_log(([=](oml_root* x,oml_root* y)
+    console_log(([&](oml_root* x,oml_root* y)
     {
         x=new_number(11);
         y=new_number(22);
         return ((new_number(number_value(x)+number_value(y))));
     })(0,0));
-    std::function<oml_root*(oml_root*)> fact=[=](oml_root* x)->oml_root* {return (([=](oml_root* n,oml_root* rlt)
+    std::function<oml_root*(oml_root*)> fact=[&](oml_root* x)->oml_root* {return (([&](oml_root* n,oml_root* rlt)
     {
         n=new_number(2);
         rlt=new_number(1);
@@ -32,7 +32,7 @@ int main()
     })(0,0));
                                                                          };
     console_log(fact(new_number(4)));
-    std::function<oml_root*(oml_root*)> fact2=[=](oml_root* x)->oml_root* {return (([=](oml_root* n,oml_root* rlt)
+    std::function<oml_root*(oml_root*)> fact2=[&](oml_root* x)->oml_root* {return (([&](oml_root* n,oml_root* rlt)
     {
         n=new_number(2);
         rlt=new_number(1);
@@ -44,10 +44,10 @@ int main()
     })(0,0));
                                                                           };
     console_log(fact2(new_number(4)));
-    std::function<oml_root*()> dummy1=[=]()->oml_root* {return (([=](oml_root* a)
+    std::function<oml_root*()> dummy1=[&]()->oml_root* {return (([&](oml_root* a)
     {
         a=new_number(22);
-        return (([=](oml_root* b)
+        return (([&](oml_root* b)
         {
             b=new_number(33);
             return (console_log((new_number(number_value(a)+number_value(b)))));
@@ -55,9 +55,9 @@ int main()
     })(0));
                                                        };
     dummy1();
-    std::function<oml_root*()> dummy2=[=]()->oml_root* {return (([=](std::function<oml_root*(oml_root*,oml_root*)> my_add2)
+    std::function<oml_root*()> dummy2=[&]()->oml_root* {return (([&](std::function<oml_root*(oml_root*,oml_root*)> my_add2)
     {
-        my_add2=[=](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
+        my_add2=[&](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
         return (console_log(my_add2(new_number(33),new_number(44))));
     })(0));
                                                        };
@@ -75,7 +75,7 @@ int main()
     console_log((bool_value((1<2))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_number(1))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_number(0))?new_string("ok"):(new_string("ng"))));
-    (([=](oml_root* x)
+    (([&](oml_root* x)
     {
         x=new_number(20);
         return (console_log(new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {new_number(1),x,new_number(3)})));
