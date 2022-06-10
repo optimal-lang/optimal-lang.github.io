@@ -1,9 +1,4 @@
 #include "omlcpp.h"
-#include <iostream>
-#include <functional>
-#include <vector>
-#include <gc/gc.h>
-#include <gc/gc_cpp.h>
 
 int main()
 {
@@ -80,6 +75,7 @@ int main()
     console_log((bool_value((1<2))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_number(1))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_number(0))?new_string("ok"):(new_string("ng"))));
+    console_log(new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {new_number(1),new_number(2),new_number(3)}));
 
     return 0;
 }

@@ -40,3 +40,4 @@
 (console.log (if (< 1 2) "ok" "ng"]
 (console.log (if 1 "ok" "ng"]
 (console.log (if 0 "ok" "ng"]
+(console.log (1 2 3]

@@ -41,11 +41,6 @@ let common = new OMLCppCommon();
 
 const CPP_HEAD =
     `#include "omlcpp.h"
-#include <iostream>
-#include <functional>
-#include <vector>
-#include <gc/gc.h>
-#include <gc/gc_cpp.h>
 
 int main() {
     GC_INIT();
@@ -337,6 +332,15 @@ function compile_ast(ast) {
                     compile_body(ast, 2) +
                     ";})" +
                     voids);
+        }
+        case "list": {
+            let result = "new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {";
+            for (let i = 1; i < ast.length; i++) {
+                if (i > 1) result += ",";
+                result += compile_ast(ast[i]);
+            }
+            result += "})";
+            return result;
         }
         case "dict": {
             if ((ast.length % 2) !== 1) throw new Error("synatx error");
