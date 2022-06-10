@@ -24,7 +24,7 @@ class OMLCppCommon extends OMLCommon {
     }
     val_body(ast) {
         if (!this.is_fn(ast)) return compile_ast(ast);
-        let result = "[=](";
+        let result = "[&](";
         let args = ast[1];
         for (let i = 0; i < args.length; i++) {
             if (i > 0) result += ",";
