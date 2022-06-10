@@ -78,11 +78,10 @@ function compile_body_helper(body) {
         if (def !== null) {
             if (common.is_fn(def[2])) {
                 let args = def[2][1];
-                let args_types = new Array(args.length).fill("oml_root*");
-                let proto = "std::function< oml_root*(" + args_types.join(",") + ") >";
+                let proto = common.val_type(def[2]);
                 let let_ast = [common.id("let*"), [[def[1], def[2], proto]], ...body.slice(i + 1)];
                 return result + compile_ast(let_ast) + ")";
-                }
+            }
             let let_ast = [common.id("let*"), [[def[1], def[2]]], ...body.slice(i + 1)];
             return result + compile_ast(let_ast) + ")";
         }
@@ -95,8 +94,8 @@ function compile_body(ast, start) {
     let body = [];
     let prologue = "";
     for (let i = start; i < ast.length; i++) {
-        if (common.is_string(ast[i]) && ast[i][0] == "#") {
-            prologue += ast[i].substr(1);
+        if (common.is_quoted(ast[i])) {
+            prologue += ast[i][1];
             continue;
         }
         body.push(ast[i]);
@@ -121,6 +120,9 @@ function compile_ast(ast) {
     }
     if (ast.length === 0)
         return "[]";
+    if (common.is_quoted(ast)) {
+        return ast[1];
+    }
     if (common.is_variable(ast)) {
         return common.to_id(ast);
     }
@@ -338,7 +340,7 @@ function compile_ast(ast) {
                 body.push([common.id("prop-set!"), common.id("__dict__"), ast[i], ast[i + 1]]);
             }
             body.push(common.id("__dict__"));
-            ast = [common.id("let*"), [[common.id("__dict__"), ["@", "{}"]]], ...body];
+            ast = [common.id("let*"), [[common.id("__dict__"), ["`", "{}"]]], ...body];
             return compile_ast(ast);
         }
         case "set!":
@@ -436,19 +438,20 @@ function compile_do(ast) {
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
     let until_ast = parallel ?
-        [common.id("until"), ast2[0], "#oml_root* __do__[" + ast1_len + "];", ...ast.slice(3)] :
-        [common.id("until"), ast2[0], ...ast.slice(3)];
+    //[common.id("until"), ast2[0], "#oml_root* __do__[" + ast1_len + "];", ...ast.slice(3)] :
+    [common.id("until"), ast2[0], ["`", "oml_root* __do__[" + ast1_len + "];"], ...ast.slice(3)] :
+    [common.id("until"), ast2[0], ...ast.slice(3)];
     if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = [common.id("set!"), ["@", "__do__[" + i + "]"], x[2]];
+            let next_step = [common.id("set!"), ["`", "__do__[" + i + "]"], x[2]];
             until_ast.push(next_step);
         });
         ast1.forEach((x, i) => {
             if (x.length < 3)
                 return;
-            let next_step = [common.id("set!"), x[0], ["@", "__do__[" + i + "]"]];
+            let next_step = [common.id("set!"), x[0], ["`", "__do__[" + i + "]"]];
             until_ast.push(next_step);
         });
     }

@@ -60,7 +60,7 @@ int main()
     })(0));
                                                        };
     dummy1();
-    std::function<oml_root*()> dummy2=[=]()->oml_root* {return (([=](std::function< oml_root*(oml_root*,oml_root*) > my_add2)
+    std::function<oml_root*()> dummy2=[=]()->oml_root* {return (([=](std::function<oml_root*(oml_root*,oml_root*)> my_add2)
     {
         my_add2=[=](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
         return (console_log(my_add2(new_number(33),new_number(44))));
