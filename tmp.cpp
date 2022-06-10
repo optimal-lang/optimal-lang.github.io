@@ -74,6 +74,10 @@ int main()
     console_log((new_number(11+number_value(undefined)+number_value(null)+number_value(new_string("22")))));
     console_log(new_string("abc\nxyz"));
     print(new_string(string_value(new_number(11))+string_value(undefined)+string_value(null)+std::string("22")));
+    console_log((bool_value(new_string("abc"))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(new_string(""))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(new_string(""))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value((1<2))?new_string("ok"):(new_string("ng"))));
 
     return 0;
 }

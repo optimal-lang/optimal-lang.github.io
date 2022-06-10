@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cmath>
 
 class oml_root : public gc_cleanup
 {
@@ -15,6 +16,10 @@ public:
     {
         static std::string empty = "";
         return empty;
+    }
+    virtual bool bool_value()
+    {
+        return false;
     }
 };
 
@@ -41,6 +46,11 @@ public:
         s = stream.str();
         return s;
     }
+    virtual bool bool_value()
+    {
+        static double nan = std::nan("");
+        return !(this->value==0 || this->value==nan);
+    }
 };
 
 class oml_string : public oml_root
@@ -54,6 +64,10 @@ public:
     virtual const std::string string_value()
     {
         return this->value;
+    }
+    virtual bool bool_value()
+    {
+        return !this->value.empty();
     }
 };
 
@@ -85,6 +99,20 @@ static inline const std::string string_value(oml_root *x)
     if (x == undefined)
         return undefined_;
     return x->string_value();
+}
+
+static inline bool bool_value(bool x)
+{
+    return x;
+}
+
+static inline bool bool_value(oml_root *x)
+{
+    if (x == nullptr)
+        return false;
+    if (x == undefined)
+        return false;
+    return x->bool_value();
 }
 
 oml_root *console_log(oml_root *x)

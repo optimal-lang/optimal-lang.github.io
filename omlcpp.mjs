@@ -104,10 +104,13 @@ function compile_body(ast, start) {
 }
 
 function compile_ast(ast) {
+    if (ast === null)
+        return "null";
     if (ast === undefined)
         return "undefined";
     if (!ast) {
-        return JSON.stringify(ast);
+        //return JSON.stringify(ast);
+        return `new_string(${JSON.stringify(ast)})`;
     }
     if (typeof ast === "number") {
         return `new_number(${ast})`;
@@ -263,9 +266,9 @@ function compile_ast(ast) {
             return compile_ast(ast);
         }
         case "if":
-            return ("(" +
+            return ("(bool_value(" +
                 compile_ast(ast[1]) +
-                "?" +
+                ")?" +
                 compile_ast(ast[2]) +
                 ":" +
                 compile_body(ast, 3) +
@@ -438,9 +441,9 @@ function compile_do(ast) {
     if (ast2.length < 2)
         ast2 = [ast2[0], null];
     let until_ast = parallel ?
-    //[common.id("until"), ast2[0], "#oml_root* __do__[" + ast1_len + "];", ...ast.slice(3)] :
-    [common.id("until"), ast2[0], ["`", "oml_root* __do__[" + ast1_len + "];"], ...ast.slice(3)] :
-    [common.id("until"), ast2[0], ...ast.slice(3)];
+        //[common.id("until"), ast2[0], "#oml_root* __do__[" + ast1_len + "];", ...ast.slice(3)] :
+        [common.id("until"), ast2[0], ["`", "oml_root* __do__[" + ast1_len + "];"], ...ast.slice(3)] :
+        [common.id("until"), ast2[0], ...ast.slice(3)];
     if (parallel) {
         ast1.forEach((x, i) => {
             if (x.length < 3)
