@@ -75,7 +75,11 @@ int main()
     console_log((bool_value((1<2))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_number(1))?new_string("ok"):(new_string("ng"))));
     console_log((bool_value(new_number(0))?new_string("ok"):(new_string("ng"))));
-    console_log(new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {new_number(1),new_number(2),new_number(3)}));
+    (([=](oml_root* x)
+    {
+        x=new_number(20);
+        return (console_log(new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {new_number(1),x,new_number(3)})));
+    })(0));
 
     return 0;
 }
