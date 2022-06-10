@@ -116,14 +116,18 @@ public:
     }
 };
 
+using oml_list_data = std::vector<oml_root *, gc_allocator<oml_root *>>;
+
 class oml_list : public oml_root
 {
-    std::vector<oml_root *, gc_allocator<oml_root *>> *value;
+    oml_list_data *value;
 
 public:
-    oml_list()
-        : value(new (GC) std::vector<oml_root *, gc_allocator<oml_root *>>())
+    oml_list(oml_list_data *data = nullptr)
+        //: value(new (GC) oml_list_data())
     {
+        if (data == nullptr) data = new (GC) oml_list_data();
+        this->value = data;
     }
     virtual const std::string string_value()
     {
@@ -157,14 +161,17 @@ static inline oml_root *new_string(const std::string &s)
     return new (GC) oml_string(s);
 }
 
-static inline oml_root *new_list(std::vector<oml_root *, gc_allocator<oml_root *>> *list)
+static inline oml_root *new_list(oml_list_data *data = nullptr)
 {
+    return new (GC) oml_list(data);
+    /*
     oml_list *result = new (GC) oml_list();
     for (std::size_t i = 0; i < list->size(); i++)
     {
         result->push((*list)[i]);
     }
     return result;
+    */
 }
 
 oml_root *print(oml_root *x)

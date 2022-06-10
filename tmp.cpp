@@ -78,7 +78,7 @@ int main()
     (([&](oml_root* x)
     {
         x=new_number(20);
-        return (console_log(new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {new_number(1),x,new_number(3)})));
+        return (console_log(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
     })(0));
 
     return 0;

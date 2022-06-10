@@ -334,7 +334,7 @@ function compile_ast(ast) {
                     voids);
         }
         case "list": {
-            let result = "new_list(new (GC) std::vector< oml_root *, gc_allocator<oml_root *> > {";
+            let result = "new_list(new (GC) oml_list_data {";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1) result += ",";
                 result += compile_ast(ast[i]);
