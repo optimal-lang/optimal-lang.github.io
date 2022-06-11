@@ -47,3 +47,7 @@
 (print { :key1 123 :key2 ("abc" undefined true false)})
 (print (if true "ok" "ng"]
 (print (if false "ok" "ng"]
+
+(print (equal ("a" 1.5 undefined) ("a" 1.5 undefined)))
+(print (equal ("a" 1.5 undefined) ("a" 1.5 null)))
+(print (equal undefined null]

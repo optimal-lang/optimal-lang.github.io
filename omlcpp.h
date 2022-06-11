@@ -348,13 +348,19 @@ oml_root *console_log(oml_root *x)
     return null;
 }
 
+oml_root *print(oml_root *x)
+{
+    std::cout << printable_text(x) << std::endl;
+    return x;
+}
+
 oml_root *equal(oml_root *a, oml_root *b)
 {
     if (a == null)
         return new_bool(b == null);
     if (a == undefined)
         return new_bool(b == undefined);
-    if (b == null || b == undefined)
+    if (a == null || a == undefined || b == null || b == undefined)
         return new_bool(false);
     if (a->type_of() != b->type_of())
         return new_bool(false);
@@ -377,7 +383,9 @@ oml_root *equal(oml_root *a, oml_root *b)
             return new_bool(false);
         for (std::size_t i = 0; i < la->size(); i++)
         {
-            if (!equal((*la)[i], (*lb)[i]))
+            //print((*la)[i]);
+            //print((*lb)[i]);
+            if (!bool_value(equal((*la)[i], (*lb)[i])))
                 return new_bool(false);
         }
         return new_bool(true);
@@ -403,17 +411,11 @@ oml_root *equal(oml_root *a, oml_root *b)
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
             oml_dict_key key = a_keys[i];
-            if (!equal(da->at(key), db->at(key))) return new_bool(false);
+            if (!bool_value(equal(da->at(key), db->at(key)))) return new_bool(false);
         }
         return new_bool(true);
     }
     break;
     }
     return new_bool(false);
-}
-
-oml_root *print(oml_root *x)
-{
-    std::cout << printable_text(x) << std::endl;
-    return x;
 }

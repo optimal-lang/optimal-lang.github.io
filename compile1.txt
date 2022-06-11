@@ -24,3 +24,6 @@
 { ":key1" 123 ":key2" ( "abc" undefined true false ) }
 "ok"
 "ng"
+true
+false
+false
