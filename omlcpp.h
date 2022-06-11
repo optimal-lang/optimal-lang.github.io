@@ -71,12 +71,6 @@ static inline bool bool_value(oml_root *x)
     return x->bool_value();
 }
 
-oml_root *console_log(oml_root *x)
-{
-    std::cout << string_value(x) << std::endl;
-    return null;
-}
-
 class oml_bool : public oml_root
 {
     bool value;
@@ -111,7 +105,6 @@ public:
     }
     virtual const std::string string_value()
     {
-        // static std::string s;
         std::ostringstream stream;
         stream << this->value;
         return stream.str();
@@ -134,7 +127,6 @@ public:
     virtual const std::string string_value()
     {
         std::string s = "\"";
-        // s +=  this->value;
         for (std::size_t i = 0; i < this->value.size(); i++)
         {
             char c = this->value[i];
@@ -172,14 +164,14 @@ public:
     }
     virtual const std::string string_value()
     {
-        std::string result = "[ ";
+        std::string result = "( ";
         for (std::size_t i = 0; i < this->value->size(); i++)
         {
             if (i > 0)
-                result += ", ";
+                result += " ";
             result += ::string_value((*this->value)[i]);
         }
-        result += " ]";
+        result += " )";
         return result;
     }
     virtual bool bool_value()
@@ -220,7 +212,7 @@ public:
         for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
             if (i > 0)
-                result += ", ";
+                result += " ";
             result += ::string_value(it->first);
             result += ": ";
             result += ::string_value(it->second);
@@ -264,6 +256,12 @@ static inline oml_root *new_list(oml_list_data *data = nullptr)
 static inline oml_root *new_dict(oml_dict_data *data = nullptr)
 {
     return new (GC) oml_dict(data);
+}
+
+oml_root *console_log(oml_root *x)
+{
+    std::cout << string_value(x) << std::endl;
+    return null;
 }
 
 oml_root *print(oml_root *x)
