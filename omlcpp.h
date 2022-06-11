@@ -133,7 +133,10 @@ public:
     }
     virtual const std::string string_value()
     {
-        return this->value;
+        std::string s = "\"";
+        s +=  this->value;
+        s += "\"";
+        return s;
     }
     virtual bool bool_value()
     {
