@@ -51,7 +51,7 @@ function read_dict(code, exp) {
 function read_sexp(code, exp) {
   let token = read_token(code, exp);
   if (token === undefined) return undefined;
-  if ((typeof token)==="number") return token;
+  if ((typeof token) === "number") return token;
   switch (token) {
     case "false":
       return false;
@@ -83,10 +83,10 @@ function read_sexp(code, exp) {
       token = token.replace(/(@@)/g, "@");
       return ["@", token];
     default: {
-      if (token[0]===":") return token;
-      if (token[0]==="&") return token;
-      let ids = token[0]==="." ? [ token ] : token.split(".");
-      return ["#",...ids];
+      if (token[0] === ":") return token;
+      if (token[0] === "&") return token;
+      let ids = token[0] === "." ? [token] : token.split(".");
+      return ["#", ...ids];
     }
   }
 }
@@ -134,8 +134,8 @@ export function ast2oml(ast) {
   if ((typeof ast) === "boolean") return JSON.stringify(ast);
   if (ast instanceof Array) {
     let result = "( ";
-    for (let i=0; i<ast.length; i++) {
-      if (i>0) result += " ";
+    for (let i = 0; i < ast.length; i++) {
+      if (i > 0) result += " ";
       result += ast2oml(ast[i]);
     }
     result += " )";
@@ -144,8 +144,8 @@ export function ast2oml(ast) {
     let result = "{ ";
     let keys = Object.keys(ast);
     keys.sort();
-    for (let i=0; i<keys.length; i++) {
-      if (i>0) result += " ";
+    for (let i = 0; i < keys.length; i++) {
+      if (i > 0) result += " ";
       result += JSON.stringify(keys[i]);
       result += " ";
       result += ast2oml(ast[keys[i]]);
@@ -153,4 +153,49 @@ export function ast2oml(ast) {
     result += " }";
     return result;
   }
+}
+
+export function astequal(a, b) {
+  // primitive
+  if (a === b) {
+    return true;
+  }
+  /*
+  if(a === null){
+    return b === null; // null === null => true
+  }
+  */
+  if (a instanceof Array && b instanceof Array) {
+    // Array
+    if (a.length !== b.length) {
+      return false
+    }
+    for (let i = 0; i < a.length; ++i) {
+      const ret = astequal(a[i], b[i]);
+      if (ret === false) {
+        return false
+      }
+    }
+    return true;
+  } else if (a instanceof Function || b instanceof Function) {
+    // Function
+    //console.log("function was not supported!!")
+    return false
+  } else if (typeof (a) === 'object' && typeof (b) === 'object' && !(a instanceof Array) && !(b instanceof Array)) {
+    // Object
+    const ak = Object.keys(a);
+    const bk = Object.keys(b);
+    if (ak.length !== bk.length) {
+      return false;
+    }
+    for (let i = 0; i < ak.length; ++i) {
+      const key = ak[i];
+      const ret = astequal(a[key], b[key]);
+      if (ret === false) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false
 }

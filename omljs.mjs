@@ -1,4 +1,4 @@
-import { oml2ast, ast2oml } from "./oml2ast.mjs";
+import { oml2ast, ast2oml, astequal } from "./oml2ast.mjs";
 import { OMLCommon } from "./omlcommon.mjs";
 
 let common = new OMLCommon();
@@ -540,3 +540,8 @@ function number_value(x) {
     return typeof x !== "number" ? 0 : x;
 }
 globalThis.number_value = number_value;
+
+function equal(a, b) {
+    return astequal(a, b);    
+}
+globalThis.equal = equal;
