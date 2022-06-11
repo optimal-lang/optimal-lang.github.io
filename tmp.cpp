@@ -4,18 +4,18 @@ int main()
 {
     GC_INIT();
     std::function<oml_root*(oml_root*,oml_root*)> add2=[&](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
-    console_log(add2(new_number(11),new_number(22)));
-    console_log((new_number(5*number_value((new_number(2+3)))*10)));
+    print(add2(new_number(11),new_number(22)));
+    print((new_number(5*number_value((new_number(2+3)))*10)));
     oml_root* x=add2(new_number(100),new_number(23));
     std::function<oml_root*(oml_root*)> add_x=[&](oml_root* n)->oml_root* {return ((new_number(number_value(n)+number_value(x))));};
-    console_log(add_x(new_number(10)));
-    console_log(([&](oml_root* x,oml_root* y)
+    print(add_x(new_number(10)));
+    print(([&](oml_root* x,oml_root* y)
     {
         x=new_number(11);
         y=new_number(22);
         return ((new_number(number_value(x)+number_value(y))));
     })(0,0));
-    console_log(([&](oml_root* x,oml_root* y)
+    print(([&](oml_root* x,oml_root* y)
     {
         x=new_number(11);
         y=new_number(22);
@@ -31,7 +31,7 @@ int main()
         }})(),0),rlt);
     })(0,0));
                                                                          };
-    console_log(fact(new_number(4)));
+    print(fact(new_number(4)));
     std::function<oml_root*(oml_root*)> fact2=[&](oml_root* x)->oml_root* {return (([&](oml_root* n,oml_root* rlt)
     {
         n=new_number(2);
@@ -43,14 +43,14 @@ int main()
         }})(),0),rlt);
     })(0,0));
                                                                           };
-    console_log(fact2(new_number(4)));
+    print(fact2(new_number(4)));
     std::function<oml_root*()> dummy1=[&]()->oml_root* {return (([&](oml_root* a)
     {
         a=new_number(22);
         return (([&](oml_root* b)
         {
             b=new_number(33);
-            return (console_log((new_number(number_value(a)+number_value(b)))));
+            return (print((new_number(number_value(a)+number_value(b)))));
         })(0));
     })(0));
                                                        };
@@ -58,31 +58,31 @@ int main()
     std::function<oml_root*()> dummy2=[&]()->oml_root* {return (([&](std::function<oml_root*(oml_root*,oml_root*)> my_add2)
     {
         my_add2=[&](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
-        return (console_log(my_add2(new_number(33),new_number(44))));
+        return (print(my_add2(new_number(33),new_number(44))));
     })(0));
                                                        };
     dummy2();
-    console_log((new_number(2*3)));
-    console_log((new_number(2+number_value(null)+number_value(undefined)+3)));
-    console_log(new_string("abc"));
-    console_log(new_string(string_value(new_number(11))+string_value(undefined)+string_value(null)+std::string("22")));
-    console_log((new_number(11+number_value(undefined)+number_value(null)+number_value(new_string("22")))));
-    console_log(new_string("abc\nxyz"));
+    print((new_number(2*3)));
+    print((new_number(2+number_value(null)+number_value(undefined)+3)));
+    print(new_string("abc"));
     print(new_string(string_value(new_number(11))+string_value(undefined)+string_value(null)+std::string("22")));
-    console_log((bool_value(bool_value(new_string("abc")))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(bool_value(new_string("")))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(bool_value(new_string("")))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(bool_value((1<2)))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(bool_value(new_number(1)))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(bool_value(new_number(0)))?new_string("ok"):(new_string("ng"))));
+    print((new_number(11+number_value(undefined)+number_value(null)+number_value(new_string("22")))));
+    print(new_string("abc\nxyz"));
+    print(new_string(string_value(new_number(11))+string_value(undefined)+string_value(null)+std::string("22")));
+    print((bool_value(bool_value(new_string("abc")))?new_string("ok"):(new_string("ng"))));
+    print((bool_value(bool_value(new_string("")))?new_string("ok"):(new_string("ng"))));
+    print((bool_value(bool_value(new_string("")))?new_string("ok"):(new_string("ng"))));
+    print((bool_value(bool_value((1<2)))?new_string("ok"):(new_string("ng"))));
+    print((bool_value(bool_value(new_number(1)))?new_string("ok"):(new_string("ng"))));
+    print((bool_value(bool_value(new_number(0)))?new_string("ok"):(new_string("ng"))));
     (([&](oml_root* x)
     {
         x=new_number(20);
-        return (console_log(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
+        return (print(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
     })(0));
     print(new_dict(new (GC) oml_dict_data {{new_string(":key1"),new_number(123)},{new_string(":key2"),new_list(new (GC) oml_list_data {new_string("abc"),undefined,new_bool(true),new_bool(false)})}}));
-    console_log((bool_value(true)?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(false)?new_string("ok"):(new_string("ng"))));
+    print((bool_value(true)?new_string("ok"):(new_string("ng"))));
+    print((bool_value(false)?new_string("ok"):(new_string("ng"))));
 
     return 0;
 }

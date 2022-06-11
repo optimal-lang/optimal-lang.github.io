@@ -39,7 +39,6 @@ function read_dict(code, exp) {
   let ast1;
   let ast2;
   while ((ast1 = read_sexp(code, exp)) !== undefined) {
-    console.log("read_dict: " + ast1)
     if (ast1 === "]") continue;
     if (ast1 === "}") break;
     ast2 = read_sexp(code, exp);

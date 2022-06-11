@@ -134,7 +134,20 @@ public:
     virtual const std::string string_value()
     {
         std::string s = "\"";
-        s +=  this->value;
+        // s +=  this->value;
+        for (std::size_t i = 0; i < this->value.size(); i++)
+        {
+            char c = this->value[i];
+            switch (c)
+            {
+            case '\n':
+                s += "\\n";
+                break;
+            default:
+                s += c;
+                break;
+            }
+        }
         s += "\"";
         return s;
     }

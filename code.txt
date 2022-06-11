@@ -1,49 +1,49 @@
 (defun add2 (a b) (+ a b]
-(console.log (add2 11 22]
-(console.log (* 5 (+ 2 3) 10]
+(print (add2 11 22]
+(print (* 5 (+ 2 3) 10]
 (defvar x (add2 100 23]
 (defun add_x (n) (+ n x]
-(console.log (add_x 10]
-(console.log (let [(x 11) (y 22)] (+ x y]]
-(console.log (let* [(x 11) (y 22)] (+ x y]]
+(print (add_x 10]
+(print (let [(x 11) (y 22)] (+ x y]]
+(print (let* [(x 11) (y 22)] (+ x y]]
 (define (fact x)
   (do* ((n 2 (+ 1 n)) (rlt 1))
        ((< x n) rlt)
     (set! rlt (* rlt n))))
-(console.log (fact 4))
+(print (fact 4))
 (define (fact2 x)
   (do ((n 2 (+ 1 n)) (rlt 1))
       ((< x n) rlt)
     (set! rlt (* rlt n))))
-(console.log (fact2 4))
+(print (fact2 4))
 (defun dummy1 ()
   (define a 22)
   (defvar b 33)
-  (console.log (+ a b))
+  (print (+ a b))
   )
 (dummy1)
 (defun dummy2 ()
   [define (my_add2 a b) (+ a b]
-  (console.log (my_add2 33 44]
+  (print (my_add2 33 44]
 (dummy2)
-(console.log (* 2 3]
-(console.log (+ 2 null undefined 3]
-(console.log "abc")
-(console.log (. 11 undefined null "22"))
-(console.log (+ 11 undefined null "22"))
-(console.log "abc\nxyz")
+(print (* 2 3]
+(print (+ 2 null undefined 3]
+(print "abc")
+(print (. 11 undefined null "22"))
+(print (+ 11 undefined null "22"))
+(print "abc\nxyz")
 (print (. 11 undefined null "22"))
 
-(console.log (if "abc" "ok" "ng"]
-(console.log (if "" "ok" "ng"]
-(console.log (if "" "ok" "ng"]
-(console.log (if (< 1 2) "ok" "ng"]
-(console.log (if 1 "ok" "ng"]
-(console.log (if 0 "ok" "ng"]
+(print (if "abc" "ok" "ng"]
+(print (if "" "ok" "ng"]
+(print (if "" "ok" "ng"]
+(print (if (< 1 2) "ok" "ng"]
+(print (if 1 "ok" "ng"]
+(print (if 0 "ok" "ng"]
 (begin
   (define x 20)
-  (console.log (1 x 3]
+  (print (1 x 3]
 
 (print { :key1 123 :key2 ("abc" undefined true false)})
-(console.log (if true "ok" "ng"]
-(console.log (if false "ok" "ng"]
+(print (if true "ok" "ng"]
+(print (if false "ok" "ng"]

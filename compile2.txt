@@ -9,19 +9,18 @@
 77
 6
 5
-abc
-11undefinednull22
+"abc"
+"11undefinednull22"
 11
-abc
-xyz
-11undefinednull22
-ok
-ng
-ng
-ok
-ok
-ng
+"abc\nxyz"
+"11undefinednull22"
+"ok"
+"ng"
+"ng"
+"ok"
+"ok"
+"ng"
 [ 1, 20, 3 ]
-{ :key1: 123, :key2: [ abc, undefined, true, false ] }
-ok
-ng
+{ ":key1": 123, ":key2": [ "abc", undefined, true, false ] }
+"ok"
+"ng"
