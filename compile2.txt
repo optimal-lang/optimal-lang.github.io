@@ -22,4 +22,6 @@ ok
 ok
 ng
 [ 1, 20, 3 ]
-{ :key1: 123, :key2: [ abc, undefined ] }
+{ :key1: 123, :key2: [ abc, undefined, true, false ] }
+ok
+ng

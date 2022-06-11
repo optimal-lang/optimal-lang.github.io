@@ -3,6 +3,10 @@ export class OMLCommon {
         return (x instanceof Array);
     }
     
+    is_bool(x) {
+        return (typeof x) === "boolean";
+    }
+    
     is_number(x) {
         return (typeof x) === "number";
     }

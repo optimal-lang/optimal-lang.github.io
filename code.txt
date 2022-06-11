@@ -44,4 +44,6 @@
   (define x 20)
   (console.log (1 x 3]
 
-(print { :key1 123 :key2 ("abc" undefined)})
+(print { :key1 123 :key2 ("abc" undefined true false)})
+(console.log (if true "ok" "ng"]
+(console.log (if false "ok" "ng"]

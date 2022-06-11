@@ -77,6 +77,26 @@ oml_root *console_log(oml_root *x)
     return null;
 }
 
+class oml_bool : public oml_root
+{
+    bool value;
+
+public:
+    oml_bool(bool b) : value(b)
+    {
+    }
+    virtual const std::string string_value()
+    {
+        static std::string false_ = "false";
+        static std::string true_ = "true";
+        return this->value ? true_ : false_;
+    }
+    virtual bool bool_value()
+    {
+        return this->value;
+    }
+};
+
 class oml_number : public oml_root
 {
     double value;
@@ -91,11 +111,10 @@ public:
     }
     virtual const std::string string_value()
     {
-        static std::string s;
+        //static std::string s;
         std::ostringstream stream;
         stream << this->value;
-        s = stream.str();
-        return s;
+        return stream.str();
     }
     virtual bool bool_value()
     {
@@ -198,6 +217,15 @@ public:
         return true;
     }
 };
+
+static inline oml_root *new_bool(bool b)
+{
+    static oml_bool *true_ = nullptr;
+    static oml_bool *false_ = nullptr;
+    if(!true_) true_ = new (GC) oml_bool(true);
+    if(!false_) false_ = new (GC) oml_bool(false);
+    return b ? true_ : false_;
+}
 
 static inline oml_root *new_number(double n)
 {

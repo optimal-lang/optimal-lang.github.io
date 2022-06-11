@@ -52,6 +52,11 @@ const CPP_TAIL =
 }
 `
 
+function compile_bool(ast) {
+    if (common.is_bool(ast)) return ast.toString();
+    return `bool_value(${compile_ast(ast)})`;
+}
+
 function compile_number(ast) {
     if (common.is_number(ast)) return ast.toString();
     return `number_value(${compile_ast(ast)})`;
@@ -103,6 +108,9 @@ function compile_ast(ast) {
         return "null";
     if (ast === undefined)
         return "undefined";
+    if (common.is_bool(ast)) {
+        return `new_bool(${ast})`;
+    }
     if (typeof ast === "number") {
         return `new_number(${ast})`;
     }
@@ -258,7 +266,7 @@ function compile_ast(ast) {
         }
         case "if":
             return ("(bool_value(" +
-                compile_ast(ast[1]) +
+                compile_bool(ast[1]) +
                 ")?" +
                 compile_ast(ast[2]) +
                 ":" +

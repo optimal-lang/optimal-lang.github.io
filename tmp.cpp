@@ -69,18 +69,20 @@ int main()
     console_log((new_number(11+number_value(undefined)+number_value(null)+number_value(new_string("22")))));
     console_log(new_string("abc\nxyz"));
     print(new_string(string_value(new_number(11))+string_value(undefined)+string_value(null)+std::string("22")));
-    console_log((bool_value(new_string("abc"))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(new_string(""))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(new_string(""))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value((1<2))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(new_number(1))?new_string("ok"):(new_string("ng"))));
-    console_log((bool_value(new_number(0))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(bool_value(new_string("abc")))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(bool_value(new_string("")))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(bool_value(new_string("")))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(bool_value((1<2)))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(bool_value(new_number(1)))?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(bool_value(new_number(0)))?new_string("ok"):(new_string("ng"))));
     (([&](oml_root* x)
     {
         x=new_number(20);
         return (console_log(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
     })(0));
-    print(new_dict(new (GC) oml_dict_data {{new_string(":key1"),new_number(123)},{new_string(":key2"),new_list(new (GC) oml_list_data {new_string("abc"),undefined})}}));
+    print(new_dict(new (GC) oml_dict_data {{new_string(":key1"),new_number(123)},{new_string(":key2"),new_list(new (GC) oml_list_data {new_string("abc"),undefined,new_bool(true),new_bool(false)})}}));
+    console_log((bool_value(true)?new_string("ok"):(new_string("ng"))));
+    console_log((bool_value(false)?new_string("ok"):(new_string("ng"))));
 
     return 0;
 }
