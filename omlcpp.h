@@ -27,6 +27,11 @@ public:
     {
         return false;
     }
+    virtual void push(oml_root *x)
+    {
+        {
+        }
+    }
 };
 
 static oml_root *null = (oml_root *)nullptr;
@@ -126,7 +131,8 @@ class oml_list : public oml_root
 public:
     oml_list(oml_list_data *data = nullptr)
     {
-        if (data == nullptr) data = new (GC) oml_list_data();
+        if (data == nullptr)
+            data = new (GC) oml_list_data();
         this->value = data;
     }
     virtual const std::string string_value()
@@ -151,15 +157,47 @@ public:
     }
 };
 
-struct oml_string_less
+struct oml_dict_less
 {
-   bool operator() (oml_root *lhs, oml_root *rhs) const
-   {
-       return ::string_value(lhs) < ::string_value(rhs);
-   }
+    bool operator()(oml_root *lhs, oml_root *rhs) const
+    {
+        return ::string_value(lhs) < ::string_value(rhs);
+    }
 };
 
-using oml_dict_data = std::multimap<oml_root *, oml_root *, oml_string_less, gc_allocator<std::pair<oml_root *, oml_root *> > >;
+using oml_dict_data = std::multimap<oml_root *, oml_root *, oml_dict_less, gc_allocator<std::pair<oml_root *, oml_root *>>>;
+
+class oml_dict : public oml_root
+{
+    oml_dict_data *value;
+
+public:
+    oml_dict(oml_dict_data *data = nullptr)
+    {
+        if (data == nullptr)
+            data = new (GC) oml_dict_data();
+        this->value = data;
+    }
+    virtual const std::string string_value()
+    {
+        std::string result = "{ ";
+        std::size_t i = 0;
+        for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
+        {
+            if (i>0) result += ", ";
+            result += ::string_value(it->first);
+            result += ": ";
+            result += ::string_value(it->second);
+            i++;
+        }
+        result += " }";
+        return result;
+    }
+    virtual bool bool_value()
+    {
+        return true;
+    }
+};
 
 static inline oml_root *new_number(double n)
 {
