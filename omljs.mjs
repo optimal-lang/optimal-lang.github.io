@@ -533,6 +533,7 @@ export function runAll(exp) {
 
 function print(x) {
     console.log(ast2oml(x));
+    return x;
 };
 globalThis.print = print;
 

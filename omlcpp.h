@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <algorithm>
 
 #include <gc/gc.h>
 #include <gc/gc_cpp.h>
@@ -14,6 +15,20 @@
 class oml_root : public gc_cleanup
 {
 public:
+    enum type
+    {
+        BOOL,
+        NUMBER,
+        STRING,
+        LIST,
+        DICT
+    };
+    virtual type type_of() = 0;
+    virtual std::string printable_text() = 0;
+    virtual bool bool_value()
+    {
+        return false;
+    }
     virtual double number_value()
     {
         return 0;
@@ -23,14 +38,8 @@ public:
         static std::string empty = "";
         return empty;
     }
-    virtual bool bool_value()
-    {
-        return false;
-    }
     virtual void push(oml_root *x)
     {
-        {
-        }
     }
 };
 
@@ -57,6 +66,17 @@ static inline const std::string string_value(oml_root *x)
     return x->string_value();
 }
 
+static inline const std::string printable_text(oml_root *x)
+{
+    static std::string null_ = "null";
+    static std::string undefined_ = "undefined";
+    if (x == nullptr)
+        return null_;
+    if (x == undefined)
+        return undefined_;
+    return x->printable_text();
+}
+
 static inline bool bool_value(bool x)
 {
     return x;
@@ -79,6 +99,14 @@ public:
     oml_bool(bool b) : value(b)
     {
     }
+    virtual type type_of()
+    {
+        return BOOL;
+    }
+    virtual std::string printable_text()
+    {
+        return this->string_value();
+    }
     virtual const std::string string_value()
     {
         static std::string false_ = "false";
@@ -98,6 +126,14 @@ class oml_number : public oml_root
 public:
     oml_number(double n) : value(n)
     {
+    }
+    virtual type type_of()
+    {
+        return NUMBER;
+    }
+    virtual std::string printable_text()
+    {
+        return this->string_value();
     }
     virtual double number_value()
     {
@@ -124,7 +160,11 @@ public:
     oml_string(const std::string &s) : value(s)
     {
     }
-    virtual const std::string string_value()
+    virtual type type_of()
+    {
+        return STRING;
+    }
+    virtual std::string printable_text()
     {
         std::string s = "\"";
         for (std::size_t i = 0; i < this->value.size(); i++)
@@ -142,6 +182,10 @@ public:
         }
         s += "\"";
         return s;
+    }
+    virtual const std::string string_value()
+    {
+        return this->value;
     }
     virtual bool bool_value()
     {
@@ -162,6 +206,14 @@ public:
             data = new (GC) oml_list_data();
         this->value = data;
     }
+    virtual type type_of()
+    {
+        return LIST;
+    }
+    virtual std::string printable_text()
+    {
+        return this->string_value();
+    }
     virtual const std::string string_value()
     {
         std::string result = "( ";
@@ -169,7 +221,7 @@ public:
         {
             if (i > 0)
                 result += " ";
-            result += ::string_value((*this->value)[i]);
+            result += ::printable_text((*this->value)[i]);
         }
         result += " )";
         return result;
@@ -182,8 +234,10 @@ public:
     {
         this->value->push_back(x);
     }
+    friend oml_root *equal(oml_root *a, oml_root *b);
 };
 
+/*
 struct oml_dict_less
 {
     bool operator()(oml_root *lhs, oml_root *rhs) const
@@ -191,8 +245,12 @@ struct oml_dict_less
         return ::string_value(lhs) < ::string_value(rhs);
     }
 };
+*/
 
-using oml_dict_data = std::multimap<oml_root *, oml_root *, oml_dict_less, gc_allocator<std::pair<oml_root *, oml_root *>>>;
+using oml_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
+
+// using oml_dict_data = std::multimap<oml_root *, oml_root *, oml_dict_less, gc_allocator<std::pair<oml_root *, oml_root *>>>;
+using oml_dict_data = std::map<oml_dict_key, oml_root *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_root *, oml_root *>>>;
 
 class oml_dict : public oml_root
 {
@@ -205,18 +263,32 @@ public:
             data = new (GC) oml_dict_data();
         this->value = data;
     }
+    virtual type type_of()
+    {
+        return DICT;
+    }
+    virtual std::string printable_text()
+    {
+        return this->string_value();
+    }
     virtual const std::string string_value()
     {
         std::string result = "{ ";
         std::size_t i = 0;
+        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> keys;
         for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
+            keys.push_back(it->first);
+        }
+        std::sort(keys.begin(), keys.end());
+        for (std::size_t i = 0; i < keys.size(); i++)
+        {
+            oml_dict_key key = keys[i];
             if (i > 0)
                 result += " ";
-            result += ::string_value(it->first);
+            result += key;
             result += " ";
-            result += ::string_value(it->second);
-            i++;
+            result += ::printable_text(this->value->at(key));
         }
         result += " }";
         return result;
@@ -225,6 +297,7 @@ public:
     {
         return true;
     }
+    friend oml_root *equal(oml_root *a, oml_root *b);
 };
 
 static inline oml_root *new_bool(bool b)
@@ -264,8 +337,47 @@ oml_root *console_log(oml_root *x)
     return null;
 }
 
+oml_root *equal(oml_root *a, oml_root *b)
+{
+    if (a == null)
+        return new_bool(b == null);
+    if (a == undefined)
+        return new_bool(b == undefined);
+    if (b == null || b == undefined)
+        return new_bool(false);
+    if (a->type_of() != b->type_of())
+        return new_bool(false);
+    switch (a->type_of())
+    {
+    case oml_root::type::BOOL:
+        return new_bool(bool_value(a) == bool_value(b));
+        break;
+    case oml_root::type::NUMBER:
+        return new_bool(number_value(a) == number_value(b));
+        break;
+    case oml_root::type::STRING:
+        return new_bool(string_value(a) == string_value(b));
+        break;
+    case oml_root::type::LIST:
+    {
+        oml_list_data *la = ((oml_list *)a)->value;
+        oml_list_data *lb = ((oml_list *)b)->value;
+        if (la->size() != lb->size())
+            return new_bool(false);
+        for (std::size_t i = 0; i < la->size(); i++)
+        {
+            if (!equal((*la)[i], (*lb)[i]))
+                return new_bool(false);
+        }
+        return new_bool(true);
+    }
+    break;
+    }
+    return null;
+}
+
 oml_root *print(oml_root *x)
 {
-    std::cout << string_value(x) << std::endl;
+    std::cout << printable_text(x) << std::endl;
     return x;
 }

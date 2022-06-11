@@ -350,7 +350,7 @@ function compile_ast(ast) {
             for (let i = 1; i < ast.length; i += 2) {
                 if (i > 1) result += ",";
                 result += "{";
-                result += compile_ast(ast[i]);
+                result += (common.is_string(ast[i]) ? JSON.stringify(ast[i]) : compile_ast(ast[i]));
                 result += ",";
                 result += compile_ast(ast[i + 1]);
                 result += "}";

@@ -80,7 +80,7 @@ int main()
         x=new_number(20);
         return (print(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
     })(0));
-    print(new_dict(new (GC) oml_dict_data {{new_string(":key1"),new_number(123)},{new_string(":key2"),new_list(new (GC) oml_list_data {new_string("abc"),undefined,new_bool(true),new_bool(false)})}}));
+    print(new_dict(new (GC) oml_dict_data {{":key1",new_number(123)},{":key2",new_list(new (GC) oml_list_data {new_string("abc"),undefined,new_bool(true),new_bool(false)})}}));
     print((bool_value(true)?new_string("ok"):(new_string("ng"))));
     print((bool_value(false)?new_string("ok"):(new_string("ng"))));
 
