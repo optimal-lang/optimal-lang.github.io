@@ -260,19 +260,7 @@ public:
     friend oml_root *equal(oml_root *a, oml_root *b);
 };
 
-/*
-struct oml_dict_less
-{
-    bool operator()(oml_root *lhs, oml_root *rhs) const
-    {
-        return ::string_value(lhs) < ::string_value(rhs);
-    }
-};
-*/
-
 using oml_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-
-// using oml_dict_data = std::multimap<oml_root *, oml_root *, oml_dict_less, gc_allocator<std::pair<oml_root *, oml_root *>>>;
 using oml_dict_data = std::map<oml_dict_key, oml_root *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_root *, oml_root *>>>;
 
 class oml_dict : public oml_root
@@ -297,7 +285,7 @@ public:
     virtual const std::string string_value()
     {
         std::string result = "{ ";
-        std::size_t i = 0;
+        //std::size_t i = 0;
         std::vector<oml_dict_key, gc_allocator<oml_dict_key>> keys;
         for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
@@ -395,8 +383,33 @@ oml_root *equal(oml_root *a, oml_root *b)
         return new_bool(true);
     }
     break;
+    case oml_root::type::DICT:
+    {
+        oml_dict_data *da = ((oml_dict *)a)->value;
+        oml_dict_data *db = ((oml_dict *)b)->value;
+        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> a_keys;
+        for (oml_dict_data::iterator it = da->begin(); it != da->end(); ++it)
+        {
+            a_keys.push_back(it->first);
+        }
+        std::sort(a_keys.begin(), a_keys.end());
+        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> b_keys;
+        for (oml_dict_data::iterator it = db->begin(); it != db->end(); ++it)
+        {
+            b_keys.push_back(it->first);
+        }
+        std::sort(b_keys.begin(), b_keys.end());
+        if (a_keys != b_keys) return new_bool(false);
+        for (std::size_t i = 0; i < a_keys.size(); i++)
+        {
+            oml_dict_key key = a_keys[i];
+            if (!equal(da->at(key), db->at(key))) return new_bool(false);
+        }
+        return new_bool(true);
     }
-    return null;
+    break;
+    }
+    return new_bool(false);
 }
 
 oml_root *print(oml_root *x)
