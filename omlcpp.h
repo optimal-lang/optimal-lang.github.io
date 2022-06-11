@@ -214,7 +214,7 @@ public:
             if (i > 0)
                 result += " ";
             result += ::string_value(it->first);
-            result += ": ";
+            result += " ";
             result += ::string_value(it->second);
             i++;
         }
