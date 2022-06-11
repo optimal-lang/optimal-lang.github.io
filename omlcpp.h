@@ -285,7 +285,7 @@ public:
     virtual const std::string string_value()
     {
         std::string result = "{ ";
-        //std::size_t i = 0;
+        // std::size_t i = 0;
         std::vector<oml_dict_key, gc_allocator<oml_dict_key>> keys;
         for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
@@ -383,8 +383,8 @@ oml_root *equal(oml_root *a, oml_root *b)
             return new_bool(false);
         for (std::size_t i = 0; i < la->size(); i++)
         {
-            //print((*la)[i]);
-            //print((*lb)[i]);
+            // print((*la)[i]);
+            // print((*lb)[i]);
             if (!bool_value(equal((*la)[i], (*lb)[i])))
                 return new_bool(false);
         }
@@ -407,11 +407,13 @@ oml_root *equal(oml_root *a, oml_root *b)
             b_keys.push_back(it->first);
         }
         std::sort(b_keys.begin(), b_keys.end());
-        if (a_keys != b_keys) return new_bool(false);
+        if (a_keys != b_keys)
+            return new_bool(false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
             oml_dict_key key = a_keys[i];
-            if (!bool_value(equal(da->at(key), db->at(key)))) return new_bool(false);
+            if (!bool_value(equal(da->at(key), db->at(key))))
+                return new_bool(false);
         }
         return new_bool(true);
     }
