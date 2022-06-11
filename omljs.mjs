@@ -1,4 +1,4 @@
-import { oml2ast } from "./oml2ast.mjs";
+import { oml2ast, ast2oml } from "./oml2ast.mjs";
 import { OMLCommon } from "./omlcommon.mjs";
 
 let common = new OMLCommon();
@@ -532,7 +532,7 @@ export function runAll(exp) {
 }
 
 function print(x) {
-    console.log(x);
+    console.log(ast2oml(x));
 };
 globalThis.print = print;
 

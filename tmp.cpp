@@ -80,7 +80,7 @@ int main()
         x=new_number(20);
         return (console_log(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
     })(0));
-    console_log(new_dict(new (GC) oml_dict_data {{new_string(":key1"),new_number(123)},{new_string(":key2"),new_string("abc")}}));
+    print(new_dict(new (GC) oml_dict_data {{new_string(":key1"),new_number(123)},{new_string(":key2"),new_list(new (GC) oml_list_data {new_string("abc"),undefined})}}));
 
     return 0;
 }

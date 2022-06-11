@@ -126,3 +126,32 @@ export function oml2ast(text) {
   }
   return result;
 }
+
+export function ast2oml(ast) {
+  if (ast === null) return "null";
+  if (ast === undefined) return "undefined";
+  if ((typeof ast) === "number") return JSON.stringify(ast);
+  if ((typeof ast) === "string") return JSON.stringify(ast);
+  if ((typeof ast) === "boolean") return JSON.stringify(ast);
+  if (ast instanceof Array) {
+    let result = "( ";
+    for (let i=0; i<ast.length; i++) {
+      if (i>0) result += " ";
+      result += ast2oml(ast[i]);
+    }
+    result += " )";
+    return result;
+  } else {
+    let result = "{ ";
+    let keys = Object.keys(ast);
+    keys.sort();
+    for (let i=0; i<keys.length; i++) {
+      if (i>0) result += " ";
+      result += JSON.stringify(keys[i]);
+      result += " ";
+      result += ast2oml(ast[keys[i]]);
+    }
+    result += " }";
+    return result;
+  }
+}

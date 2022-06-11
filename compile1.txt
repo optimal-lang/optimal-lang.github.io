@@ -17,7 +17,7 @@ abc
 11
 abc
 xyz
-11undefinednull22
+"11undefinednull22"
 ok
 ng
 ng
@@ -25,4 +25,4 @@ ok
 ok
 ng
 [ 1, 20, 3 ]
-{ ":key1": 123, ":key2": "abc" }
+{ ":key1" 123 ":key2" ( "abc" undefined ) }
