@@ -3,6 +3,7 @@
 #include <sstream>
 #include <cmath>
 #include <vector>
+#include <map>
 #include <functional>
 
 #include <gc/gc.h>
@@ -124,7 +125,6 @@ class oml_list : public oml_root
 
 public:
     oml_list(oml_list_data *data = nullptr)
-        //: value(new (GC) oml_list_data())
     {
         if (data == nullptr) data = new (GC) oml_list_data();
         this->value = data;
@@ -150,6 +150,16 @@ public:
         this->value->push_back(x);
     }
 };
+
+struct oml_string_less
+{
+   bool operator() (oml_root *lhs, oml_root *rhs) const
+   {
+       return ::string_value(lhs) < ::string_value(rhs);
+   }
+};
+
+using oml_dict_data = std::multimap<oml_root *, oml_root *, oml_string_less, gc_allocator<std::pair<oml_root *, oml_root *> > >;
 
 static inline oml_root *new_number(double n)
 {
