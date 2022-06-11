@@ -1,3 +1,6 @@
+read_dict: :key1
+read_dict: :key2
+read_dict: }
 33
 250
 133
@@ -22,3 +25,4 @@ ok
 ok
 ng
 [ 1, 20, 3 ]
+{ ":key1": 123, ":key2": "abc" }

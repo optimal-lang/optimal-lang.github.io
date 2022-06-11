@@ -43,3 +43,5 @@
 (begin
   (define x 20)
   (console.log (1 x 3]
+
+(console.log { :key1 123 :key2 "abc"})

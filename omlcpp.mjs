@@ -338,13 +338,17 @@ function compile_ast(ast) {
         }
         case "dict": {
             if ((ast.length % 2) !== 1) throw new Error("synatx error");
-            let body = [];
+            let result = "new_dict(new (GC) oml_dict_data {";
             for (let i = 1; i < ast.length; i += 2) {
-                body.push([common.id("prop-set!"), common.id("__dict__"), ast[i], ast[i + 1]]);
+                if (i > 1) result += ",";
+                result += "{";
+                result += compile_ast(ast[i]);
+                result += ",";
+                result += compile_ast(ast[i + 1]);
+                result += "}";
             }
-            body.push(common.id("__dict__"));
-            ast = [common.id("let*"), [[common.id("__dict__"), ["`", "{}"]]], ...body];
-            return compile_ast(ast);
+            result += "})";
+            return result;
         }
         case "set!":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);

@@ -212,14 +212,11 @@ static inline oml_root *new_string(const std::string &s)
 static inline oml_root *new_list(oml_list_data *data = nullptr)
 {
     return new (GC) oml_list(data);
-    /*
-    oml_list *result = new (GC) oml_list();
-    for (std::size_t i = 0; i < list->size(); i++)
-    {
-        result->push((*list)[i]);
-    }
-    return result;
-    */
+}
+
+static inline oml_root *new_dict(oml_dict_data *data = nullptr)
+{
+    return new (GC) oml_dict(data);
 }
 
 oml_root *print(oml_root *x)
