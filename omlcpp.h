@@ -91,6 +91,26 @@ static inline bool bool_value(oml_root *x)
     return x->bool_value();
 }
 
+static inline std::string stringify_sting(const std::string &s)
+{
+    std::string result = "\"";
+    for (std::size_t i = 0; i < s.size(); i++)
+    {
+        char c = s[i];
+        switch (c)
+        {
+        case '\n':
+            result += "\\n";
+            break;
+        default:
+            result += c;
+            break;
+        }
+    }
+    result += "\"";
+    return result;
+}
+
 class oml_bool : public oml_root
 {
     bool value;
@@ -166,6 +186,8 @@ public:
     }
     virtual std::string printable_text()
     {
+        return stringify_sting(this->value);
+        /*
         std::string s = "\"";
         for (std::size_t i = 0; i < this->value.size(); i++)
         {
@@ -182,6 +204,7 @@ public:
         }
         s += "\"";
         return s;
+        */
     }
     virtual const std::string string_value()
     {
@@ -286,7 +309,7 @@ public:
             oml_dict_key key = keys[i];
             if (i > 0)
                 result += " ";
-            result += key;
+            result += stringify_sting(std::string(key.begin(), key.end()));
             result += " ";
             result += ::printable_text(this->value->at(key));
         }
