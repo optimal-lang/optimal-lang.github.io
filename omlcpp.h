@@ -111,7 +111,7 @@ public:
     }
     virtual const std::string string_value()
     {
-        //static std::string s;
+        // static std::string s;
         std::ostringstream stream;
         stream << this->value;
         return stream.str();
@@ -203,7 +203,8 @@ public:
         std::size_t i = 0;
         for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
-            if (i>0) result += ", ";
+            if (i > 0)
+                result += ", ";
             result += ::string_value(it->first);
             result += ": ";
             result += ::string_value(it->second);
@@ -222,8 +223,10 @@ static inline oml_root *new_bool(bool b)
 {
     static oml_bool *true_ = nullptr;
     static oml_bool *false_ = nullptr;
-    if(!true_) true_ = new (GC) oml_bool(true);
-    if(!false_) false_ = new (GC) oml_bool(false);
+    if (!true_)
+        true_ = new (GC) oml_bool(true);
+    if (!false_)
+        false_ = new (GC) oml_bool(false);
     return b ? true_ : false_;
 }
 
