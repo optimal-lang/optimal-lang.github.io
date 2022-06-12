@@ -87,6 +87,7 @@ int main()
     print(equal(new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined},new (GC) oml_dict_data {}),new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),null},new (GC) oml_dict_data {})));
     print(equal(undefined,null));
     print(new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(true)},{":key3",undefined}}));
+    print(equal(new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(true)},{":key3",undefined}}),new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(false)},{":key3",undefined}})));
 
     return 0;
 }

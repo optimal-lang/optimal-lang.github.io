@@ -53,3 +53,6 @@
 (print (equal undefined null]
 
 (print (list 11 22 33 ? (:key2 1.23) (:key1 true) (:key3 undefined]
+(print (equal
+  [list 11 22 33 ? (:key2 1.23) (:key1 true) (:key3 undefined]
+  [list 11 22 33 ? (:key2 1.23) (:key1 false) (:key3 undefined])
