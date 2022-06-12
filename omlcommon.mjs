@@ -21,8 +21,10 @@ export class OMLCommon {
         return x[0] === "`";
     }
     
-    is_id(ast) {
-        return ast instanceof Array && ast[0] === "#";
+    is_id(ast, name = undefined) {
+        let ok = ast instanceof Array && ast[0] === "#";
+        if (!ok) return false;
+        return name ? ast[1]===name : true;
     }
     
     is_variable(ast) {

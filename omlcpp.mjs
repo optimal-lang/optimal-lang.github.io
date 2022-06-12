@@ -147,30 +147,19 @@ function compile_ast(ast) {
         }
         case "begin":
             return compile_body(ast, 1);
-        case "case": {
-            let result = "(function(){switch(" + compile_ast(ast[1]) + "){";
-            let rest = ast.slice(2);
-            rest.forEach((x) => {
-                let val = common.to_id(x[0]);
-                switch (val) {
-                    case ":else":
-                    case "else":
-                    case "otherwise":
-                    case ":otherwise":
-                        result += "default:";
-                        break;
-                    default:
-                        if (val instanceof Array && val[0] === "`")
-                            val = val[1];
-                        result += "case " + JSON.stringify(val) + ":";
+            case "case": {
+                let cond_ast = [common.id("cond")];
+                for (let i=2; i<ast.length; i++) {
+                    let e = ast[i];
+                    if (common.is_id(e[0], "else") || common.is_id(e[0], "otherwise")) {
+                        cond_ast.push(e);
+                    } else {
+                        cond_ast.push([[common.id("equal"), common.id("__case__"), e[0]],...e.slice(1)]);
+                    }
                 }
-                let body = compile_body(x, 1);
-                result += "return " + body + ";";
-            });
-            result += "}return null})()";
-            return result;
-        }
-        case "_cond": {
+                return compile_ast([common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast]);
+            }
+            case "_cond": {
             function _cond_builder(rest) {
                 if (rest.length === 0)
                     return null;

@@ -88,6 +88,15 @@ int main()
     print(equal(undefined,null));
     print(new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(true)},{":key3",undefined}}));
     print(equal(new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(true)},{":key3",undefined}}),new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(false)},{":key3",undefined}})));
+    (([&](oml_root* x)
+    {
+        x=new_number(123);
+        return (([&](oml_root* __case__)
+        {
+            __case__=x;
+            return ((bool_value(bool_value(equal(__case__,new_number(-1))))?(console_log(new_string("(case1)")),new_number(1)):((console_log(new_string("(case2)")),new_number(2)))));
+        })(0));
+    })(0));
 
     return 0;
 }

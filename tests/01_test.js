@@ -53,7 +53,7 @@ Deno.test("01C", () => {
       [ -1
         (console.log "(case1)")
         1 ]
-      [ :else
+      [ else
         (console.log "(case2)")
         2 ]
     ]
