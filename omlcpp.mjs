@@ -171,10 +171,8 @@ function compile_ast(ast) {
                 let action = rest.shift();
                 switch (condition) {
                     case true:
-                    case ":else":
                     case "else":
                     case "otherwise":
-                    case ":otherwise":
                         return action;
                 }
                 return [common.id("if"), condition, action, _cond_builder(rest)];
