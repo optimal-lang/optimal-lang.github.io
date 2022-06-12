@@ -97,6 +97,15 @@ int main()
             return ((bool_value(bool_value(equal(__case__,new_number(-1))))?(console_log(new_string("(case1)")),new_number(1)):((console_log(new_string("(case2)")),new_number(2)))));
         })(0));
     })(0));
+    (([&](oml_root* x)
+    {
+        x=new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key1",new_bool(true)},{":key2",new_string("abc")}});
+        return (([&](oml_root* __case__)
+        {
+            __case__=x;
+            return ((bool_value(bool_value(equal(__case__,new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key1",new_bool(true)},{":key2",new_string("xyz")}}))))?(console_log(new_string("(case1)")),new_number(1)):((bool_value(bool_value(equal(__case__,new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key1",new_bool(true)},{":key2",new_string("abc")}}))))?(console_log(new_string("(case2)")),new_number(2)):((console_log(new_string("(case3)")),new_number(3)))))));
+        })(0));
+    })(0));
 
     return 0;
 }

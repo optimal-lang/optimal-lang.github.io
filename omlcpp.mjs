@@ -147,19 +147,22 @@ function compile_ast(ast) {
         }
         case "begin":
             return compile_body(ast, 1);
-            case "case": {
-                let cond_ast = [common.id("cond")];
-                for (let i=2; i<ast.length; i++) {
-                    let e = ast[i];
-                    if (common.is_id(e[0], "else") || common.is_id(e[0], "otherwise")) {
-                        cond_ast.push(e);
-                    } else {
-                        cond_ast.push([[common.id("equal"), common.id("__case__"), e[0]],...e.slice(1)]);
-                    }
+        case "case": {
+            let cond_ast = [common.id("cond")];
+            for (let i = 2; i < ast.length; i++) {
+                let e = ast[i];
+                if (common.is_id(e[0], "else") || common.is_id(e[0], "otherwise")) {
+                    cond_ast.push(e);
+                } else {
+                    cond_ast.push([[common.id("equal"), common.id("__case__"), e[0]], ...e.slice(1)]);
                 }
-                return compile_ast([common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast]);
             }
-            case "_cond": {
+            //return compile_ast([common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast]);
+            let new_ast = [common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast];
+            //print(new_ast);
+            return compile_ast(new_ast);
+        }
+        case "_cond": {
             function _cond_builder(rest) {
                 if (rest.length === 0)
                     return null;
@@ -363,7 +366,7 @@ function compile_ast(ast) {
                 result += compile_ast(list[i]);
             }
             result += "},new (GC) oml_dict_data {";
-            for (let i = 0; i < dict.length; i ++) {
+            for (let i = 0; i < dict.length; i++) {
                 if (i > 0) result += ",";
                 let pair = dict[i];
                 if (common.is_string(pair)) pair = [pair, true];

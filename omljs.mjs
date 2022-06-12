@@ -93,7 +93,10 @@ function compile_ast(ast) {
                     cond_ast.push([[common.id("equal"), common.id("__case__"), e[0]],...e.slice(1)]);
                 }
             }
-            return compile_ast([common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast]);
+            //return compile_ast([common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast]);
+            let new_ast = [common.id("let*"), [[common.id("__case__"), ast[1]]], cond_ast];
+            //print(new_ast);
+            return compile_ast(new_ast);
         }
         case "_cond": {
             function _cond_builder(rest) {

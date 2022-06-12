@@ -39,3 +39,34 @@ Deno.test("OBJECT_C", () => {
   console.log(v1);
   assertEquals(v1, '( ? (":key1" true) (":key2" true) (":key3" undefined) )');
 });
+
+Deno.test("OBJECT_D", () => {
+  var v1 = run(`
+  (begin
+    (define x (11 22 33 ? :key1 (:key2 "abc"))
+    (case x
+      [ (11 22 33 ? :key1 (:key2 "xyz"))
+        (console.log "(case1)")
+        1 ]
+      [ (11 22 33 ? :key1 (:key2 "abc"))
+        (console.log "(case2)")
+        2 ]
+      [ else
+        (console.log "(case3)")
+        3 ]
+      ]
+    `);
+  console.log(v1);
+  assertEquals(v1, '( ? (":key1" true) (":key2" true) (":key3" undefined) )');
+});
+
+Deno.test("OBJECT_E", () => {
+  var v1 = run(`
+  (begin
+    (define x (11 22 33 ? :key1 (:key2 "abc")))
+    x
+    ]
+    `);
+  console.log(v1);
+  assertEquals(v1, '( ? (":key1" true) (":key2" true) (":key3" undefined) )');
+});
