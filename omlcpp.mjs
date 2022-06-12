@@ -335,11 +335,54 @@ function compile_ast(ast) {
                     ";})" +
                     voids);
         }
+        /*
         case "list": {
             let result = "new_list(new (GC) oml_list_data {";
             for (let i = 1; i < ast.length; i++) {
                 if (i > 1) result += ",";
                 result += compile_ast(ast[i]);
+            }
+            result += "})";
+            return result;
+        }
+        */
+        case "list": {
+            ast = ast.slice(1);
+            let found = -1;
+            for (let i = 0; i < ast.length; i++) {
+                let e = ast[i];
+                if (common.is_id(e) && common.to_id(e) === "?") {
+                    found = i;
+                    break;
+                }
+            }
+            let list;
+            let dict;
+            if (found === -1) {
+                list = ast;
+                dict = [];
+            } else if (found === 0) {
+                list = [];
+                dict = ast.slice(1);
+            } else {
+                list = ast.slice(0, found);
+                dict = ast.slice(found + 1);
+            }
+            let result = "new_list(new (GC) oml_list_data {";
+            for (let i = 0; i < list.length; i++) {
+                if (i > 0) result += ",";
+                result += compile_ast(list[i]);
+            }
+            result += "},new (GC) oml_dict_data {";
+            for (let i = 0; i < dict.length; i ++) {
+                if (i > 0) result += ",";
+                let pair = dict[i];
+                if (common.is_string(pair)) pair = [pair, true];
+                result += "{";
+                result += (common.is_string(pair[0]) ? JSON.stringify(pair[0]) : compile_ast(pair[0]));
+                result += ",";
+                result += compile_ast(pair[1]);
+                result += "}";
             }
             result += "})";
             return result;

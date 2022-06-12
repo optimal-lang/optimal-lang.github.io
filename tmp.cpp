@@ -78,14 +78,15 @@ int main()
     (([&](oml_root* x)
     {
         x=new_number(20);
-        return (print(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)})));
+        return (print(new_list(new (GC) oml_list_data {new_number(1),x,new_number(3)},new (GC) oml_dict_data {})));
     })(0));
-    print(new_dict(new (GC) oml_dict_data {{":key1",new_number(123)},{":key2",new_list(new (GC) oml_list_data {new_string("abc"),undefined,new_bool(true),new_bool(false)})}}));
+    print(new_dict(new (GC) oml_dict_data {{":key1",new_number(123)},{":key2",new_list(new (GC) oml_list_data {new_string("abc"),undefined,new_bool(true),new_bool(false)},new (GC) oml_dict_data {})}}));
     print((bool_value(true)?new_string("ok"):(new_string("ng"))));
     print((bool_value(false)?new_string("ok"):(new_string("ng"))));
-    print(equal(new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined}),new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined})));
-    print(equal(new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined}),new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),null})));
+    print(equal(new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined},new (GC) oml_dict_data {}),new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined},new (GC) oml_dict_data {})));
+    print(equal(new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),undefined},new (GC) oml_dict_data {}),new_list(new (GC) oml_list_data {new_string("a"),new_number(1.5),null},new (GC) oml_dict_data {})));
     print(equal(undefined,null));
+    print(new_list(new (GC) oml_list_data {new_number(11),new_number(22),new_number(33)},new (GC) oml_dict_data {{":key2",new_number(1.23)},{":key1",new_bool(true)},{":key3",undefined}}));
 
     return 0;
 }

@@ -217,17 +217,23 @@ public:
 };
 
 using oml_list_data = std::vector<oml_root *, gc_allocator<oml_root *>>;
+using oml_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
+using oml_dict_data = std::map<oml_dict_key, oml_root *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_root *, oml_root *>>>;
 
 class oml_list : public oml_root
 {
     oml_list_data *value;
+    oml_dict_data *props;
 
 public:
-    oml_list(oml_list_data *data = nullptr)
+    oml_list(oml_list_data *data = nullptr, oml_dict_data *props = nullptr)
     {
         if (data == nullptr)
             data = new (GC) oml_list_data();
         this->value = data;
+        if (props == nullptr)
+            props = new (GC) oml_dict_data();
+        this->props = props;
     }
     virtual type type_of()
     {
@@ -246,6 +252,26 @@ public:
                 result += " ";
             result += ::printable_text((*this->value)[i]);
         }
+        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> keys;
+        for (oml_dict_data::iterator it = this->props->begin(); it != this->props->end(); ++it)
+        {
+            keys.push_back(it->first);
+        }
+        std::sort(keys.begin(), keys.end());
+        if (keys.size() > 0)
+        {
+            if (this->value->size() > 0) result += " ";
+            result += "?";
+            for (std::size_t i = 0; i < keys.size(); i++)
+            {
+                oml_dict_key key = keys[i];
+                result += " (";
+                result += stringify_sting(std::string(key.begin(), key.end()));
+                result += " ";
+                result += ::printable_text(this->props->at(key));
+                result += ")";
+            }
+        }
         result += " )";
         return result;
     }
@@ -259,9 +285,6 @@ public:
     }
     friend oml_root *equal(oml_root *a, oml_root *b);
 };
-
-using oml_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-using oml_dict_data = std::map<oml_dict_key, oml_root *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_root *, oml_root *>>>;
 
 class oml_dict : public oml_root
 {
@@ -332,9 +355,9 @@ static inline oml_root *new_string(const std::string &s)
     return new (GC) oml_string(s);
 }
 
-static inline oml_root *new_list(oml_list_data *data = nullptr)
+static inline oml_root *new_list(oml_list_data *data = nullptr, oml_dict_data *props = nullptr)
 {
-    return new (GC) oml_list(data);
+    return new (GC) oml_list(data, props);
 }
 
 static inline oml_root *new_dict(oml_dict_data *data = nullptr)

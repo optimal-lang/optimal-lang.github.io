@@ -267,27 +267,6 @@ function compile_ast(ast) {
                     compile_body(ast, 2) +
                     "})())");
         }
-        /*
-        case "list": {
-            let result = "[";
-            for (let i = 1; i < ast.length; i++) {
-                if (i > 1) result += ",";
-                result += compile_ast(ast[i]);
-            }
-            result += "]";
-            return result;
-        }
-        */
-        case "dict": {
-            if ((ast.length % 2) !== 1) throw new Error("synatx error");
-            let body = [];
-            for (let i = 1; i < ast.length; i += 2) {
-                body.push([common.id("prop-set!"), common.id("__dict__"), ast[i], ast[i + 1]]);
-            }
-            body.push(common.id("__dict__"));
-            ast = [common.id("let*"), [[common.id("__dict__"), ["@", "{}"]]], ...body];
-            return compile_ast(ast);
-        }
         case "list": {
             ast = ast.slice(1);
             let found = -1;
@@ -321,6 +300,16 @@ function compile_ast(ast) {
             }
             body.push(common.id("__obj__"));
             ast = [common.id("let*"), [[common.id("__obj__"), ["@", "[]"]]], ...body];
+            return compile_ast(ast);
+        }
+        case "dict": {
+            if ((ast.length % 2) !== 1) throw new Error("synatx error");
+            let body = [];
+            for (let i = 1; i < ast.length; i += 2) {
+                body.push([common.id("prop-set!"), common.id("__dict__"), ast[i], ast[i + 1]]);
+            }
+            body.push(common.id("__dict__"));
+            ast = [common.id("let*"), [[common.id("__dict__"), ["@", "{}"]]], ...body];
             return compile_ast(ast);
         }
         case "set!":
