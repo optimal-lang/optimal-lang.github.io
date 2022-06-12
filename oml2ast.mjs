@@ -84,7 +84,7 @@ function read_sexp(code, exp) {
       return ["@", token];
     default: {
       if (token[0] === ":") return token;
-      if (token[0] === "&") return token;
+      if (token[0] === "&" && token !== "&") return token;
       let ids = token[0] === "." ? [token] : token.split(".");
       return ["#", ...ids];
     }
@@ -137,6 +137,23 @@ export function ast2oml(ast) {
     for (let i = 0; i < ast.length; i++) {
       if (i > 0) result += " ";
       result += ast2oml(ast[i]);
+    }
+    let keys = Object.keys(ast);
+    let re = /^[0-9]+/;
+    keys = keys.filter(key => !re.test(key));
+    keys.sort();
+    console.log("keys: " + keys);
+    if (keys.length > 0) {
+      if (ast.length > 0) result += " ";
+      result += "&";
+      for (let i=0; i<keys.length; i++) {
+        let key = keys[i];
+        result += " (";
+        result += JSON.stringify(key);
+        result += " ";
+        result += ast2oml(ast[key]);
+        result += ")";
+      }
     }
     result += " )";
     return result;

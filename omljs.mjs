@@ -283,6 +283,41 @@ function compile_ast(ast) {
             ast = [common.id("let*"), [[common.id("__dict__"), ["@", "{}"]]], ...body];
             return compile_ast(ast);
         }
+        case "object": {
+            ast = ast.slice(1);
+            let found = -1;
+            for (let i = 1; i < ast.length; i++) {
+                let e = ast[i];
+                if (common.is_id(e) && common.to_id(e) === "&") {
+                    found = i;
+                    break;
+                }
+            }
+            let list;
+            let dict;
+            if (found === -1) {
+                list = ast;
+                dict = [];
+            } else if (found === 0) {
+                list = [];
+                dict = ast.slice(1);
+            } else {
+                list = ast.slice(0, found);
+                dict = ast.slice(found + 1);
+            }
+            let body = [];
+            for (let i = 0; i < list.length; i++) {
+                body.push([common.id("prop-set!"), common.id("__obj__"), i, list[i]]);
+            }
+            for (let i = 0; i < dict.length; i++) {
+                let pair = dict[i];
+                if (common.is_id(pair)) pair = [pair, true];
+                body.push([common.id("prop-set!"), common.id("__obj__"), pair[0], pair[1]]);
+            }
+            body.push(common.id("__obj__"));
+            ast = [common.id("let*"), [[common.id("__obj__"), ["@", "[]"]]], ...body];
+            return compile_ast(ast);
+        }
         case "set!":
             return compile_ast(ast[1]) + "=" + compile_ast(ast[2]);
         case "throw": {
@@ -543,6 +578,6 @@ function number_value(x) {
 globalThis.number_value = number_value;
 
 function equal(a, b) {
-    return astequal(a, b);    
+    return astequal(a, b);
 }
 globalThis.equal = equal;
