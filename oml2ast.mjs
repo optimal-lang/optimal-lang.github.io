@@ -182,6 +182,7 @@ export function astequal(a, b) {
     return b === null; // null === null => true
   }
   */
+  /*
   if (a instanceof Array && b instanceof Array) {
     // Array
     if (a.length !== b.length) {
@@ -194,11 +195,14 @@ export function astequal(a, b) {
       }
     }
     return true;
-  } else if (a instanceof Function || b instanceof Function) {
+  } else
+  */
+  if (a instanceof Function || b instanceof Function) {
     // Function
     //console.log("function was not supported!!")
     return false
-  } else if (typeof (a) === 'object' && typeof (b) === 'object' && !(a instanceof Array) && !(b instanceof Array)) {
+  //} else if (typeof (a) === 'object' && typeof (b) === 'object' && !(a instanceof Array) && !(b instanceof Array)) {
+  } else if (typeof (a) === 'object' && typeof (b) === 'object') {
     // Object
     const ak = Object.keys(a);
     const bk = Object.keys(b);
