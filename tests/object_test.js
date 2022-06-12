@@ -31,3 +31,11 @@ Deno.test("OBJECT_C", () => {
   console.log(v1);
   assertEquals(v1, '( ? (":key1" true) (":key2" 1.23) (":key3" undefined) )');
 });
+
+Deno.test("OBJECT_C", () => {
+  var v1 = run(`
+(ast2oml (? :key2 (:key1 true) (:key3 undefined]
+  `);
+  console.log(v1);
+  assertEquals(v1, '( ? (":key1" true) (":key2" 1.23) (":key3" undefined) )');
+});
