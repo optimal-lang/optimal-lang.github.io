@@ -411,6 +411,28 @@ oml_root *equal(oml_root *a, oml_root *b)
             if (!bool_value(equal((*la)[i], (*lb)[i])))
                 return new_bool(false);
         }
+        oml_dict_data *da = ((oml_list *)a)->props;
+        oml_dict_data *db = ((oml_list *)b)->props;
+        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> a_keys;
+        for (oml_dict_data::iterator it = da->begin(); it != da->end(); ++it)
+        {
+            a_keys.push_back(it->first);
+        }
+        std::sort(a_keys.begin(), a_keys.end());
+        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> b_keys;
+        for (oml_dict_data::iterator it = db->begin(); it != db->end(); ++it)
+        {
+            b_keys.push_back(it->first);
+        }
+        std::sort(b_keys.begin(), b_keys.end());
+        if (a_keys != b_keys)
+            return new_bool(false);
+        for (std::size_t i = 0; i < a_keys.size(); i++)
+        {
+            oml_dict_key key = a_keys[i];
+            if (!bool_value(equal(da->at(key), db->at(key))))
+                return new_bool(false);
+        }
         return new_bool(true);
     }
     break;
