@@ -142,7 +142,6 @@ export function ast2oml(ast) {
     let re = /^[0-9]+/;
     keys = keys.filter(key => !re.test(key));
     keys.sort();
-    console.log("keys: " + keys);
     if (keys.length > 0) {
       if (ast.length > 0) result += " ";
       result += "&";

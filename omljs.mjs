@@ -286,7 +286,7 @@ function compile_ast(ast) {
         case "object": {
             ast = ast.slice(1);
             let found = -1;
-            for (let i = 1; i < ast.length; i++) {
+            for (let i = 0; i < ast.length; i++) {
                 let e = ast[i];
                 if (common.is_id(e) && common.to_id(e) === "&") {
                     found = i;
