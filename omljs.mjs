@@ -64,6 +64,9 @@ function compile_ast(ast) {
     if (common.is_script(ast)) {
         return ast[1];
     }
+    if (common.is_id(ast[0]) && common.to_id(ast[0])==="?") {
+        return compile_ast([common.id("list"), ...ast]);
+    }
     if (!common.is_callable(ast)) {
         return compile_ast([common.id("list"), ...ast]);
     }
@@ -290,7 +293,7 @@ function compile_ast(ast) {
             let found = -1;
             for (let i = 0; i < ast.length; i++) {
                 let e = ast[i];
-                if (common.is_id(e) && common.to_id(e) === "&") {
+                if (common.is_id(e) && common.to_id(e) === "?") {
                     found = i;
                     break;
                 }
