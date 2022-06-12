@@ -316,7 +316,7 @@ function compile_ast(ast) {
             }
             for (let i = 0; i < dict.length; i++) {
                 let pair = dict[i];
-                if (common.is_id(pair)) pair = [pair, true];
+                if (common.is_string(pair)) pair = [pair, true];
                 body.push([common.id("prop-set!"), common.id("__obj__"), pair[0], pair[1]]);
             }
             body.push(common.id("__obj__"));
