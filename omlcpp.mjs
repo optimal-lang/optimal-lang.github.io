@@ -44,7 +44,9 @@ const CPP_HEAD =
 
 int main() {
     GC_INIT();
-`;
+    static oml_root *null = new_null();
+    static oml_root *undefined = new_undefined();
+    `;
 
 const CPP_TAIL =
     `

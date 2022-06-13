@@ -3,6 +3,8 @@
 int main()
 {
     GC_INIT();
+    static oml_root *null = new_null();
+    static oml_root *undefined = new_undefined();
     std::function<oml_root*(oml_root*,oml_root*)> add2=[&](oml_root* a,oml_root* b)->oml_root* {return ((new_number(number_value(a)+number_value(b))));};
     print(add2(new_number(11),new_number(22)));
     print((new_number(5*number_value((new_number(2+3)))*10)));

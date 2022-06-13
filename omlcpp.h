@@ -17,14 +17,22 @@ class oml_root : public gc_cleanup
 public:
     enum type
     {
+        UNDEINED,
+        NULL_,
         BOOL,
         NUMBER,
         STRING,
         LIST,
         DICT
     };
-    virtual type type_of() = 0;
-    virtual std::string printable_text() = 0;
+    virtual type type_of()
+    {
+        return (type)-1;
+    }
+    virtual std::string printable_text()
+    {
+        return "?";
+    }
     virtual bool bool_value()
     {
         return false;
@@ -43,39 +51,48 @@ public:
     }
 };
 
-static oml_root *null = (oml_root *)nullptr;
-static oml_root *undefined = (oml_root *)-1;
-
-static inline double number_value(oml_root *x)
+class oml_undefined : public oml_root
 {
-    if (x == nullptr)
-        return 0;
-    if (x == undefined)
-        return 0;
-    return x->number_value();
-}
+public:
+    oml_undefined()
+    {
+    }
+    virtual type type_of()
+    {
+        return UNDEINED;
+    }
+    virtual std::string printable_text()
+    {
+        return "undefined";
+    }
+    virtual const std::string string_value()
+    {
+        return "undefined";
+    }
+};
 
-static inline const std::string string_value(oml_root *x)
+class oml_null : public oml_root
 {
-    static std::string null_ = "null";
-    static std::string undefined_ = "undefined";
-    if (x == nullptr)
-        return null_;
-    if (x == undefined)
-        return undefined_;
-    return x->string_value();
-}
+public:
+    oml_null()
+    {
+    }
+    virtual type type_of()
+    {
+        return NULL_;
+    }
+    virtual std::string printable_text()
+    {
+        return "null";
+    }
+    virtual const std::string string_value()
+    {
+        return "null";
+    }
+};
 
-static inline const std::string printable_text(oml_root *x)
-{
-    static std::string null_ = "null";
-    static std::string undefined_ = "undefined";
-    if (x == nullptr)
-        return null_;
-    if (x == undefined)
-        return undefined_;
-    return x->printable_text();
-}
+//static oml_root *null = (oml_root *)nullptr;
+//static oml_root *undefined = (oml_root *)-1;
 
 static inline bool bool_value(bool x)
 {
@@ -84,11 +101,22 @@ static inline bool bool_value(bool x)
 
 static inline bool bool_value(oml_root *x)
 {
-    if (x == nullptr)
-        return false;
-    if (x == undefined)
-        return false;
     return x->bool_value();
+}
+
+static inline double number_value(oml_root *x)
+{
+    return x->number_value();
+}
+
+static inline const std::string string_value(oml_root *x)
+{
+    return x->string_value();
+}
+
+static inline const std::string printable_text(oml_root *x)
+{
+    return x->printable_text();
 }
 
 static inline std::string stringify_sting(const std::string &s)
@@ -334,6 +362,22 @@ public:
     friend oml_root *equal(oml_root *a, oml_root *b);
 };
 
+static inline oml_root *new_undefined()
+{
+    static oml_undefined *undefined = nullptr;
+    if (!undefined)
+        undefined = new (GC) oml_undefined();
+    return undefined;
+}
+
+static inline oml_root *new_null()
+{
+    static oml_null *null = nullptr;
+    if (!null)
+        null = new (GC) oml_null();
+    return null;
+}
+
 static inline oml_root *new_bool(bool b)
 {
     static oml_bool *true_ = nullptr;
@@ -368,7 +412,7 @@ static inline oml_root *new_dict(oml_dict_data *data = nullptr)
 oml_root *console_log(oml_root *x)
 {
     std::cout << string_value(x) << std::endl;
-    return null;
+    return new_null();
 }
 
 oml_root *print(oml_root *x)
@@ -379,11 +423,11 @@ oml_root *print(oml_root *x)
 
 oml_root *equal(oml_root *a, oml_root *b)
 {
-    if (a == null)
-        return new_bool(b == null);
-    if (a == undefined)
-        return new_bool(b == undefined);
-    if (a == null || a == undefined || b == null || b == undefined)
+    if (a == new_null())
+        return new_bool(b == new_null());
+    if (a == new_undefined())
+        return new_bool(b == new_undefined());
+    if (a == new_null() || a == new_undefined() || b == new_null() || b == new_undefined())
         return new_bool(false);
     if (a->type_of() != b->type_of())
         return new_bool(false);
