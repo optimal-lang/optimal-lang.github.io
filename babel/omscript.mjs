@@ -22,15 +22,17 @@ function writeAsJson(path, x) {
 function parsePath(path) {
   path = path.replace(/\\/g, "/");
   let result = $path.parse(path);
-  //result.path = result.dir + "/" + result.base;
+  result.path = result.dir + "/" + result.base;
   return result;
 }
 
-
-
 const code = `function square(n) {
   return n * n * n;
-}`;
+}
+let f = function (n) {
+  return n * n * n;
+}
+`;
 
 let ast = $parser.parse(code);
 
@@ -42,6 +44,14 @@ let opt = optimize(ast);
 for (let step of opt.program.body) {
 	printAsJson(step.type, "step.type");
 	printAsJson(step, "step");
+  $traverse.default(ast, {
+    enter(path) {
+      printAsJson(path.node, `enter(${path.node.type})`);
+      if (path.isIdentifier({ name: "n" })) {
+        path.node.name = "x";
+      }
+    },
+  });
 }
 
 printAsJson(parsePath("C:\\abc\\xyz\\test.txt"));
