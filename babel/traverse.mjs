@@ -3,7 +3,7 @@ import $traverse from "https://jspm.dev/@babel/traverse";
 import { optimize } from "./optimize.mjs";
 
 const code = `function square(n) {
-  return n * n;
+  return n * n * n;
 }`;
 
 let ast = $parser.parse(code);
