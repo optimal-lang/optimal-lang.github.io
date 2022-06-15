@@ -35,12 +35,13 @@ const code = `function square(n) {
 let ast = $parser.parse(code);
 
 let opt = optimize(ast);
-printAsJson(opt, "opt");
+//printAsJson(opt, "opt");
 
-printAsJson(opt.program.body, "opt.program.body");
+//printAsJson(opt.program.body, "opt.program.body");
 
-for (let step of ast.program.body) {
-	printAsJson(step.type);
+for (let step of opt.program.body) {
+	printAsJson(step.type, "step.type");
+	printAsJson(step, "step");
 }
 
 printAsJson(parsePath("C:\\abc\\xyz\\test.txt"));
