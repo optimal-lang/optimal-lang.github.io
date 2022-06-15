@@ -8,3 +8,4 @@ const g = ohm.grammars(Deno.readTextFileSync("es5.ohm")+"\n"+Deno.readTextFileSy
 
 const match = g.match('1 + (2 - 3) + 4');
 console.log(match.succeeded());
+//console.log(JSON.stringify(match, null, 2));
