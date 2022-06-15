@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ohm-grammar-ecmascript": "^0.5.0"
+  }
+}
