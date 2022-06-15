@@ -1,5 +1,7 @@
 import $parser from "https://jspm.dev/@babel/parser";
 import $traverse from "https://jspm.dev/@babel/traverse";
+import $path from "https://jspm.dev/path";
+
 import { optimize } from "./optimize.mjs";
 
 function printAsJson(x, title) {
@@ -17,6 +19,15 @@ function writeAsJson(path, x) {
   );
 }
 
+function parsePath(path) {
+  path = path.replace(/\\/g, "/");
+  let result = $path.parse(path);
+  //result.path = result.dir + "/" + result.base;
+  return result;
+}
+
+
+
 const code = `function square(n) {
   return n * n * n;
 }`;
@@ -32,3 +43,5 @@ for (let step of ast.program.body) {
 	printAsJson(step.type);
 }
 
+printAsJson(parsePath("C:\\abc\\xyz\\test.txt"));
+printAsJson(parsePath("test2.txt"));
