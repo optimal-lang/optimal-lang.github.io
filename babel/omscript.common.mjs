@@ -2,7 +2,7 @@ import $path from "https://jspm.dev/path";
 
 export function printAsJson(x, title) {
     let json = JSON.stringify(x, null, "  ");
-    if (title == null)
+    if (title === undefined)
         console.log(json);
     else
         console.log(title + ": " + json);

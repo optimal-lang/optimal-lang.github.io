@@ -16,15 +16,18 @@ export function compile_ast(ast) {
         } break;
         case "ReturnStatement": {
             common.printAsJson(ast.argument, "Returned");
-            compile_ast(ast.argument);
+            let argument = compile_ast(ast.argument);
+            common.printAsJson(argument);
         } break;
         case "BinaryExpression": {
             common.printAsJson(ast.left, "BinaryExpression.left");
             common.printAsJson(ast.right, "BinaryExpression.right");
             let left = compile_ast(ast.left);
             let right = compile_ast(ast.right);
+            let conv = function(x) { return x.type==="double" ? x.text : `number_value(${x.text})`; }
             common.printAsJson(left);
             common.printAsJson(right);
+            return { type: "double", text: "(" + conv(left) + ast.operator + conv(right) + ")" };
         } break;
         case "Identifier": {
             //common.printAsJson(ast.name, "Identifier");
