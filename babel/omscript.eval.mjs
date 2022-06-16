@@ -6,7 +6,10 @@ export function compile_ast(ast) {
     switch (ast.type) {
         case "FunctionDeclaration": {
             //common.printAsJson("FunctionDeclaration found");
-            let text = "auto oml_root* " + ast.id.name + "=[&](";
+            let text = "std::function<oml_root*(";
+            text += Array(ast.params.length).fill("oml_root*").join(",");
+            text += ")> ";
+            text += ast.id.name + "=[&](";
             let params = [];
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
