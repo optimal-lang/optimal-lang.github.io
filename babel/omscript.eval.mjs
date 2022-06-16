@@ -21,11 +21,14 @@ export function compile_ast(ast) {
         case "BinaryExpression": {
             common.printAsJson(ast.left, "BinaryExpression.left");
             common.printAsJson(ast.right, "BinaryExpression.right");
-            compile_ast(ast.left);
-            compile_ast(ast.right);
+            let left = compile_ast(ast.left);
+            let right = compile_ast(ast.right);
+            common.printAsJson(left);
+            common.printAsJson(right);
         } break;
         case "Identifier": {
-            common.printAsJson(ast.name, "Identifier");
+            //common.printAsJson(ast.name, "Identifier");
+            return { type: "oml_root*", text: ast.name };
         } break;
         default:
             throw new Error(`AST node type "${ast.type}" is not expected.`)
