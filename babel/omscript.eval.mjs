@@ -47,6 +47,25 @@ export function compile_ast(ast) {
             //common.printAsJson(ast.name, "Identifier");
             return { type: "oml_root*", text: ast.name };
         } break;
+        case "ExpressionStatement": {
+            return compile_ast(ast.expression);
+        } break;
+        case "CallExpression": {
+            //common.printAsJson("FunctionDeclaration found");
+            let text = ast.callee.name + "(";
+            let args = [];
+            for (let arg of ast.arguments) {
+                arg = compile_ast(arg);
+                let conv = function(x) { return x.type==="oml_root*" ? x.text : `new_root(${x.text})`; };
+                args.push(conv(arg));
+            }
+            text += args.join(",");
+            text += ")";
+            return { type: "oml_root*", text: text };
+        } break;
+        case "NumericLiteral": {
+            return {type: "double", text: `((double)${ast.extra.raw})` };
+        } break;
         default:
             throw new Error(`AST node type "${ast.type}" is not expected.`)
             break;
