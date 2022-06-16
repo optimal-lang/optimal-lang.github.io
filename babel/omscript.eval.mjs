@@ -16,7 +16,16 @@ export function compile_ast(ast) {
         } break;
         case "ReturnStatement": {
             common.printAsJson(ast.argument, "Returned");
-            //compile_ast(ast.argument);
+            compile_ast(ast.argument);
+        } break;
+        case "BinaryExpression": {
+            common.printAsJson(ast.left, "BinaryExpression.left");
+            common.printAsJson(ast.right, "BinaryExpression.right");
+            compile_ast(ast.left);
+            compile_ast(ast.right);
+        } break;
+        case "Identifier": {
+            common.printAsJson(ast.name, "Identifier");
         } break;
         default:
             throw new Error(`AST node type "${ast.type}" is not expected.`)
