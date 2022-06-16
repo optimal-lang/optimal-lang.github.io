@@ -409,6 +409,11 @@ static inline oml_root *new_dict(oml_dict_data *data = nullptr)
     return new (GC) oml_dict(data);
 }
 
+static inline oml_root *new_root(double x)
+{
+    return new_number(x);
+}
+
 oml_root *console_log(oml_root *x)
 {
     std::cout << string_value(x) << std::endl;

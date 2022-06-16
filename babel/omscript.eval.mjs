@@ -15,7 +15,7 @@ export function compile_ast(ast) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
                 params.push("oml_root* " + param.name);
             }
-            text += params.join(" ");
+            text += params.join(",");
             text += "){";
             for (let step of ast.body.body) {
                 common.printAsJson(step, "FunctionDeclaration(step)");

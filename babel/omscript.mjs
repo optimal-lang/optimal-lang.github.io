@@ -4,6 +4,20 @@ import * as common from "./omscript.common.mjs";
 import { compile_ast } from "./omscript.eval.mjs";
 import { optimize } from "./optimize.mjs";
 
+const CPP_HEAD =
+    `#include "omlcpp.h"
+
+int main() {
+    GC_INIT();
+    static oml_root *null = new_null();
+    static oml_root *undefined = new_undefined();
+`;
+
+const CPP_TAIL =
+    `
+    return 0;
+}
+`
 
 const code = `function add2(a, b) {
   return a + b;
@@ -22,11 +36,18 @@ let opt = optimize(ast);
 //printAsJson(opt, "opt");
 
 //printAsJson(opt.program.body, "opt.program.body");
+let text = CPP_HEAD;
 
 for (let step of opt.program.body) {
   step = compile_ast(step);
   console.log(step.text + ";");
+  text += step.text + ";\n";
 }
+
+text += CPP_TAIL;
 
 common.printAsJson(common.parsePath("C:\\abc\\xyz\\test.txt"));
 common.printAsJson(common.parsePath("test2.txt"));
+
+console.log(text);
+Deno.writeTextFileSync("tmp.cpp", text);
