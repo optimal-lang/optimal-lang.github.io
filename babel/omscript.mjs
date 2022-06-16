@@ -23,19 +23,8 @@ let opt = optimize(ast);
 //printAsJson(opt.program.body, "opt.program.body");
 
 for (let step of opt.program.body) {
-  compile_ast(step);
-  /*
-	common.printAsJson(step.type, "step.type");
-	common.printAsJson(step, "step");
-  $traverse.default(ast, {
-    enter(path) {
-      common.printAsJson(path.node, `enter(${path.node.type})`);
-      if (path.isIdentifier({ name: "n" })) {
-        path.node.name = "x";
-      }
-    },
-  });
-  */
+  step = compile_ast(step);
+  console.log(step.text + ";");
 }
 
 common.printAsJson(common.parsePath("C:\\abc\\xyz\\test.txt"));

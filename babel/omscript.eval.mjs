@@ -6,11 +6,11 @@ export function compile_ast(ast) {
     switch (ast.type) {
         case "FunctionDeclaration": {
             //common.printAsJson("FunctionDeclaration found");
-            let text = "oml_root* " + ast.id.name + "(";
+            let text = "auto oml_root* " + ast.id.name + "=[&](";
             let params = [];
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
-                params.push(param.name);
+                params.push("oml_root* " + param.name);
             }
             text += params.join(" ");
             text += "){";
@@ -23,6 +23,7 @@ export function compile_ast(ast) {
             }
             text += "}";
             common.printAsJson(text);
+            return { type: "?", text: text };
         } break;
         case "ReturnStatement": {
             let argument = compile_ast(ast.argument);
