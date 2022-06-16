@@ -1,37 +1,18 @@
 import $parser from "https://jspm.dev/@babel/parser";
 import $traverse from "https://jspm.dev/@babel/traverse";
-import $path from "https://jspm.dev/path";
-
+import * as common from "./omscript.common.mjs";
+import { compile_ast } from "./omscript.eval.mjs";
 import { optimize } from "./optimize.mjs";
 
-function printAsJson(x, title) {
-  let json = JSON.stringify(x, null, "  ");
-  if (title == null)
-    console.log(json);
-  else
-    console.log(title + ": " + json);
-}
-
-function writeAsJson(path, x) {
-  Deno.writeTextFileSync(
-    path,
-    JSON.stringify(x, null, "  ")
-  );
-}
-
-function parsePath(path) {
-  path = path.replace(/\\/g, "/");
-  let result = $path.parse(path);
-  result.path = result.dir + "/" + result.base;
-  return result;
-}
 
 const code = `function square(n) {
   return n * n * n;
 }
+/*
 let f = function (n) {
   return n * n * n;
 }
+*/
 `;
 
 let ast = $parser.parse(code);
@@ -42,17 +23,20 @@ let opt = optimize(ast);
 //printAsJson(opt.program.body, "opt.program.body");
 
 for (let step of opt.program.body) {
-	printAsJson(step.type, "step.type");
-	printAsJson(step, "step");
+  compile_ast(step);
+  /*
+	common.printAsJson(step.type, "step.type");
+	common.printAsJson(step, "step");
   $traverse.default(ast, {
     enter(path) {
-      printAsJson(path.node, `enter(${path.node.type})`);
+      common.printAsJson(path.node, `enter(${path.node.type})`);
       if (path.isIdentifier({ name: "n" })) {
         path.node.name = "x";
       }
     },
   });
+  */
 }
 
-printAsJson(parsePath("C:\\abc\\xyz\\test.txt"));
-printAsJson(parsePath("test2.txt"));
+common.printAsJson(common.parsePath("C:\\abc\\xyz\\test.txt"));
+common.printAsJson(common.parsePath("test2.txt"));
