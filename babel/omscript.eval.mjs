@@ -15,7 +15,8 @@ export function compile_ast(ast) {
             }
         } break;
         case "ReturnStatement": {
-
+            common.printAsJson(ast.argument, "Returned");
+            //compile_ast(ast.argument);
         } break;
         default:
             throw new Error(`AST node type "${ast.type}" is not expected.`)
