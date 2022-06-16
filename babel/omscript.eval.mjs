@@ -5,26 +5,36 @@ export function compile_ast(ast) {
     common.printAsJson(ast, "ast");
     switch (ast.type) {
         case "FunctionDeclaration": {
-            common.printAsJson("FunctionDeclaration found");
+            //common.printAsJson("FunctionDeclaration found");
+            let text = "oml_root* " + ast.id.name + "(";
+            let params = [];
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
+                params.push(param.name);
             }
+            text += params.join(" ");
+            text += "){";
             for (let step of ast.body.body) {
                 common.printAsJson(step, "FunctionDeclaration(step)");
-                compile_ast(step);
+                step = compile_ast(step);
+                common.printAsJson(step);
+                text += step.text;
+                text += ";";
             }
+            text += "}";
+            common.printAsJson(text);
         } break;
         case "ReturnStatement": {
-            common.printAsJson(ast.argument, "Returned");
             let argument = compile_ast(ast.argument);
-            common.printAsJson(argument);
+            let conv = function(x) { return x.type==="oml_root*" ? x.text : `new_root(${x.text})`; };
+            return { type: "?", text: "return " + conv(argument) };
         } break;
         case "BinaryExpression": {
             common.printAsJson(ast.left, "BinaryExpression.left");
             common.printAsJson(ast.right, "BinaryExpression.right");
             let left = compile_ast(ast.left);
             let right = compile_ast(ast.right);
-            let conv = function(x) { return x.type==="double" ? x.text : `number_value(${x.text})`; }
+            let conv = function(x) { return x.type==="double" ? x.text : `number_value(${x.text})`; };
             common.printAsJson(left);
             common.printAsJson(right);
             return { type: "double", text: "(" + conv(left) + ast.operator + conv(right) + ")" };
