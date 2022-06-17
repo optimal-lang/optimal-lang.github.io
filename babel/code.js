@@ -37,3 +37,5 @@ print(list2+dict);
 print(10+true);
 print(10+"abc");
 print(true+true);
+print(null+undefined);
+print(undefined+null);
