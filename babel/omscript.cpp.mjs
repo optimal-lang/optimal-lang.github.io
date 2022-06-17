@@ -31,8 +31,8 @@ let text = CPP_HEAD;
 
 for (let step of opt.program.body) {
   step = compile_ast(step);
-  console.log(step.text + ";");
-  text += step.text + ";\n";
+  //console.log(step + ";");
+  text += step + ";\n";
 }
 
 text += CPP_TAIL;

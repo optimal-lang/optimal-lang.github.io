@@ -1,6 +1,6 @@
 #! bash -uvx
 set -e
-deno run --allow-all omscript.js.mjs > compile1.txt
+deno run --allow-all omscript.js.mjs | tee compile1.txt
 deno run --allow-all omscript.cpp.mjs
 astyle --style=allman tmp.cpp
 cat tmp.cpp

@@ -49,6 +49,7 @@ public:
     virtual void push(om_register *x)
     {
     }
+    om_register *operator+(om_register &other);
 };
 
 class om_undefined : public om_register
@@ -394,7 +395,7 @@ static inline om_register *new_number(double n)
     return new (GC) om_number(n);
 }
 
-static inline om_register *new_string(const std::string &s)
+static inline om_register *new_string(std::string &s)
 {
     return new (GC) om_string(s);
 }
@@ -412,6 +413,11 @@ static inline om_register *new_dict(om_dict_data *data = nullptr)
 static inline om_register *new_register(double x)
 {
     return new_number(x);
+}
+
+om_register *om_register::operator+(om_register &other)
+{
+    return new_number(::number_value(this)+::number_value(&other));
 }
 
 om_register *console_log(om_register *x)
