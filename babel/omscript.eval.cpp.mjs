@@ -111,14 +111,14 @@ export function compile_ast(ast) {
         case "ArrayExpression": {
             let elements = ast.elements;
             //let text = "new (GC) om_list(new (GC) om_list_data{";
-            let text = "new_list(";
+            let text = "new_list({";
             let list = [];
             for (let e of elements) {
                 list.push(compile_ast(e));
             }
             text += list.join(",");
             //text += "})";
-            text += ")";
+            text += "})";
             return text;
         } break;
         case "ObjectExpression": {

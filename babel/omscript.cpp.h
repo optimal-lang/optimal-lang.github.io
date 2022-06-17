@@ -410,14 +410,26 @@ static inline om_register *new_string(const std::string &s)
     return new (GC) om_string(s);
 }
 
+/*
 static inline om_register *new_list(om_list_data *data = nullptr, om_dict_data *props = nullptr)
 {
     return new (GC) om_list(data, props);
 }
+*/
 
+/*
 template<class... A> om_register *new_list(A... args) {
   om_list_data *data = new (GC) om_list_data();
   for ( om_register *i : std::initializer_list< om_register *>{args...}) {
+    data->push_back(i);
+  }
+  return new (GC) om_list(data);
+}
+*/
+
+om_register *new_list(std::initializer_list< om_register *> args) {
+  om_list_data *data = new (GC) om_list_data();
+  for ( om_register *i : args) {
     data->push_back(i);
   }
   return new (GC) om_list(data);
