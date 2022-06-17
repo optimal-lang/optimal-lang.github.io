@@ -50,6 +50,7 @@ public:
     {
     }
     om_register *operator+(om_register &other);
+    om_register *operator()(std::initializer_list<om_register *> __arguments__);
 };
 
 class om_undefined : public om_register
@@ -453,6 +454,12 @@ om_register *om_register::operator+(om_register &other)
     }
     return new_number(::number_value(this) + ::number_value(&other));
 }
+
+om_register *om_register::operator()(std::initializer_list<om_register *> __arguments__)
+{
+    return new_null();
+}
+
 
 om_register *console_log(om_register *x)
 {
