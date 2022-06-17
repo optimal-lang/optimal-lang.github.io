@@ -270,10 +270,6 @@ public:
     }
     virtual std::string printable_text()
     {
-        return this->string_value();
-    }
-    virtual const std::string string_value()
-    {
         std::string result = "( ";
         for (std::size_t i = 0; i < this->value->size(); i++)
         {
@@ -304,6 +300,17 @@ public:
         result += " )";
         return result;
     }
+    virtual const std::string string_value()
+    {
+        std::string result = "";
+        for (std::size_t i = 0; i < this->value->size(); i++)
+        {
+            if (i > 0)
+                result += ",";
+            result += ::string_value((*this->value)[i]);
+        }
+        return result;
+    }
     virtual bool bool_value()
     {
         return true;
@@ -332,12 +339,7 @@ public:
     }
     virtual std::string printable_text()
     {
-        return this->string_value();
-    }
-    virtual const std::string string_value()
-    {
         std::string result = "{ ";
-        // std::size_t i = 0;
         std::vector<om_dict_key, gc_allocator<om_dict_key>> keys;
         for (om_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
@@ -355,6 +357,10 @@ public:
         }
         result += " }";
         return result;
+    }
+    virtual const std::string string_value()
+    {
+        return "[object Object]";
     }
     virtual bool bool_value()
     {
@@ -418,6 +424,9 @@ static inline om_register *new_register(double x)
 om_register *om_register::operator+(om_register &other)
 {
     if (this->type_of()==om_register::type::STRING) {
+        return new_string(::string_value(this)+::string_value(&other));
+    }
+    if (this->type_of()==om_register::type::LIST) {
         return new_string(::string_value(this)+::string_value(&other));
     }
     return new_number(::number_value(this)+::number_value(&other));
