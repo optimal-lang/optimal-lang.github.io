@@ -35,6 +35,7 @@ int main()
     auto list=new (GC) om_list(new (GC) om_list_data{new_number(11),new_number(22),new_number(33)});
     auto dict=new (GC) om_dict(new (GC) om_dict_data{{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
     print(((*(list))+(*(dict))));
+    print(((*(new_number(10)))+(*(new_string("abc")))));
 
     return 0;
 }

@@ -423,7 +423,7 @@ static inline om_register *new_register(double x)
 
 om_register *om_register::operator+(om_register &other)
 {
-    if (this->type_of()==om_register::type::STRING) {
+    if (this->type_of()==om_register::type::STRING || other.type_of()==om_register::type::STRING) {
         return new_string(::string_value(this)+::string_value(&other));
     }
     if (this->type_of()==om_register::type::LIST) {
