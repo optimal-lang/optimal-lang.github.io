@@ -6,7 +6,6 @@ print(add2(11, 22));
 let x = 123;
 print(x);
 
-/*
 let add3 = function(a, b, c) {
   return a + b + c;
 }
@@ -22,4 +21,3 @@ print(test01(22));
 
 let y = 1 + 2 + 3;
 print(y);
-*/

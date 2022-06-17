@@ -18,7 +18,7 @@ export function compile_ast(ast) {
                 common.printAsJson(step, "FunctionDeclaration(step)");
                 step = compile_ast(step);
                 common.printAsJson(step);
-                text += step.text;
+                text += step;
                 text += ";";
             }
             text += "}";
