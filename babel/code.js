@@ -42,3 +42,6 @@ print(undefined+null);
 print("abc"+null);
 print(null+"abc");
 print(null+0);
+//print("abc"+add2);
+//print(add2+"abc");
+print(add2);

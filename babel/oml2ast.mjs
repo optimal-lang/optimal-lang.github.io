@@ -157,6 +157,8 @@ export function ast2oml(ast) {
     }
     result += " )";
     return result;
+  } else if (ast instanceof Function) {
+    return "function";
   } else {
     let result = "{ ";
     let keys = Object.keys(ast);

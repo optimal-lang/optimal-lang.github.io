@@ -378,7 +378,7 @@ public:
     }
     virtual const std::string string_value()
     {
-        return "[object Object]";
+        return "function ?";
     }
     virtual bool bool_value()
     {

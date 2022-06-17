@@ -51,6 +51,9 @@ int main()
     (*print)({((*(new_string("abc")))+(*(null)))});
     (*print)({((*(null))+(*(new_string("abc"))))});
     (*print)({((*(null))+(*(new_number(0))))});
+    (*print)({((*(new_string("abc")))+(*(add2)))});
+    (*print)({((*(add2))+(*(new_string("abc"))))});
+    (*print)({add2});
 
     return 0;
 }

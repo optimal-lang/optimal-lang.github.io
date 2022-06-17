@@ -20,3 +20,6 @@ null
 "abcnull"
 "nullabc"
 0
+"abcfunction add2(a, b) {\n  return a + b;\n}"
+"function add2(a, b) {\n  return a + b;\n}abc"
+function
