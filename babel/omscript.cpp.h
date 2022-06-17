@@ -415,6 +415,14 @@ static inline om_register *new_list(om_list_data *data = nullptr, om_dict_data *
     return new (GC) om_list(data, props);
 }
 
+template<class... A> om_register *new_list(A... args) {
+  om_list_data *data = new (GC) om_list_data();
+  for ( om_register *i : std::initializer_list< om_register *>{args...}) {
+    data->push_back(i);
+  }
+  return new (GC) om_list(data);
+}
+
 static inline om_register *new_dict(om_dict_data *data = nullptr)
 {
     return new (GC) om_dict(data);
