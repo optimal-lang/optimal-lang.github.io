@@ -12,7 +12,7 @@
 #include <gc/gc_allocator.h>
 #include <gc/javaxfc.h>
 
-class oml_root : public gc_cleanup
+class oml_register : public gc_cleanup
 {
 public:
     enum type
@@ -46,12 +46,12 @@ public:
         static std::string empty = "";
         return empty;
     }
-    virtual void push(oml_root *x)
+    virtual void push(oml_register *x)
     {
     }
 };
 
-class oml_undefined : public oml_root
+class oml_undefined : public oml_register
 {
 public:
     oml_undefined()
@@ -71,7 +71,7 @@ public:
     }
 };
 
-class oml_null : public oml_root
+class oml_null : public oml_register
 {
 public:
     oml_null()
@@ -91,30 +91,30 @@ public:
     }
 };
 
-//static oml_root *null = (oml_root *)nullptr;
-//static oml_root *undefined = (oml_root *)-1;
+//static oml_register *null = (oml_register *)nullptr;
+//static oml_register *undefined = (oml_register *)-1;
 
 static inline bool bool_value(bool x)
 {
     return x;
 }
 
-static inline bool bool_value(oml_root *x)
+static inline bool bool_value(oml_register *x)
 {
     return x->bool_value();
 }
 
-static inline double number_value(oml_root *x)
+static inline double number_value(oml_register *x)
 {
     return x->number_value();
 }
 
-static inline const std::string string_value(oml_root *x)
+static inline const std::string string_value(oml_register *x)
 {
     return x->string_value();
 }
 
-static inline const std::string printable_text(oml_root *x)
+static inline const std::string printable_text(oml_register *x)
 {
     return x->printable_text();
 }
@@ -139,7 +139,7 @@ static inline std::string stringify_sting(const std::string &s)
     return result;
 }
 
-class oml_bool : public oml_root
+class oml_bool : public oml_register
 {
     bool value;
 
@@ -167,7 +167,7 @@ public:
     }
 };
 
-class oml_number : public oml_root
+class oml_number : public oml_register
 {
     double value;
 
@@ -200,7 +200,7 @@ public:
     }
 };
 
-class oml_string : public oml_root
+class oml_string : public oml_register
 {
     std::string value;
 
@@ -244,11 +244,11 @@ public:
     }
 };
 
-using oml_list_data = std::vector<oml_root *, gc_allocator<oml_root *>>;
+using oml_list_data = std::vector<oml_register *, gc_allocator<oml_register *>>;
 using oml_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-using oml_dict_data = std::map<oml_dict_key, oml_root *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_root *, oml_root *>>>;
+using oml_dict_data = std::map<oml_dict_key, oml_register *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_register *, oml_register *>>>;
 
-class oml_list : public oml_root
+class oml_list : public oml_register
 {
     oml_list_data *value;
     oml_dict_data *props;
@@ -307,14 +307,14 @@ public:
     {
         return true;
     }
-    virtual void push(oml_root *x)
+    virtual void push(oml_register *x)
     {
         this->value->push_back(x);
     }
-    friend oml_root *equal(oml_root *a, oml_root *b);
+    friend oml_register *equal(oml_register *a, oml_register *b);
 };
 
-class oml_dict : public oml_root
+class oml_dict : public oml_register
 {
     oml_dict_data *value;
 
@@ -359,10 +359,10 @@ public:
     {
         return true;
     }
-    friend oml_root *equal(oml_root *a, oml_root *b);
+    friend oml_register *equal(oml_register *a, oml_register *b);
 };
 
-static inline oml_root *new_undefined()
+static inline oml_register *new_undefined()
 {
     static oml_undefined *undefined = nullptr;
     if (!undefined)
@@ -370,7 +370,7 @@ static inline oml_root *new_undefined()
     return undefined;
 }
 
-static inline oml_root *new_null()
+static inline oml_register *new_null()
 {
     static oml_null *null = nullptr;
     if (!null)
@@ -378,7 +378,7 @@ static inline oml_root *new_null()
     return null;
 }
 
-static inline oml_root *new_bool(bool b)
+static inline oml_register *new_bool(bool b)
 {
     static oml_bool *true_ = nullptr;
     static oml_bool *false_ = nullptr;
@@ -389,44 +389,44 @@ static inline oml_root *new_bool(bool b)
     return b ? true_ : false_;
 }
 
-static inline oml_root *new_number(double n)
+static inline oml_register *new_number(double n)
 {
     return new (GC) oml_number(n);
 }
 
-static inline oml_root *new_string(const std::string &s)
+static inline oml_register *new_string(const std::string &s)
 {
     return new (GC) oml_string(s);
 }
 
-static inline oml_root *new_list(oml_list_data *data = nullptr, oml_dict_data *props = nullptr)
+static inline oml_register *new_list(oml_list_data *data = nullptr, oml_dict_data *props = nullptr)
 {
     return new (GC) oml_list(data, props);
 }
 
-static inline oml_root *new_dict(oml_dict_data *data = nullptr)
+static inline oml_register *new_dict(oml_dict_data *data = nullptr)
 {
     return new (GC) oml_dict(data);
 }
 
-static inline oml_root *new_root(double x)
+static inline oml_register *new_root(double x)
 {
     return new_number(x);
 }
 
-oml_root *console_log(oml_root *x)
+oml_register *console_log(oml_register *x)
 {
     std::cout << string_value(x) << std::endl;
     return new_null();
 }
 
-oml_root *print(oml_root *x)
+oml_register *print(oml_register *x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
 }
 
-oml_root *equal(oml_root *a, oml_root *b)
+oml_register *equal(oml_register *a, oml_register *b)
 {
     if (a == new_null())
         return new_bool(b == new_null());
@@ -438,16 +438,16 @@ oml_root *equal(oml_root *a, oml_root *b)
         return new_bool(false);
     switch (a->type_of())
     {
-    case oml_root::type::BOOL:
+    case oml_register::type::BOOL:
         return new_bool(bool_value(a) == bool_value(b));
         break;
-    case oml_root::type::NUMBER:
+    case oml_register::type::NUMBER:
         return new_bool(number_value(a) == number_value(b));
         break;
-    case oml_root::type::STRING:
+    case oml_register::type::STRING:
         return new_bool(string_value(a) == string_value(b));
         break;
-    case oml_root::type::LIST:
+    case oml_register::type::LIST:
     {
         oml_list_data *la = ((oml_list *)a)->value;
         oml_list_data *lb = ((oml_list *)b)->value;
@@ -485,7 +485,7 @@ oml_root *equal(oml_root *a, oml_root *b)
         return new_bool(true);
     }
     break;
-    case oml_root::type::DICT:
+    case oml_register::type::DICT:
     {
         oml_dict_data *da = ((oml_dict *)a)->value;
         oml_dict_data *db = ((oml_dict *)b)->value;

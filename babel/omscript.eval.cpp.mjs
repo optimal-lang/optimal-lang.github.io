@@ -10,7 +10,7 @@ export function compile_ast(ast) {
             let params = [];
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
-                params.push("oml_root* " + param.name);
+                params.push("oml_register* " + param.name);
             }
             text += params.join(",");
             text += "){";
@@ -27,8 +27,8 @@ export function compile_ast(ast) {
         } break;
         case "FunctionDeclaration": {
             /*
-            let text = "std::function<oml_root*(";
-            text += Array(ast.params.length).fill("oml_root*").join(",");
+            let text = "std::function<oml_register*(";
+            text += Array(ast.params.length).fill("oml_register*").join(",");
             text += ")> ";
             */
             let text = "";
@@ -37,7 +37,7 @@ export function compile_ast(ast) {
             let params = [];
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
-                params.push("oml_root* " + param.name);
+                params.push("oml_register* " + param.name);
             }
             text += params.join(",");
             text += "){";
@@ -54,7 +54,7 @@ export function compile_ast(ast) {
         } break;
         case "ReturnStatement": {
             let argument = compile_ast(ast.argument);
-            let conv = function(x) { return x.type==="oml_root*" ? x.text : `new_root(${x.text})`; };
+            let conv = function(x) { return x.type==="oml_register*" ? x.text : `new_root(${x.text})`; };
             return { type: "?", text: "return " + conv(argument) };
         } break;
         case "BinaryExpression": {
@@ -69,7 +69,7 @@ export function compile_ast(ast) {
         } break;
         case "Identifier": {
             //common.printAsJson(ast.name, "Identifier");
-            return { type: "oml_root*", text: ast.name };
+            return { type: "oml_register*", text: ast.name };
         } break;
         case "ExpressionStatement": {
             return compile_ast(ast.expression);
@@ -80,12 +80,12 @@ export function compile_ast(ast) {
             let args = [];
             for (let arg of ast.arguments) {
                 arg = compile_ast(arg);
-                let conv = function(x) { return x.type==="oml_root*" ? x.text : `new_root(${x.text})`; };
+                let conv = function(x) { return x.type==="oml_register*" ? x.text : `new_root(${x.text})`; };
                 args.push(conv(arg));
             }
             text += args.join(",");
             text += ")";
-            return { type: "oml_root*", text: text };
+            return { type: "oml_register*", text: text };
         } break;
         case "NumericLiteral": {
             return {type: "double", text: `((double)${ast.extra.raw})` };
@@ -98,9 +98,9 @@ export function compile_ast(ast) {
             common.printAsJson(declaration.init);
             let text = "auto " + declaration.id.name + "=";
             let init = compile_ast(declaration.init);
-            let conv = function(x) { return x.type==="oml_root*"||x.type==="FunctionExpression" ? x.text : `new_root(${x.text})`; };
+            let conv = function(x) { return x.type==="oml_register*"||x.type==="FunctionExpression" ? x.text : `new_root(${x.text})`; };
             text += conv(init);
-            return {type: "oml_root*", text: text };
+            return {type: "oml_register*", text: text };
         } break;
         default:
             throw new Error(`AST node type "${ast.type}" is not expected.`)
