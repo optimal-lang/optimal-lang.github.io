@@ -26,6 +26,7 @@ int main()
     print(test01(new_number(22)));
     auto y=((*(((*(new_number(1)))+(*(new_number(2))))))+(*(new_number(3))));
     print(y);
+    print(new_string("abc"));
 
     return 0;
 }

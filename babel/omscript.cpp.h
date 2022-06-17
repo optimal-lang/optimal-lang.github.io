@@ -395,7 +395,7 @@ static inline om_register *new_number(double n)
     return new (GC) om_number(n);
 }
 
-static inline om_register *new_string(std::string &s)
+static inline om_register *new_string(const std::string &s)
 {
     return new (GC) om_string(s);
 }

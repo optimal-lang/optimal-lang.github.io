@@ -86,6 +86,9 @@ export function compile_ast(ast) {
         case "NumericLiteral": {
             return `new_number(${ast.extra.raw})`;
         } break;
+        case "StringLiteral": {
+            return `new_string(${ast.extra.raw})`;
+        } break;
         case "VariableDeclaration": {
             let declarations = ast.declarations;
             if (declarations.length !== 1) throw new Error("VariableDeclaration error(1)");
