@@ -15,3 +15,8 @@
 11
 "10abc"
 2
+null
+null
+"abcnull"
+"nullabc"
+0

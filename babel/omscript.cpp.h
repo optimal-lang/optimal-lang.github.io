@@ -21,7 +21,7 @@ class om_register : public gc_cleanup
 public:
     enum type
     {
-        UNDEINED,
+        UNDEFINED,
         NULL_,
         BOOL,
         NUMBER,
@@ -66,7 +66,7 @@ public:
     }
     virtual type type_of()
     {
-        return UNDEINED;
+        return UNDEFINED;
     }
     virtual std::string printable_text()
     {
@@ -388,7 +388,7 @@ public:
     {
         return this->value(__arguments__);
     }
-    //friend om_register *equal(om_register *a, om_register *b);
+    // friend om_register *equal(om_register *a, om_register *b);
 };
 
 static inline om_register *new_undefined()
@@ -455,12 +455,18 @@ om_register *new_func(om_func_def def)
 
 static inline om_register *get_arg(om_list_data &args, std::size_t index)
 {
-    if (index>=args.size()) return new_undefined();
+    if (index >= args.size())
+        return new_undefined();
     return args[index];
 }
 
 om_register *om_register::operator+(om_register &other)
 {
+    if ((this->type_of() == om_register::type::NULL_ || this->type_of() == om_register::type::UNDEFINED) &&
+        (other.type_of() == om_register::type::NULL_ || other.type_of() == om_register::type::UNDEFINED))
+    {
+        return new_null();
+    }
     if (this->type_of() == om_register::type::STRING || other.type_of() == om_register::type::STRING)
     {
         return new_string(::string_value(this) + ::string_value(&other));

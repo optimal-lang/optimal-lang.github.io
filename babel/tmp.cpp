@@ -46,6 +46,11 @@ int main()
     (*print)({((*(new_number(10)))+(*(new_bool(true))))});
     (*print)({((*(new_number(10)))+(*(new_string("abc"))))});
     (*print)({((*(new_bool(true)))+(*(new_bool(true))))});
+    (*print)({((*(null))+(*(undefined)))});
+    (*print)({((*(undefined))+(*(null)))});
+    (*print)({((*(new_string("abc")))+(*(null)))});
+    (*print)({((*(null))+(*(new_string("abc"))))});
+    (*print)({((*(null))+(*(new_number(0))))});
 
     return 0;
 }

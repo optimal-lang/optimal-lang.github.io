@@ -39,3 +39,6 @@ print(10+"abc");
 print(true+true);
 print(null+undefined);
 print(undefined+null);
+print("abc"+null);
+print(null+"abc");
+print(null+0);
