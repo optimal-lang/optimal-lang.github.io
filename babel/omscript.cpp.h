@@ -12,7 +12,7 @@
 #include <gc/gc_allocator.h>
 #include <gc/javaxfc.h>
 
-class oml_register : public gc_cleanup
+class om_register : public gc_cleanup
 {
 public:
     enum type
@@ -46,15 +46,15 @@ public:
         static std::string empty = "";
         return empty;
     }
-    virtual void push(oml_register *x)
+    virtual void push(om_register *x)
     {
     }
 };
 
-class oml_undefined : public oml_register
+class om_undefined : public om_register
 {
 public:
-    oml_undefined()
+    om_undefined()
     {
     }
     virtual type type_of()
@@ -71,10 +71,10 @@ public:
     }
 };
 
-class oml_null : public oml_register
+class om_null : public om_register
 {
 public:
-    oml_null()
+    om_null()
     {
     }
     virtual type type_of()
@@ -91,30 +91,30 @@ public:
     }
 };
 
-//static oml_register *null = (oml_register *)nullptr;
-//static oml_register *undefined = (oml_register *)-1;
+//static om_register *null = (om_register *)nullptr;
+//static om_register *undefined = (om_register *)-1;
 
 static inline bool bool_value(bool x)
 {
     return x;
 }
 
-static inline bool bool_value(oml_register *x)
+static inline bool bool_value(om_register *x)
 {
     return x->bool_value();
 }
 
-static inline double number_value(oml_register *x)
+static inline double number_value(om_register *x)
 {
     return x->number_value();
 }
 
-static inline const std::string string_value(oml_register *x)
+static inline const std::string string_value(om_register *x)
 {
     return x->string_value();
 }
 
-static inline const std::string printable_text(oml_register *x)
+static inline const std::string printable_text(om_register *x)
 {
     return x->printable_text();
 }
@@ -139,12 +139,12 @@ static inline std::string stringify_sting(const std::string &s)
     return result;
 }
 
-class oml_bool : public oml_register
+class om_bool : public om_register
 {
     bool value;
 
 public:
-    oml_bool(bool b) : value(b)
+    om_bool(bool b) : value(b)
     {
     }
     virtual type type_of()
@@ -167,12 +167,12 @@ public:
     }
 };
 
-class oml_number : public oml_register
+class om_number : public om_register
 {
     double value;
 
 public:
-    oml_number(double n) : value(n)
+    om_number(double n) : value(n)
     {
     }
     virtual type type_of()
@@ -200,12 +200,12 @@ public:
     }
 };
 
-class oml_string : public oml_register
+class om_string : public om_register
 {
     std::string value;
 
 public:
-    oml_string(const std::string &s) : value(s)
+    om_string(const std::string &s) : value(s)
     {
     }
     virtual type type_of()
@@ -244,23 +244,23 @@ public:
     }
 };
 
-using oml_list_data = std::vector<oml_register *, gc_allocator<oml_register *>>;
-using oml_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-using oml_dict_data = std::map<oml_dict_key, oml_register *, std::less<oml_dict_key>, gc_allocator<std::pair<oml_register *, oml_register *>>>;
+using om_list_data = std::vector<om_register *, gc_allocator<om_register *>>;
+using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
+using om_dict_data = std::map<om_dict_key, om_register *, std::less<om_dict_key>, gc_allocator<std::pair<om_register *, om_register *>>>;
 
-class oml_list : public oml_register
+class om_list : public om_register
 {
-    oml_list_data *value;
-    oml_dict_data *props;
+    om_list_data *value;
+    om_dict_data *props;
 
 public:
-    oml_list(oml_list_data *data = nullptr, oml_dict_data *props = nullptr)
+    om_list(om_list_data *data = nullptr, om_dict_data *props = nullptr)
     {
         if (data == nullptr)
-            data = new (GC) oml_list_data();
+            data = new (GC) om_list_data();
         this->value = data;
         if (props == nullptr)
-            props = new (GC) oml_dict_data();
+            props = new (GC) om_dict_data();
         this->props = props;
     }
     virtual type type_of()
@@ -280,8 +280,8 @@ public:
                 result += " ";
             result += ::printable_text((*this->value)[i]);
         }
-        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> keys;
-        for (oml_dict_data::iterator it = this->props->begin(); it != this->props->end(); ++it)
+        std::vector<om_dict_key, gc_allocator<om_dict_key>> keys;
+        for (om_dict_data::iterator it = this->props->begin(); it != this->props->end(); ++it)
         {
             keys.push_back(it->first);
         }
@@ -292,7 +292,7 @@ public:
             result += "?";
             for (std::size_t i = 0; i < keys.size(); i++)
             {
-                oml_dict_key key = keys[i];
+                om_dict_key key = keys[i];
                 result += " (";
                 result += stringify_sting(std::string(key.begin(), key.end()));
                 result += " ";
@@ -307,22 +307,22 @@ public:
     {
         return true;
     }
-    virtual void push(oml_register *x)
+    virtual void push(om_register *x)
     {
         this->value->push_back(x);
     }
-    friend oml_register *equal(oml_register *a, oml_register *b);
+    friend om_register *equal(om_register *a, om_register *b);
 };
 
-class oml_dict : public oml_register
+class om_dict : public om_register
 {
-    oml_dict_data *value;
+    om_dict_data *value;
 
 public:
-    oml_dict(oml_dict_data *data = nullptr)
+    om_dict(om_dict_data *data = nullptr)
     {
         if (data == nullptr)
-            data = new (GC) oml_dict_data();
+            data = new (GC) om_dict_data();
         this->value = data;
     }
     virtual type type_of()
@@ -337,15 +337,15 @@ public:
     {
         std::string result = "{ ";
         // std::size_t i = 0;
-        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> keys;
-        for (oml_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
+        std::vector<om_dict_key, gc_allocator<om_dict_key>> keys;
+        for (om_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
             keys.push_back(it->first);
         }
         std::sort(keys.begin(), keys.end());
         for (std::size_t i = 0; i < keys.size(); i++)
         {
-            oml_dict_key key = keys[i];
+            om_dict_key key = keys[i];
             if (i > 0)
                 result += " ";
             result += stringify_sting(std::string(key.begin(), key.end()));
@@ -359,74 +359,74 @@ public:
     {
         return true;
     }
-    friend oml_register *equal(oml_register *a, oml_register *b);
+    friend om_register *equal(om_register *a, om_register *b);
 };
 
-static inline oml_register *new_undefined()
+static inline om_register *new_undefined()
 {
-    static oml_undefined *undefined = nullptr;
+    static om_undefined *undefined = nullptr;
     if (!undefined)
-        undefined = new (GC) oml_undefined();
+        undefined = new (GC) om_undefined();
     return undefined;
 }
 
-static inline oml_register *new_null()
+static inline om_register *new_null()
 {
-    static oml_null *null = nullptr;
+    static om_null *null = nullptr;
     if (!null)
-        null = new (GC) oml_null();
+        null = new (GC) om_null();
     return null;
 }
 
-static inline oml_register *new_bool(bool b)
+static inline om_register *new_bool(bool b)
 {
-    static oml_bool *true_ = nullptr;
-    static oml_bool *false_ = nullptr;
+    static om_bool *true_ = nullptr;
+    static om_bool *false_ = nullptr;
     if (!true_)
-        true_ = new (GC) oml_bool(true);
+        true_ = new (GC) om_bool(true);
     if (!false_)
-        false_ = new (GC) oml_bool(false);
+        false_ = new (GC) om_bool(false);
     return b ? true_ : false_;
 }
 
-static inline oml_register *new_number(double n)
+static inline om_register *new_number(double n)
 {
-    return new (GC) oml_number(n);
+    return new (GC) om_number(n);
 }
 
-static inline oml_register *new_string(const std::string &s)
+static inline om_register *new_string(const std::string &s)
 {
-    return new (GC) oml_string(s);
+    return new (GC) om_string(s);
 }
 
-static inline oml_register *new_list(oml_list_data *data = nullptr, oml_dict_data *props = nullptr)
+static inline om_register *new_list(om_list_data *data = nullptr, om_dict_data *props = nullptr)
 {
-    return new (GC) oml_list(data, props);
+    return new (GC) om_list(data, props);
 }
 
-static inline oml_register *new_dict(oml_dict_data *data = nullptr)
+static inline om_register *new_dict(om_dict_data *data = nullptr)
 {
-    return new (GC) oml_dict(data);
+    return new (GC) om_dict(data);
 }
 
-static inline oml_register *new_register(double x)
+static inline om_register *new_register(double x)
 {
     return new_number(x);
 }
 
-oml_register *console_log(oml_register *x)
+om_register *console_log(om_register *x)
 {
     std::cout << string_value(x) << std::endl;
     return new_null();
 }
 
-oml_register *print(oml_register *x)
+om_register *print(om_register *x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
 }
 
-oml_register *equal(oml_register *a, oml_register *b)
+om_register *equal(om_register *a, om_register *b)
 {
     if (a == new_null())
         return new_bool(b == new_null());
@@ -438,19 +438,19 @@ oml_register *equal(oml_register *a, oml_register *b)
         return new_bool(false);
     switch (a->type_of())
     {
-    case oml_register::type::BOOL:
+    case om_register::type::BOOL:
         return new_bool(bool_value(a) == bool_value(b));
         break;
-    case oml_register::type::NUMBER:
+    case om_register::type::NUMBER:
         return new_bool(number_value(a) == number_value(b));
         break;
-    case oml_register::type::STRING:
+    case om_register::type::STRING:
         return new_bool(string_value(a) == string_value(b));
         break;
-    case oml_register::type::LIST:
+    case om_register::type::LIST:
     {
-        oml_list_data *la = ((oml_list *)a)->value;
-        oml_list_data *lb = ((oml_list *)b)->value;
+        om_list_data *la = ((om_list *)a)->value;
+        om_list_data *lb = ((om_list *)b)->value;
         if (la->size() != lb->size())
             return new_bool(false);
         for (std::size_t i = 0; i < la->size(); i++)
@@ -460,16 +460,16 @@ oml_register *equal(oml_register *a, oml_register *b)
             if (!bool_value(equal((*la)[i], (*lb)[i])))
                 return new_bool(false);
         }
-        oml_dict_data *da = ((oml_list *)a)->props;
-        oml_dict_data *db = ((oml_list *)b)->props;
-        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> a_keys;
-        for (oml_dict_data::iterator it = da->begin(); it != da->end(); ++it)
+        om_dict_data *da = ((om_list *)a)->props;
+        om_dict_data *db = ((om_list *)b)->props;
+        std::vector<om_dict_key, gc_allocator<om_dict_key>> a_keys;
+        for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
         {
             a_keys.push_back(it->first);
         }
         std::sort(a_keys.begin(), a_keys.end());
-        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> b_keys;
-        for (oml_dict_data::iterator it = db->begin(); it != db->end(); ++it)
+        std::vector<om_dict_key, gc_allocator<om_dict_key>> b_keys;
+        for (om_dict_data::iterator it = db->begin(); it != db->end(); ++it)
         {
             b_keys.push_back(it->first);
         }
@@ -478,25 +478,25 @@ oml_register *equal(oml_register *a, oml_register *b)
             return new_bool(false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
-            oml_dict_key key = a_keys[i];
+            om_dict_key key = a_keys[i];
             if (!bool_value(equal(da->at(key), db->at(key))))
                 return new_bool(false);
         }
         return new_bool(true);
     }
     break;
-    case oml_register::type::DICT:
+    case om_register::type::DICT:
     {
-        oml_dict_data *da = ((oml_dict *)a)->value;
-        oml_dict_data *db = ((oml_dict *)b)->value;
-        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> a_keys;
-        for (oml_dict_data::iterator it = da->begin(); it != da->end(); ++it)
+        om_dict_data *da = ((om_dict *)a)->value;
+        om_dict_data *db = ((om_dict *)b)->value;
+        std::vector<om_dict_key, gc_allocator<om_dict_key>> a_keys;
+        for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
         {
             a_keys.push_back(it->first);
         }
         std::sort(a_keys.begin(), a_keys.end());
-        std::vector<oml_dict_key, gc_allocator<oml_dict_key>> b_keys;
-        for (oml_dict_data::iterator it = db->begin(); it != db->end(); ++it)
+        std::vector<om_dict_key, gc_allocator<om_dict_key>> b_keys;
+        for (om_dict_data::iterator it = db->begin(); it != db->end(); ++it)
         {
             b_keys.push_back(it->first);
         }
@@ -505,7 +505,7 @@ oml_register *equal(oml_register *a, oml_register *b)
             return new_bool(false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
-            oml_dict_key key = a_keys[i];
+            om_dict_key key = a_keys[i];
             if (!bool_value(equal(da->at(key), db->at(key))))
                 return new_bool(false);
         }

@@ -5,12 +5,12 @@ import { compile_ast } from "./omscript.eval.cpp.mjs";
 import { optimize } from "./optimize.mjs";
 
 const CPP_HEAD =
-    `#include "omlcpp.h"
+    `#include "omscript.cpp.h"
 
 int main() {
     GC_INIT();
-    static oml_register *null = new_null();
-    static oml_register *undefined = new_undefined();
+    static om_register *null = new_null();
+    static om_register *undefined = new_undefined();
 `;
 
 const CPP_TAIL =
