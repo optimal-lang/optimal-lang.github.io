@@ -122,7 +122,8 @@ export function compile_ast(ast) {
             return text;
         } break;
         case "ObjectExpression": {
-            let text = "new (GC) om_dict(new (GC) om_dict_data{";
+            //let text = "new (GC) om_dict(new (GC) om_dict_data{";
+            let text = "new_dict({";
             let properties = ast.properties;
             let plist = [];
             for (let p of properties) {

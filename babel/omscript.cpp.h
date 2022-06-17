@@ -92,8 +92,8 @@ public:
     }
 };
 
-//static om_register *null = (om_register *)nullptr;
-//static om_register *undefined = (om_register *)-1;
+// static om_register *null = (om_register *)nullptr;
+// static om_register *undefined = (om_register *)-1;
 
 static inline bool bool_value(bool x)
 {
@@ -289,7 +289,8 @@ public:
         std::sort(keys.begin(), keys.end());
         if (keys.size() > 0)
         {
-            if (this->value->size() > 0) result += " ";
+            if (this->value->size() > 0)
+                result += " ";
             result += "?";
             for (std::size_t i = 0; i < keys.size(); i++)
             {
@@ -427,17 +428,24 @@ template<class... A> om_register *new_list(A... args) {
 }
 */
 
-om_register *new_list(std::initializer_list< om_register *> args) {
-  om_list_data *data = new (GC) om_list_data();
-  for ( om_register *i : args) {
-    data->push_back(i);
-  }
-  return new (GC) om_list(data);
+om_register *new_list(std::initializer_list<om_register *> args)
+{
+    om_list_data *data = new (GC) om_list_data();
+    for (om_register *i : args)
+    {
+        data->push_back(i);
+    }
+    return new (GC) om_list(data);
 }
 
 om_register *new_dict(std::initializer_list<std::pair<om_dict_key, om_register *>> args)
 {
-  return new_null();
+    om_dict_data *data = new (GC) om_dict_data();
+    for (std::pair<om_dict_key, om_register *> i : args)
+    {
+        data->insert(i);
+    }
+    return new (GC) om_dict(data);
 }
 
 /*
@@ -468,13 +476,15 @@ static inline om_register *new_register(double x)
 
 om_register *om_register::operator+(om_register &other)
 {
-    if (this->type_of()==om_register::type::STRING || other.type_of()==om_register::type::STRING) {
-        return new_string(::string_value(this)+::string_value(&other));
+    if (this->type_of() == om_register::type::STRING || other.type_of() == om_register::type::STRING)
+    {
+        return new_string(::string_value(this) + ::string_value(&other));
     }
-    if (this->type_of()==om_register::type::LIST) {
-        return new_string(::string_value(this)+::string_value(&other));
+    if (this->type_of() == om_register::type::LIST)
+    {
+        return new_string(::string_value(this) + ::string_value(&other));
     }
-    return new_number(::number_value(this)+::number_value(&other));
+    return new_number(::number_value(this) + ::number_value(&other));
 }
 
 om_register *console_log(om_register *x)
