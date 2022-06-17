@@ -23,3 +23,5 @@ let y = 1 + 2 + 3;
 print(y);
 
 print("abc");
+
+print("abc"+123);
