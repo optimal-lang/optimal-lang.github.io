@@ -11,8 +11,8 @@ let add3 = function(a, b, c) {
 }
 print(add3(11, 22, 33));
 
-/*
-let f = function (n) {
-  return n * n * n;
+function test01(a)
+{
+  let a10 = a + 10;
+  print(a10);
 }
-*/
