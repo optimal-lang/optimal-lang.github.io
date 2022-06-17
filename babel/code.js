@@ -32,3 +32,4 @@ print({a:11, "b":22, c:33});
 let list = [11, 22, 33];
 let dict = {a:11, "b":22, c:33};
 print(list+dict);
+print(10+true);
