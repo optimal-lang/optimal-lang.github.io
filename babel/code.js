@@ -18,3 +18,6 @@ function test01(a)
   return 0;
 }
 print(test01(22));
+
+let y = 1 + 2 + 3;
+print(y);
