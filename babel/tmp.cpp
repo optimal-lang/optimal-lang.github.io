@@ -5,41 +5,47 @@ int main()
     GC_INIT();
     static om_register *null = new_null();
     static om_register *undefined = new_undefined();
-    auto add2=[&](om_register* a,om_register* b)
+    om_register* add2= new_func([&](om_list_data __arguments__)
     {
+        om_register* a=get_arg(__arguments__, 0);
+        om_register* b=get_arg(__arguments__, 1);
         return ((*(a))+(*(b)));
-    };
-    print(add2(new_number(11),new_number(22)));
+    });
+    (*print)({(*add2)({new_number(11),new_number(22)})});
     auto x=new_number(123);
-    print(x);
-    auto add3=[&](om_register* a,om_register* b,om_register* c)
+    (*print)({x});
+    auto add3=new_func([&](om_list_data __arguments__)
     {
+        om_register* a=get_arg(__arguments__, 0);
+        om_register* b=get_arg(__arguments__, 1);
+        om_register* c=get_arg(__arguments__, 2);
         return ((*(((*(a))+(*(b)))))+(*(c)));
-    };
-    print(add3(new_number(11),new_number(22),new_number(33)));
-    auto test01=[&](om_register* a)
+    });
+    (*print)({(*add3)({new_number(11),new_number(22),new_number(33)})});
+    om_register* test01= new_func([&](om_list_data __arguments__)
     {
+        om_register* a=get_arg(__arguments__, 0);
         auto a10=((*(a))+(*(new_number(10))));
-        print(a10);
+        (*print)({a10});
         return new_number(0);
-    };
-    print(test01(new_number(22)));
+    });
+    (*print)({(*test01)({new_number(22)})});
     auto y=((*(((*(new_number(1)))+(*(new_number(2))))))+(*(new_number(3))));
-    print(y);
-    print(new_string("abc"));
-    print(((*(new_string("abc")))+(*(new_number(123)))));
-    print(((*(new_string("abc")))+(*(null))));
-    print(((*(new_string("abc")))+(*(undefined))));
-    print(new_list({new_number(11),new_number(22),new_number(33)}));
-    print(new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}}));
+    (*print)({y});
+    (*print)({new_string("abc")});
+    (*print)({((*(new_string("abc")))+(*(new_number(123))))});
+    (*print)({((*(new_string("abc")))+(*(null)))});
+    (*print)({((*(new_string("abc")))+(*(undefined)))});
+    (*print)({new_list({new_number(11),new_number(22),new_number(33)})});
+    (*print)({new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}})});
     auto list1=new_list({new_number(11),new_number(22),new_number(33)});
     auto dict=new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
-    print(((*(list1))+(*(dict))));
+    (*print)({((*(list1))+(*(dict)))});
     auto list2=new_list({new_number(11),new_number(22),new_number(33),new_list({new_number(44),new_number(55)})});
-    print(((*(list2))+(*(dict))));
-    print(((*(new_number(10)))+(*(new_bool(true)))));
-    print(((*(new_number(10)))+(*(new_string("abc")))));
-    print(((*(new_bool(true)))+(*(new_bool(true)))));
+    (*print)({((*(list2))+(*(dict)))});
+    (*print)({((*(new_number(10)))+(*(new_bool(true))))});
+    (*print)({((*(new_number(10)))+(*(new_string("abc"))))});
+    (*print)({((*(new_bool(true)))+(*(new_bool(true))))});
 
     return 0;
 }

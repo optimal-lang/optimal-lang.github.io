@@ -5,15 +5,16 @@ export function compile_ast(ast) {
     common.printAsJson(ast, "ast");
     switch (ast.type) {
         case "FunctionExpression": {
-            let text = "";
-            text += "[&](";
+            let text = "new_func(";
+            text += "[&](om_list_data __arguments__){";
             let params = [];
+            let i=0;
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
-                params.push("om_register* " + param.name);
+                params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
+                i++;
             }
-            text += params.join(",");
-            text += "){";
+            text += params.join("");
             for (let step of ast.body.body) {
                 common.printAsJson(step, "FunctionDeclaration(step)");
                 step = compile_ast(step);
@@ -21,26 +22,21 @@ export function compile_ast(ast) {
                 text += step;
                 text += ";";
             }
-            text += "}";
-            common.printAsJson(text);
+            text += "})";
             return text;
         } break;
         case "FunctionDeclaration": {
-            /*
-            let text = "std::function<om_register*(";
-            text += Array(ast.params.length).fill("om_register*").join(",");
-            text += ")> ";
-            */
             let text = "";
-            text += "auto " + ast.id.name + "="
-            text += "[&](";
+            text += "om_register* " + ast.id.name + "= new_func("
+            text += "[&](om_list_data __arguments__){";
             let params = [];
+            let i=0;
             for (let param of ast.params) {
                 common.printAsJson(param.name, "FunctionDeclaration(param)");
-                params.push("om_register* " + param.name);
+                params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
+                i++;
             }
-            text += params.join(",");
-            text += "){";
+            text += params.join("");
             for (let step of ast.body.body) {
                 common.printAsJson(step, "FunctionDeclaration(step)");
                 step = compile_ast(step);
@@ -48,7 +44,7 @@ export function compile_ast(ast) {
                 text += step;
                 text += ";";
             }
-            text += "}";
+            text += "})";
             common.printAsJson(text);
             return text;
         } break;
@@ -72,15 +68,14 @@ export function compile_ast(ast) {
             return compile_ast(ast.expression);
         } break;
         case "CallExpression": {
-            let text = ast.callee.name + "(";
+            let text = `(*${ast.callee.name})({`;
             let args = [];
             for (let arg of ast.arguments) {
                 arg = compile_ast(arg);
-                //let conv = function(x) { return x.type==="om_register*" ? x.text : `new_register(${x.text})`; };
                 args.push(arg);
             }
             text += args.join(",");
-            text += ")";
+            text += "})";
             return text;
         } break;
         case "BooleanLiteral": {

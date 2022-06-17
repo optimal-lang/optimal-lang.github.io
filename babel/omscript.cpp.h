@@ -12,6 +12,10 @@
 #include <gc/gc_allocator.h>
 #include <gc/javaxfc.h>
 
+using om_list_data = std::vector<class om_register *, gc_allocator<class om_register *>>;
+using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
+using om_dict_data = std::map<om_dict_key, class om_register *, std::less<om_dict_key>, gc_allocator<std::pair<om_dict_key, class om_register *>>>;
+
 class om_register : public gc_cleanup
 {
 public:
@@ -23,7 +27,8 @@ public:
         NUMBER,
         STRING,
         LIST,
-        DICT
+        DICTIONARY,
+        FUNCTION
     };
     virtual type type_of()
     {
@@ -50,7 +55,7 @@ public:
     {
     }
     om_register *operator+(om_register &other);
-    om_register *operator()(std::initializer_list<om_register *> __arguments__);
+    virtual om_register *operator()(om_list_data __arguments__);
 };
 
 class om_undefined : public om_register
@@ -221,24 +226,6 @@ public:
     virtual std::string printable_text()
     {
         return stringify_sting(this->value);
-        /*
-        std::string s = "\"";
-        for (std::size_t i = 0; i < this->value.size(); i++)
-        {
-            char c = this->value[i];
-            switch (c)
-            {
-            case '\n':
-                s += "\\n";
-                break;
-            default:
-                s += c;
-                break;
-            }
-        }
-        s += "\"";
-        return s;
-        */
     }
     virtual const std::string string_value()
     {
@@ -249,10 +236,6 @@ public:
         return !this->value.empty();
     }
 };
-
-using om_list_data = std::vector<om_register *, gc_allocator<om_register *>>;
-using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-using om_dict_data = std::map<om_dict_key, om_register *, std::less<om_dict_key>, gc_allocator<std::pair<om_dict_key, om_register *>>>;
 
 class om_list : public om_register
 {
@@ -341,7 +324,7 @@ public:
     }
     virtual type type_of()
     {
-        return DICT;
+        return DICTIONARY;
     }
     virtual std::string printable_text()
     {
@@ -373,6 +356,39 @@ public:
         return true;
     }
     friend om_register *equal(om_register *a, om_register *b);
+};
+
+using om_func_def = std::function<om_register *(om_list_data)>;
+
+class om_func : public om_register
+{
+    om_func_def value;
+
+public:
+    om_func(om_func_def data) : value(data)
+    {
+    }
+    virtual type type_of()
+    {
+        return FUNCTION;
+    }
+    virtual std::string printable_text()
+    {
+        return "function";
+    }
+    virtual const std::string string_value()
+    {
+        return "[object Object]";
+    }
+    virtual bool bool_value()
+    {
+        return true;
+    }
+    virtual om_register *operator()(om_list_data __arguments__)
+    {
+        return this->value(__arguments__);
+    }
+    //friend om_register *equal(om_register *a, om_register *b);
 };
 
 static inline om_register *new_undefined()
@@ -432,14 +448,15 @@ om_register *new_dict(std::initializer_list<std::pair<om_dict_key, om_register *
     return new (GC) om_dict(data);
 }
 
-static inline om_register *new_dict(om_dict_data *data = nullptr)
+om_register *new_func(om_func_def def)
 {
-    return new (GC) om_dict(data);
+    return new (GC) om_func(def);
 }
 
-static inline om_register *new_register(double x)
+static inline om_register *get_arg(om_list_data &args, std::size_t index)
 {
-    return new_number(x);
+    if (index>=args.size()) return new_undefined();
+    return args[index];
 }
 
 om_register *om_register::operator+(om_register &other)
@@ -455,11 +472,10 @@ om_register *om_register::operator+(om_register &other)
     return new_number(::number_value(this) + ::number_value(&other));
 }
 
-om_register *om_register::operator()(std::initializer_list<om_register *> __arguments__)
+om_register *om_register::operator()(om_list_data __arguments__)
 {
-    return new_null();
+    return new_undefined();
 }
-
 
 om_register *console_log(om_register *x)
 {
@@ -532,7 +548,7 @@ om_register *equal(om_register *a, om_register *b)
         return new_bool(true);
     }
     break;
-    case om_register::type::DICT:
+    case om_register::type::DICTIONARY:
     {
         om_dict_data *da = ((om_dict *)a)->value;
         om_dict_data *db = ((om_dict *)b)->value;
