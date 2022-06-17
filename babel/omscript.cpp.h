@@ -423,6 +423,27 @@ template<class... A> om_register *new_list(A... args) {
   return new (GC) om_list(data);
 }
 
+om_register *new_dict(std::initializer_list<std::pair<om_dict_key, om_register *>> args)
+{
+  return new_null();
+}
+
+/*
+template<class... A> om_register *new_dict(A... args) {
+  om_list_data *data = new (GC) om_list_data();
+  for ( std::pair<om_dict_key, om_register *> &i : std::initializer_list<std::pair<om_dict_key, om_register *> &>{args...}) {
+    //data->push_back(i);
+  }
+  //return new (GC) om_list(data);
+  return new_null();
+}
+*/
+
+void dummy()
+{
+    new_dict({{"abc", new_null()}, {"xyz", new_number(123)}});
+}
+
 static inline om_register *new_dict(om_dict_data *data = nullptr)
 {
     return new (GC) om_dict(data);
