@@ -166,6 +166,10 @@ public:
     {
         return this->value;
     }
+    virtual double number_value()
+    {
+        return this->value ? 1 : 0;
+    }
 };
 
 class om_number : public om_register

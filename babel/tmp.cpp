@@ -37,7 +37,9 @@ int main()
     print(((*(list1))+(*(dict))));
     auto list2=new (GC) om_list(new (GC) om_list_data{new_number(11),new_number(22),new_number(33),new (GC) om_list(new (GC) om_list_data{new_number(44),new_number(55)})});
     print(((*(list2))+(*(dict))));
+    print(((*(new_number(10)))+(*(new_bool(true)))));
     print(((*(new_number(10)))+(*(new_string("abc")))));
+    print(((*(new_bool(true)))+(*(new_bool(true)))));
 
     return 0;
 }

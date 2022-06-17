@@ -34,5 +34,6 @@ let dict = {a:11, "b":22, c:33};
 print(list1+dict);
 let list2 = [11, 22, 33, [44, 55]];
 print(list2+dict);
-//print(10+true);
+print(10+true);
 print(10+"abc");
+print(true+true);

@@ -83,6 +83,9 @@ export function compile_ast(ast) {
             text += ")";
             return text;
         } break;
+        case "BooleanLiteral": {
+            return `new_bool(${ast.value})`;
+        } break;
         case "NumericLiteral": {
             return `new_number(${ast.extra.raw})`;
         } break;

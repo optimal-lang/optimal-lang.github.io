@@ -12,4 +12,6 @@
 { "a" 11 "b" 22 "c" 33 }
 "11,22,33[object Object]"
 "11,22,33,44,55[object Object]"
+11
 "10abc"
+2
