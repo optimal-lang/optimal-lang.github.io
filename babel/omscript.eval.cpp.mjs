@@ -54,7 +54,7 @@ export function compile_ast(ast) {
         } break;
         case "ReturnStatement": {
             let argument = compile_ast(ast.argument);
-            let conv = function(x) { return x.type==="oml_register*" ? x.text : `new_root(${x.text})`; };
+            let conv = function(x) { return x.type==="oml_register*" ? x.text : `new_register(${x.text})`; };
             return { type: "?", text: "return " + conv(argument) };
         } break;
         case "BinaryExpression": {
@@ -80,7 +80,7 @@ export function compile_ast(ast) {
             let args = [];
             for (let arg of ast.arguments) {
                 arg = compile_ast(arg);
-                let conv = function(x) { return x.type==="oml_register*" ? x.text : `new_root(${x.text})`; };
+                let conv = function(x) { return x.type==="oml_register*" ? x.text : `new_register(${x.text})`; };
                 args.push(conv(arg));
             }
             text += args.join(",");
@@ -88,7 +88,7 @@ export function compile_ast(ast) {
             return { type: "oml_register*", text: text };
         } break;
         case "NumericLiteral": {
-            return {type: "double", text: `((double)${ast.extra.raw})` };
+            return {type: "double", text: `(double)${ast.extra.raw}` };
         } break;
         case "VariableDeclaration": {
             let declarations = ast.declarations;
@@ -98,7 +98,7 @@ export function compile_ast(ast) {
             common.printAsJson(declaration.init);
             let text = "auto " + declaration.id.name + "=";
             let init = compile_ast(declaration.init);
-            let conv = function(x) { return x.type==="oml_register*"||x.type==="FunctionExpression" ? x.text : `new_root(${x.text})`; };
+            let conv = function(x) { return x.type==="oml_register*"||x.type==="FunctionExpression" ? x.text : `new_register(${x.text})`; };
             text += conv(init);
             return {type: "oml_register*", text: text };
         } break;

@@ -409,7 +409,7 @@ static inline oml_register *new_dict(oml_dict_data *data = nullptr)
     return new (GC) oml_dict(data);
 }
 
-static inline oml_register *new_root(double x)
+static inline oml_register *new_register(double x)
 {
     return new_number(x);
 }
