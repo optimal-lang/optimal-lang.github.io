@@ -251,7 +251,7 @@ public:
 
 using om_list_data = std::vector<om_register *, gc_allocator<om_register *>>;
 using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-using om_dict_data = std::map<om_dict_key, om_register *, std::less<om_dict_key>, gc_allocator<std::pair<om_register *, om_register *>>>;
+using om_dict_data = std::map<om_dict_key, om_register *, std::less<om_dict_key>, gc_allocator<std::pair<om_dict_key, om_register *>>>;
 
 class om_list : public om_register
 {
