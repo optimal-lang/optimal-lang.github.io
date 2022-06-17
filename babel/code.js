@@ -23,5 +23,9 @@ let y = 1 + 2 + 3;
 print(y);
 
 print("abc");
-
 print("abc"+123);
+print("abc"+null);
+print("abc"+undefined);
+print([11, 22, 33]);
+print({a:11, "b":22, c:33});
+

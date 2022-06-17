@@ -89,6 +89,9 @@ export function compile_ast(ast) {
         case "StringLiteral": {
             return `new_string(${ast.extra.raw})`;
         } break;
+        case "NullLiteral": {
+            return null;
+        } break;
         case "VariableDeclaration": {
             let declarations = ast.declarations;
             if (declarations.length !== 1) throw new Error("VariableDeclaration error(1)");
@@ -100,6 +103,42 @@ export function compile_ast(ast) {
             //let conv = function(x) { return x.type==="om_register*"||x.type==="FunctionExpression" ? x.text : `new_register(${x.text})`; };
             //text += conv(init);
             text += init;
+            return text;
+        } break;
+        case "ArrayExpression": {
+            let elements = ast.elements;
+            let text = "new (GC) om_list(new (GC) om_list_data{";
+            let list = [];
+            for (let e of elements) {
+                list.push(compile_ast(e));
+            }
+            text += list.join(",");
+            text += "})";
+            return text;
+        } break;
+        case "ObjectExpression": {
+            let text = "new (GC) om_dict(new (GC) om_dict_data{";
+            let properties = ast.properties;
+            let plist = [];
+            for (let p of properties) {
+                let ptext = "{";
+                let key = p.key;
+                switch(key.type) {
+                    case "Identifier": {
+                        key = `"${key.name}"`;
+                    } break;
+                    case "StringLiteral": {
+                        key = key.extra.raw;
+                    } break;
+                }
+                ptext+=key;
+                ptext+=",";
+                ptext+=compile_ast(p.value);
+                ptext+="}";
+                plist.push(ptext);
+            }
+            text+=plist.join(",");
+            text+="})";
             return text;
         } break;
         default:
