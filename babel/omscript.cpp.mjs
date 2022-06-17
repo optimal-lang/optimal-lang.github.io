@@ -1,7 +1,7 @@
 import $parser from "https://jspm.dev/@babel/parser";
 import $traverse from "https://jspm.dev/@babel/traverse";
 import * as common from "./omscript.common.mjs";
-import { compile_ast } from "./omscript.eval.mjs";
+import { compile_ast } from "./omscript.eval.cpp.mjs";
 import { optimize } from "./optimize.mjs";
 
 const CPP_HEAD =

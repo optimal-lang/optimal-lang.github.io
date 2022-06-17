@@ -1,7 +1,7 @@
 #! bash -uvx
 set -e
 deno run --allow-all omscript.js.mjs > compile1.txt
-deno run --allow-all omscript.mjs
+deno run --allow-all omscript.cpp.mjs
 astyle --style=allman tmp.cpp
 cat tmp.cpp
 mingwx.cmd g++.exe tmp.cpp -static -lgc -lgccpp
