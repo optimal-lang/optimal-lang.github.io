@@ -66,6 +66,18 @@ export function compile_ast(ast) {
         case "NumericLiteral": {
             return {type: "double", text: `((double)${ast.extra.raw})` };
         } break;
+        case "VariableDeclaration": {
+            let declarations = ast.declarations;
+            if (declarations.length !== 1) throw new Error("VariableDeclaration error(1)");
+            let declaration = declarations[0];
+            common.printAsJson(declaration.id.name);
+            common.printAsJson(declaration.init);
+            let text = "oml_root* " + declaration.id.name + "=";
+            let init = compile_ast(declaration.init);
+            let conv = function(x) { return x.type==="oml_root*" ? x.text : `new_root(${x.text})`; };
+            text += conv(init);
+            return {type: "oml_root*", text: text };
+        } break;
         default:
             throw new Error(`AST node type "${ast.type}" is not expected.`)
             break;

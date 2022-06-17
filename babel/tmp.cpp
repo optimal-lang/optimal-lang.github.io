@@ -10,6 +10,8 @@ int main()
         return new_root((number_value(a)+number_value(b)));
     };
     print(add2(new_root(((double)11)),new_root(((double)22))));
+    oml_root* x=new_root(((double)123));
+    print(x);
 
     return 0;
 }
