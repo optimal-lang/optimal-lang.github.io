@@ -411,23 +411,6 @@ static inline om_register *new_string(const std::string &s)
     return new (GC) om_string(s);
 }
 
-/*
-static inline om_register *new_list(om_list_data *data = nullptr, om_dict_data *props = nullptr)
-{
-    return new (GC) om_list(data, props);
-}
-*/
-
-/*
-template<class... A> om_register *new_list(A... args) {
-  om_list_data *data = new (GC) om_list_data();
-  for ( om_register *i : std::initializer_list< om_register *>{args...}) {
-    data->push_back(i);
-  }
-  return new (GC) om_list(data);
-}
-*/
-
 om_register *new_list(std::initializer_list<om_register *> args)
 {
     om_list_data *data = new (GC) om_list_data();
@@ -446,22 +429,6 @@ om_register *new_dict(std::initializer_list<std::pair<om_dict_key, om_register *
         data->insert(i);
     }
     return new (GC) om_dict(data);
-}
-
-/*
-template<class... A> om_register *new_dict(A... args) {
-  om_list_data *data = new (GC) om_list_data();
-  for ( std::pair<om_dict_key, om_register *> &i : std::initializer_list<std::pair<om_dict_key, om_register *> &>{args...}) {
-    //data->push_back(i);
-  }
-  //return new (GC) om_list(data);
-  return new_null();
-}
-*/
-
-void dummy()
-{
-    new_dict({{"abc", new_null()}, {"xyz", new_number(123)}});
 }
 
 static inline om_register *new_dict(om_dict_data *data = nullptr)
