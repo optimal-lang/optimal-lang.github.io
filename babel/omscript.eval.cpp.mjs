@@ -4,14 +4,8 @@ export function compile_ast(ast) {
     common.printAsJson(ast.type, "ast.type");
     common.printAsJson(ast, "ast");
     switch (ast.type) {
-        case "FunctionDeclaration": {
-            /*
-            let text = "std::function<oml_root*(";
-            text += Array(ast.params.length).fill("oml_root*").join(",");
-            text += ")> ";
-            */
-            let text = "auto "
-            text += ast.id.name + "="
+        case "FunctionExpression": {
+            let text = "";
             text += "[&](";
             let params = [];
             for (let param of ast.params) {
@@ -29,7 +23,34 @@ export function compile_ast(ast) {
             }
             text += "}";
             common.printAsJson(text);
-            return { type: "?", text: text };
+            return { type: ast.type, text: text };
+        } break;
+        case "FunctionDeclaration": {
+            /*
+            let text = "std::function<oml_root*(";
+            text += Array(ast.params.length).fill("oml_root*").join(",");
+            text += ")> ";
+            */
+            let text = "";
+            text += "auto " + ast.id.name + "="
+            text += "[&](";
+            let params = [];
+            for (let param of ast.params) {
+                common.printAsJson(param.name, "FunctionDeclaration(param)");
+                params.push("oml_root* " + param.name);
+            }
+            text += params.join(",");
+            text += "){";
+            for (let step of ast.body.body) {
+                common.printAsJson(step, "FunctionDeclaration(step)");
+                step = compile_ast(step);
+                common.printAsJson(step);
+                text += step.text;
+                text += ";";
+            }
+            text += "}";
+            common.printAsJson(text);
+            return { type: ast.type, text: text };
         } break;
         case "ReturnStatement": {
             let argument = compile_ast(ast.argument);
@@ -75,9 +96,9 @@ export function compile_ast(ast) {
             let declaration = declarations[0];
             common.printAsJson(declaration.id.name);
             common.printAsJson(declaration.init);
-            let text = "oml_root* " + declaration.id.name + "=";
+            let text = "auto " + declaration.id.name + "=";
             let init = compile_ast(declaration.init);
-            let conv = function(x) { return x.type==="oml_root*" ? x.text : `new_root(${x.text})`; };
+            let conv = function(x) { return x.type==="oml_root*"||x.type==="FunctionExpression" ? x.text : `new_root(${x.text})`; };
             text += conv(init);
             return {type: "oml_root*", text: text };
         } break;

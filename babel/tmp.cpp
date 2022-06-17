@@ -5,13 +5,18 @@ int main()
     GC_INIT();
     static oml_root *null = new_null();
     static oml_root *undefined = new_undefined();
-    std::function<oml_root*(oml_root*,oml_root*)> add2=[&](oml_root* a,oml_root* b)
+    auto add2=[&](oml_root* a,oml_root* b)
     {
         return new_root((number_value(a)+number_value(b)));
     };
     print(add2(new_root(((double)11)),new_root(((double)22))));
-    oml_root* x=new_root(((double)123));
+    auto x=new_root(((double)123));
     print(x);
+    auto add3=[&](oml_root* a,oml_root* b,oml_root* c)
+    {
+        return new_root(((number_value(a)+number_value(b))+number_value(c)));
+    };
+    print(add3(new_root(((double)11)),new_root(((double)22)),new_root(((double)33))));
 
     return 0;
 }
