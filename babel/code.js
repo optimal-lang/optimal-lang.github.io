@@ -29,8 +29,10 @@ print("abc"+undefined);
 print([11, 22, 33]);
 print({a:11, "b":22, c:33});
 
-let list = [11, 22, 33];
+let list1 = [11, 22, 33];
 let dict = {a:11, "b":22, c:33};
-print(list+dict);
+print(list1+dict);
+let list2 = [11, 22, 33, [44, 55]];
+print(list2+dict);
 //print(10+true);
 print(10+"abc");

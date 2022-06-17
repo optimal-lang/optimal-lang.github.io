@@ -32,9 +32,11 @@ int main()
     print(((*(new_string("abc")))+(*(undefined))));
     print(new (GC) om_list(new (GC) om_list_data{new_number(11),new_number(22),new_number(33)}));
     print(new (GC) om_dict(new (GC) om_dict_data{{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}}));
-    auto list=new (GC) om_list(new (GC) om_list_data{new_number(11),new_number(22),new_number(33)});
+    auto list1=new (GC) om_list(new (GC) om_list_data{new_number(11),new_number(22),new_number(33)});
     auto dict=new (GC) om_dict(new (GC) om_dict_data{{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
-    print(((*(list))+(*(dict))));
+    print(((*(list1))+(*(dict))));
+    auto list2=new (GC) om_list(new (GC) om_list_data{new_number(11),new_number(22),new_number(33),new (GC) om_list(new (GC) om_list_data{new_number(44),new_number(55)})});
+    print(((*(list2))+(*(dict))));
     print(((*(new_number(10)))+(*(new_string("abc")))));
 
     return 0;
