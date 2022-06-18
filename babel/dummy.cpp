@@ -20,6 +20,7 @@ int main()
         ;
     } while(false);
     print(new_string("END"));
+    //label1:
 
     return 0;
 }

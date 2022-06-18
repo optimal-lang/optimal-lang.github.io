@@ -21,3 +21,5 @@ null
 "nullabc"
 0
 function
+"XYZ"
+"default"
