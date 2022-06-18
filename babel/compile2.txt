@@ -21,3 +21,4 @@ null
 "nullabc"
 0
 function
+"ABC+1: 2"

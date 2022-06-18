@@ -35,6 +35,8 @@ int main()
     (*print)({((*(null))+(*(new_string("abc"))))});
     (*print)({((*(null))+(*(new_number(0))))});
     (*print)({add2});
+    auto abc=new_number(1);
+    (*print)({new_string(std::string("ABC+1: ")+string_value(((*(abc))+(*(new_number(1)))))+std::string(""))});
 
     return 0;
 }

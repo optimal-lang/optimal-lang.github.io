@@ -133,6 +133,24 @@ export function compile_ast(ast) {
             text+="})";
             return text;
         } break;
+        case "TemplateLiteral": {
+            common.printAsJson(ast);
+            let quasis = ast.quasis;
+            let expressions = ast.expressions;
+            let text = "";
+            text += "new_string(";
+            let list = [];
+            for (let i=0; i<quasis.length; i++) {
+                let q = quasis[i];
+                list.push(`std::string(${JSON.stringify(q.value.raw)})`);
+                if (q.tail) break;
+                let e = expressions[i];
+                list.push(`string_value(${compile_ast(e)})`);
+            }
+            text += list.join("+");
+            text += ")";
+            return text;
+        } break;
         default:
             common.printAsJson(ast);
             throw new Error(`AST node type "${ast.type}" is not expected.`);
