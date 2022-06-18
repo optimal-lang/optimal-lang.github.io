@@ -1,7 +1,13 @@
 import * as common from "./omscript.common.mjs";
 
-function compile_body(body)
-{
+let sym_count = 0;
+
+function gensym(prefix) {
+    sym_count++;
+    return `__${prefix}${sym_count}__`;
+}
+
+function compile_body(body) {
     let text = "{{";
     for (let step of body) {
         step = compile_ast(step);
@@ -9,6 +15,18 @@ function compile_body(body)
         text += ";";
     }
     text += "}return undefined;}";
+    return text;
+}
+
+function compile_switch(ast) {
+    let discriminant = ast.discriminant;
+    common.printAsJson(discriminant, "switch(discriminant)");
+    let text = "";
+    text += "{";
+    let sym = gensym("switch");
+    text += `om_register *${sym}=${compile_ast(discriminant)};`;
+    let consequent = ast.consequent;
+    text += "}";
     return text;
 }
 
@@ -20,7 +38,7 @@ export function compile_ast(ast) {
             let text = "new_func(";
             text += "[&](om_list_data __arguments__)->om_register*{";
             let params = [];
-            let i=0;
+            let i = 0;
             for (let param of ast.params) {
                 params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
@@ -35,7 +53,7 @@ export function compile_ast(ast) {
             text += "om_register* " + ast.id.name + "= new_func("
             text += "[&](om_list_data __arguments__)->om_register*{";
             let params = [];
-            let i=0;
+            let i = 0;
             for (let param of ast.params) {
                 params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
@@ -115,7 +133,7 @@ export function compile_ast(ast) {
             for (let p of properties) {
                 let ptext = "{";
                 let key = p.key;
-                switch(key.type) {
+                switch (key.type) {
                     case "Identifier": {
                         key = `"${key.name}"`;
                     } break;
@@ -123,14 +141,14 @@ export function compile_ast(ast) {
                         key = key.extra.raw;
                     } break;
                 }
-                ptext+=key;
-                ptext+=",";
-                ptext+=compile_ast(p.value);
-                ptext+="}";
+                ptext += key;
+                ptext += ",";
+                ptext += compile_ast(p.value);
+                ptext += "}";
                 plist.push(ptext);
             }
-            text+=plist.join(",");
-            text+="})";
+            text += plist.join(",");
+            text += "})";
             return text;
         } break;
         case "TemplateLiteral": {
@@ -140,7 +158,7 @@ export function compile_ast(ast) {
             let text = "";
             text += "new_string(";
             let list = [];
-            for (let i=0; i<quasis.length; i++) {
+            for (let i = 0; i < quasis.length; i++) {
                 let q = quasis[i];
                 list.push(`std::string(${JSON.stringify(q.value.raw)})`);
                 if (q.tail) break;
@@ -150,6 +168,10 @@ export function compile_ast(ast) {
             text += list.join("+");
             text += ")";
             return text;
+        } break;
+        case "SwitchStatement": {
+            common.printAsJson(ast);
+            return compile_switch(ast);
         } break;
         default:
             common.printAsJson(ast);

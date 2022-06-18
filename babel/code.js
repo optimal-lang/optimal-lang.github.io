@@ -49,6 +49,19 @@ let abc = 1;
 print(`ABC+1: ${abc+1}`);
 print(`test: ${add2(11, 22)+1}`);
 
+let s = "AB";
+switch (s+"C") {
+  case "ABC": {
+    print("abc");
+  }
+  case "XYZ": {
+    print("xyz");
+    break;
+  }
+  default: {
+    print("default");
+  }
+}
 
 /*
 let s = "XYZ";
