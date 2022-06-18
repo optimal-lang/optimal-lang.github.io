@@ -134,7 +134,7 @@ export function compile_ast(ast) {
             return text;
         } break;
         case "TemplateLiteral": {
-            common.printAsJson(ast);
+            //common.printAsJson(ast);
             let quasis = ast.quasis;
             let expressions = ast.expressions;
             let text = "";

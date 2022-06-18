@@ -47,6 +47,8 @@ print(add2);
 
 let abc = 1;
 print(`ABC+1: ${abc+1}`);
+print(`test: ${add2(11, 22)+1}`);
+
 
 /*
 let s = "XYZ";

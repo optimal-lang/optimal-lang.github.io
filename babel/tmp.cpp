@@ -37,6 +37,7 @@ int main()
     (*print)({add2});
     auto abc=new_number(1);
     (*print)({new_string(std::string("ABC+1: ")+string_value(((*(abc))+(*(new_number(1)))))+std::string(""))});
+    (*print)({new_string(std::string("test: ")+string_value(((*((*add2)({new_number(11),new_number(22)})))+(*(new_number(1)))))+std::string(""))});
 
     return 0;
 }
