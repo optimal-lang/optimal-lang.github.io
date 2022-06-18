@@ -47,8 +47,13 @@ print(add2);
 
 let s = "XYZ";
 switch (s) {
-  case "XYZ":
-    print("XYZ");
+  case "ABC":
+    let abc = "abc";
+    print(`ABC: ${abc}`);
+  case "XYZ": {
+    let xyz = "xyz";
+    //print(`XYZ: ${abc+xyz}`);
+  }
   default:
-    print("default");
+    print(`def: ${xyz}`);
 }
