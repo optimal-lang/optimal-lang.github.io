@@ -28,16 +28,6 @@ export function compile_ast(ast) {
             }
             text += params.join("");
             text += compile_body(ast.body.body);
-            /*
-            for (let step of ast.body.body) {
-                common.printAsJson(step, "FunctionDeclaration(step)");
-                step = compile_ast(step);
-                common.printAsJson(step);
-                text += step;
-                text += ";";
-            }
-            text += "})";
-            */
             text += "})";
             return text;
         } break;
@@ -54,16 +44,6 @@ export function compile_ast(ast) {
             }
             text += params.join("");
             text += compile_body(ast.body.body);
-            /*
-            for (let step of ast.body.body) {
-                common.printAsJson(step, "FunctionDeclaration(step)");
-                step = compile_ast(step);
-                common.printAsJson(step);
-                text += step;
-                text += ";";
-            }
-            text += "})";
-            */
             text += "})";
             common.printAsJson(text);
             return text;
