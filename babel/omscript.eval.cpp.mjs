@@ -14,7 +14,7 @@ function compile_body(body)
 
 export function compile_ast(ast) {
     common.printAsJson(ast.type, "ast.type");
-    common.printAsJson(ast, "ast");
+    //common.printAsJson(ast, "ast");
     switch (ast.type) {
         case "FunctionExpression": {
             let text = "new_func(";
@@ -22,7 +22,6 @@ export function compile_ast(ast) {
             let params = [];
             let i=0;
             for (let param of ast.params) {
-                common.printAsJson(param.name, "FunctionDeclaration(param)");
                 params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
@@ -38,14 +37,12 @@ export function compile_ast(ast) {
             let params = [];
             let i=0;
             for (let param of ast.params) {
-                common.printAsJson(param.name, "FunctionDeclaration(param)");
                 params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
             text += compile_body(ast.body.body);
             text += "})";
-            common.printAsJson(text);
             return text;
         } break;
         case "ReturnStatement": {
@@ -53,12 +50,8 @@ export function compile_ast(ast) {
             return "return " + argument;
         } break;
         case "BinaryExpression": {
-            common.printAsJson(ast.left, "BinaryExpression.left");
-            common.printAsJson(ast.right, "BinaryExpression.right");
             let left = compile_ast(ast.left);
             let right = compile_ast(ast.right);
-            common.printAsJson(left);
-            common.printAsJson(right);
             return "(" + `(*(${left}))` + ast.operator + `(*(${right}))` + ")";
         } break;
         case "Identifier": {
@@ -94,8 +87,6 @@ export function compile_ast(ast) {
             let declarations = ast.declarations;
             if (declarations.length !== 1) throw new Error("VariableDeclaration error(1)");
             let declaration = declarations[0];
-            common.printAsJson(declaration.id.name);
-            common.printAsJson(declaration.init);
             let text = "auto " + declaration.id.name + "=";
             let init = compile_ast(declaration.init);
             //let conv = function(x) { return x.type==="om_register*"||x.type==="FunctionExpression" ? x.text : `new_register(${x.text})`; };
@@ -143,7 +134,8 @@ export function compile_ast(ast) {
             return text;
         } break;
         default:
-            throw new Error(`AST node type "${ast.type}" is not expected.`)
+            common.printAsJson(ast);
+            throw new Error(`AST node type "${ast.type}" is not expected.`);
             break;
     }
 }

@@ -55,5 +55,5 @@ switch (s) {
     //print(`XYZ: ${abc+xyz}`);
   }
   default:
-    print(`def: ${xyz}`);
+    print(`${x}def: ${abc} ${xyz}`);
 }
