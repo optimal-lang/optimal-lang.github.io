@@ -45,6 +45,10 @@ print(null + 0);
 //print(add2+"abc");
 print(add2);
 
+let abc = 1;
+print(`ABC+1: ${abc+1}`);
+
+/*
 let s = "XYZ";
 switch (s) {
   case "ABC":
@@ -57,3 +61,4 @@ switch (s) {
   default:
     print(`${x}def: ${abc} ${xyz}`);
 }
+*/
