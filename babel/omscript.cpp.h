@@ -58,7 +58,9 @@ public:
     virtual om_register *operator()(om_list_data __arguments__);
 };
 
-namespace om {
+namespace om
+{
+    bool eq(om_register *a, om_register *b);
     bool equal(om_register *a, om_register *b);
 }
 
@@ -493,30 +495,43 @@ om_register *console_log(om_register *x)
     return new_null();
 }
 
-#if 0x1
-/*
-om_register *print(om_list_data __arguments__)
-{
-    om_register *x = get_arg(__arguments__, 0);
-    std::cout << printable_text(x) << std::endl;
-    return x;
-}
-*/
 om_register *print(om_register *x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
 }
-#else
-static om_register *print = new_func([](om_list_data __arguments__) -> om_register *
-                                     {
-    om_register *x = get_arg(__arguments__, 0);
-    std::cout << printable_text(x) << std::endl;
-    return x; });
-#endif
 
 namespace om
 {
+    bool eq(om_register *a, om_register *b)
+    {
+        if (a == b)
+            return true;
+        if (a == new_null() || a == new_undefined() || b == new_null() || b == new_undefined())
+            return (false);
+        if (a->type_of() != b->type_of())
+            return (false);
+        switch (a->type_of())
+        {
+        case om_register::type::BOOL:
+            return (bool_value(a) == bool_value(b));
+            break;
+        case om_register::type::NUMBER:
+            return (number_value(a) == number_value(b));
+            break;
+        case om_register::type::STRING:
+            return (string_value(a) == string_value(b));
+            break;
+        case om_register::type::LIST:
+            return (false);
+            break;
+            break;
+        case om_register::type::DICTIONARY:
+            return (false);
+            break;
+        }
+        return (false);
+    }
     bool equal(om_register *a, om_register *b)
     {
         if (a == new_null())
@@ -546,8 +561,6 @@ namespace om
                 return (false);
             for (std::size_t i = 0; i < la->size(); i++)
             {
-                // print((*la)[i]);
-                // print((*lb)[i]);
                 if (!bool_value(equal((*la)[i], (*lb)[i])))
                     return (false);
             }
@@ -608,23 +621,11 @@ namespace om
     }
 }
 
-#if 0x1
-/*
-om_register *equal(om_list_data __arguments__)
+om_register *eq(om_register *a, om_register *b)
 {
-    om_register *a = get_arg(__arguments__, 0);
-    om_register *b = get_arg(__arguments__, 1);
-    return new_bool(equal(a, b));
+    return new_bool(om::eq(a, b));
 }
-*/
 om_register *equal(om_register *a, om_register *b)
 {
     return new_bool(om::equal(a, b));
 }
-#else
-static om_register *equal = new_func([](om_list_data __arguments__) -> om_register *
-                                     {
-    om_register *a = get_arg(__arguments__, 0);
-    om_register *b = get_arg(__arguments__, 1);
-    return new_bool(equal(a, b)); });
-#endif
