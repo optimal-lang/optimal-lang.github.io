@@ -2,7 +2,7 @@
 123
 66
 32
-0
+undefined
 6
 "abc"
 "abc123"
@@ -20,6 +20,4 @@ null
 "abcnull"
 "nullabc"
 0
-"abcfunction add2(a, b) {\n  return a + b;\n}"
-"function add2(a, b) {\n  return a + b;\n}abc"
 function

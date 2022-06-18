@@ -15,7 +15,7 @@ function test01(a)
 {
   let a10 = a + 10;
   print(a10);
-  return 0;
+  //return 0;
 }
 print(test01(22));
 

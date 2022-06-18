@@ -5,30 +5,13 @@ int main()
     GC_INIT();
     static om_register *null = new_null();
     static om_register *undefined = new_undefined();
-    om_register* add2= new_func([&](om_list_data __arguments__)
-    {
-        om_register* a=get_arg(__arguments__, 0);
-        om_register* b=get_arg(__arguments__, 1);
-        return ((*(a))+(*(b)));
-    });
+    om_register* add2= new_func([&](om_list_data __arguments__)->om_register* {om_register* a=get_arg(__arguments__, 0); om_register* b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
     (*print)({(*add2)({new_number(11),new_number(22)})});
     auto x=new_number(123);
     (*print)({x});
-    auto add3=new_func([&](om_list_data __arguments__)
-    {
-        om_register* a=get_arg(__arguments__, 0);
-        om_register* b=get_arg(__arguments__, 1);
-        om_register* c=get_arg(__arguments__, 2);
-        return ((*(((*(a))+(*(b)))))+(*(c)));
-    });
+    auto add3=new_func([&](om_list_data __arguments__)->om_register* {om_register* a=get_arg(__arguments__, 0); om_register* b=get_arg(__arguments__, 1); om_register* c=get_arg(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
     (*print)({(*add3)({new_number(11),new_number(22),new_number(33)})});
-    om_register* test01= new_func([&](om_list_data __arguments__)
-    {
-        om_register* a=get_arg(__arguments__, 0);
-        auto a10=((*(a))+(*(new_number(10))));
-        (*print)({a10});
-        return new_number(0);
-    });
+    om_register* test01= new_func([&](om_list_data __arguments__)->om_register* {om_register* a=get_arg(__arguments__, 0); {{auto a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
     (*print)({(*test01)({new_number(22)})});
     auto y=((*(((*(new_number(1)))+(*(new_number(2))))))+(*(new_number(3))));
     (*print)({y});
@@ -51,8 +34,6 @@ int main()
     (*print)({((*(new_string("abc")))+(*(null)))});
     (*print)({((*(null))+(*(new_string("abc"))))});
     (*print)({((*(null))+(*(new_number(0))))});
-    (*print)({((*(new_string("abc")))+(*(add2)))});
-    (*print)({((*(add2))+(*(new_string("abc"))))});
     (*print)({add2});
 
     return 0;

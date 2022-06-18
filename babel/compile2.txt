@@ -2,7 +2,7 @@
 123
 66
 32
-0
+undefined
 6
 "abc"
 "abc123"
@@ -20,6 +20,4 @@ null
 "abcnull"
 "nullabc"
 0
-"abcfunction ?"
-"function ?abc"
 function

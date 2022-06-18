@@ -1,12 +1,24 @@
 import * as common from "./omscript.common.mjs";
 
+function compile_body(body)
+{
+    let text = "{{";
+    for (let step of body) {
+        step = compile_ast(step);
+        text += step;
+        text += ";";
+    }
+    text += "}return undefined;}";
+    return text;
+}
+
 export function compile_ast(ast) {
     common.printAsJson(ast.type, "ast.type");
     common.printAsJson(ast, "ast");
     switch (ast.type) {
         case "FunctionExpression": {
             let text = "new_func(";
-            text += "[&](om_list_data __arguments__){";
+            text += "[&](om_list_data __arguments__)->om_register*{";
             let params = [];
             let i=0;
             for (let param of ast.params) {
@@ -15,6 +27,8 @@ export function compile_ast(ast) {
                 i++;
             }
             text += params.join("");
+            text += compile_body(ast.body.body);
+            /*
             for (let step of ast.body.body) {
                 common.printAsJson(step, "FunctionDeclaration(step)");
                 step = compile_ast(step);
@@ -23,12 +37,14 @@ export function compile_ast(ast) {
                 text += ";";
             }
             text += "})";
+            */
+            text += "})";
             return text;
         } break;
         case "FunctionDeclaration": {
             let text = "";
             text += "om_register* " + ast.id.name + "= new_func("
-            text += "[&](om_list_data __arguments__){";
+            text += "[&](om_list_data __arguments__)->om_register*{";
             let params = [];
             let i=0;
             for (let param of ast.params) {
@@ -37,6 +53,8 @@ export function compile_ast(ast) {
                 i++;
             }
             text += params.join("");
+            text += compile_body(ast.body.body);
+            /*
             for (let step of ast.body.body) {
                 common.printAsJson(step, "FunctionDeclaration(step)");
                 step = compile_ast(step);
@@ -44,6 +62,8 @@ export function compile_ast(ast) {
                 text += step;
                 text += ";";
             }
+            text += "})";
+            */
             text += "})";
             common.printAsJson(text);
             return text;

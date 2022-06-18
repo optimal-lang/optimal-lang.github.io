@@ -308,7 +308,7 @@ public:
     {
         this->value->push_back(x);
     }
-    friend om_register *equal(om_register *a, om_register *b);
+    friend bool equal_helper(om_register *a, om_register *b);
 };
 
 class om_dict : public om_register
@@ -355,7 +355,7 @@ public:
     {
         return true;
     }
-    friend om_register *equal(om_register *a, om_register *b);
+    friend bool equal_helper(om_register *a, om_register *b);
 };
 
 using om_func_def = std::function<om_register *(om_list_data)>;
@@ -388,7 +388,7 @@ public:
     {
         return this->value(__arguments__);
     }
-    // friend om_register *equal(om_register *a, om_register *b);
+    // friend bool equal_helper(om_register *a, om_register *b);
 };
 
 static inline om_register *new_undefined()
@@ -489,45 +489,62 @@ om_register *console_log(om_register *x)
     return new_null();
 }
 
+#if 0x1
+/*
+om_register *print(om_list_data __arguments__)
+{
+    om_register *x = get_arg(__arguments__, 0);
+    std::cout << printable_text(x) << std::endl;
+    return x;
+}
+*/
 om_register *print(om_register *x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
 }
+#else
+static om_register *print = new_func([](om_list_data __arguments__)->om_register *
+{
+    om_register *x = get_arg(__arguments__, 0);
+    std::cout << printable_text(x) << std::endl;
+    return x;
+});
+#endif
 
-om_register *equal(om_register *a, om_register *b)
+bool equal_helper(om_register *a, om_register *b)
 {
     if (a == new_null())
-        return new_bool(b == new_null());
+        return (b == new_null());
     if (a == new_undefined())
-        return new_bool(b == new_undefined());
+        return (b == new_undefined());
     if (a == new_null() || a == new_undefined() || b == new_null() || b == new_undefined())
-        return new_bool(false);
+        return (false);
     if (a->type_of() != b->type_of())
-        return new_bool(false);
+        return (false);
     switch (a->type_of())
     {
     case om_register::type::BOOL:
-        return new_bool(bool_value(a) == bool_value(b));
+        return (bool_value(a) == bool_value(b));
         break;
     case om_register::type::NUMBER:
-        return new_bool(number_value(a) == number_value(b));
+        return (number_value(a) == number_value(b));
         break;
     case om_register::type::STRING:
-        return new_bool(string_value(a) == string_value(b));
+        return (string_value(a) == string_value(b));
         break;
     case om_register::type::LIST:
     {
         om_list_data *la = ((om_list *)a)->value;
         om_list_data *lb = ((om_list *)b)->value;
         if (la->size() != lb->size())
-            return new_bool(false);
+            return (false);
         for (std::size_t i = 0; i < la->size(); i++)
         {
             // print((*la)[i]);
             // print((*lb)[i]);
-            if (!bool_value(equal((*la)[i], (*lb)[i])))
-                return new_bool(false);
+            if (!bool_value(equal_helper((*la)[i], (*lb)[i])))
+                return (false);
         }
         om_dict_data *da = ((om_list *)a)->props;
         om_dict_data *db = ((om_list *)b)->props;
@@ -544,14 +561,14 @@ om_register *equal(om_register *a, om_register *b)
         }
         std::sort(b_keys.begin(), b_keys.end());
         if (a_keys != b_keys)
-            return new_bool(false);
+            return (false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
             om_dict_key key = a_keys[i];
-            if (!bool_value(equal(da->at(key), db->at(key))))
-                return new_bool(false);
+            if (!bool_value(equal_helper(da->at(key), db->at(key))))
+                return (false);
         }
-        return new_bool(true);
+        return (true);
     }
     break;
     case om_register::type::DICTIONARY:
@@ -571,16 +588,38 @@ om_register *equal(om_register *a, om_register *b)
         }
         std::sort(b_keys.begin(), b_keys.end());
         if (a_keys != b_keys)
-            return new_bool(false);
+            return (false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
             om_dict_key key = a_keys[i];
-            if (!bool_value(equal(da->at(key), db->at(key))))
-                return new_bool(false);
+            if (!bool_value(equal_helper(da->at(key), db->at(key))))
+                return (false);
         }
-        return new_bool(true);
+        return (true);
     }
     break;
     }
-    return new_bool(false);
+    return (false);
 }
+
+#if 0x1
+/*
+om_register *equal(om_list_data __arguments__)
+{
+    om_register *a = get_arg(__arguments__, 0);
+    om_register *b = get_arg(__arguments__, 1);
+    return new_bool(equal_helper(a, b));
+}
+*/
+om_register *equal(om_register *a, om_register *b)
+{
+    return new_bool(equal_helper(a, b));
+}
+#else
+static om_register *equal = new_func([](om_list_data __arguments__)->om_register *
+{
+    om_register *a = get_arg(__arguments__, 0);
+    om_register *b = get_arg(__arguments__, 1);
+    return new_bool(equal_helper(a, b));
+});
+#endif
