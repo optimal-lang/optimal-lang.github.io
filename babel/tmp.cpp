@@ -39,9 +39,34 @@ int main()
     (*print)({new_string(std::string("ABC+1: ")+string_value(((*(abc))+(*(new_number(1)))))+std::string(""))});
     (*print)({new_string(std::string("test: ")+string_value(((*((*add2)({new_number(11),new_number(22)})))+(*(new_number(1)))))+std::string(""))});
     auto s=new_string("AB");
+    do
     {
         om_register *__switch1__=((*(s))+(*(new_string("C"))));
-    };
+        if(eq(__switch1__,new_string("ABC"))) goto __label3__;
+        if(eq(__switch1__,new_string("XYZ"))) goto __label4__;
+        goto __default2__;
+__label3__:
+        ;
+        {
+            (*print)({new_string("abc")});
+        }
+__label4__:
+        ;
+        {
+            {
+                (*print)({new_string("xyz")});
+                break;
+            };
+        }
+__default2__:
+        ;
+        {
+            {
+                (*print)({new_string("default")});
+            };
+        }
+    }
+    while(false);
 
     return 0;
 }

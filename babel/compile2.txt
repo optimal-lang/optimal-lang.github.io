@@ -23,3 +23,5 @@ null
 function
 "ABC+1: 2"
 "test: 34"
+"abc"
+"xyz"

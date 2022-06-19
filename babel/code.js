@@ -51,9 +51,8 @@ print(`test: ${add2(11, 22)+1}`);
 
 let s = "AB";
 switch (s+"C") {
-  case "ABC": {
+  case "ABC":
     print("abc");
-  }
   case "XYZ": {
     print("xyz");
     break;
