@@ -42,9 +42,8 @@ function compile_switch(ast, info) {
     let has_default = false;
     let default_label = gensym("default");
     let break_label = gensym("break");
-    //info = Object.assign({}, info);
-    //info.break_label = break_label;
-    info = Object.assign({ break_label: break_label }, info);
+    info = Object.assign({}, info);
+    info.break_label = break_label;
     for (let case_ of ast.cases) {
         case_ = { test: case_.test, label: (case_.test !== null) ? gensym("label") : default_label, consequent: case_.consequent };
         //common.printAsJson(case_);
