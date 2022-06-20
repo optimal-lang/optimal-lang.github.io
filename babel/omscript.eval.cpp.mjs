@@ -20,6 +20,16 @@ function compile_body(body, add_undefined) {
     return text;
 }
 
+function compile_consequent(body) {
+    let text = "";
+    for (let step of body) {
+        step = compile_ast(step);
+        text += step;
+        text += ";";
+    }
+    return text;
+}
+
 function compile_switch(ast) {
     let discriminant = ast.discriminant;
     common.printAsJson(discriminant, "switch(discriminant)");
@@ -48,7 +58,7 @@ function compile_switch(ast) {
         } else {
             text += `${case_.label}:;`
         }
-        text += compile_body(case_.consequent);
+        text += compile_consequent(case_.consequent);
     }
     if (!has_default) {
         text += `${default_label}:;`

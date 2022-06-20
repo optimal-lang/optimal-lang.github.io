@@ -47,24 +47,18 @@ int main()
         goto __default2__;
 __label3__:
         ;
-        {
-            (*print)({new_string("abc")});
-        }
+        (*print)({new_string("abc")});
 __label4__:
         ;
         {
-            {
-                (*print)({new_string("xyz")});
-                break;
-            };
-        }
+            (*print)({new_string("xyz")});
+            break;
+        };
 __default2__:
         ;
         {
-            {
-                (*print)({new_string("default")});
-            };
-        }
+            (*print)({new_string("default")});
+        };
     }
     while(false);
 
