@@ -7,11 +7,11 @@ function gensym(prefix) {
     return `__${prefix}${sym_count}__`;
 }
 
-function compile_body(body, add_undefined) {
+function compile_body(body, info, add_undefined) {
     let text = "{";
     if (add_undefined) text += "{";
     for (let step of body) {
-        step = compile_ast(step);
+        step = compile_ast(step, info);
         text += step;
         text += ";";
     }
@@ -20,35 +20,39 @@ function compile_body(body, add_undefined) {
     return text;
 }
 
-function compile_consequent(body) {
+function compile_consequent(body, info) {
     let text = "";
     for (let step of body) {
-        step = compile_ast(step);
+        step = compile_ast(step, info);
         text += step;
         text += ";";
     }
     return text;
 }
 
-function compile_switch(ast) {
+function compile_switch(ast, info) {
     let discriminant = ast.discriminant;
     common.printAsJson(discriminant, "switch(discriminant)");
     let text = "";
-    text += "do {";
+    //text += "do {";
+    text += "{{";
     let sym = gensym("switch");
-    text += `om_register *${sym}=${compile_ast(discriminant)};`;
+    text += `om_register *${sym}=${compile_ast(discriminant, info)};`;
     let cases = [];
     let has_default = false;
     let default_label = gensym("default");
+    let break_label = gensym("break");
+    info = Object.assign({}, info);
+    info.break_label = break_label;
     for (let case_ of ast.cases) {
         case_ = { test: case_.test, label: (case_.test !== null) ? gensym("label") : default_label, consequent: case_.consequent };
-        common.printAsJson(case_);
+        //common.printAsJson(case_);
         if (case_.test === null) has_default = true;
         cases.push(case_);
     }
     for (let case_ of cases) {
         if (case_.test !== null) {
-            text += `if(eq(${sym},${compile_ast(case_.test)})) goto ${case_.label};`;
+            text += `if(eq(${sym},${compile_ast(case_.test, info)})) goto ${case_.label};`;
         }
     }
     text += `goto ${default_label};`
@@ -58,16 +62,17 @@ function compile_switch(ast) {
         } else {
             text += `${case_.label}:;`
         }
-        text += compile_consequent(case_.consequent);
+        text += compile_consequent(case_.consequent, info);
     }
     if (!has_default) {
         text += `${default_label}:;`
     }
-    text += "} while(false)";
+    //text += "} while(false)";
+    text += `}${break_label}:;}`;
     return text;
 }
 
-export function compile_ast(ast) {
+export function compile_ast(ast, info = {}) {
     common.printAsJson(ast.type, "ast.type");
     //common.printAsJson(ast, "ast");
     switch (ast.type) {
@@ -81,7 +86,7 @@ export function compile_ast(ast) {
                 i++;
             }
             text += params.join("");
-            text += compile_body(ast.body.body, true);
+            text += compile_body(ast.body.body, info, true);
             text += "})";
             return text;
         } break;
@@ -96,30 +101,30 @@ export function compile_ast(ast) {
                 i++;
             }
             text += params.join("");
-            text += compile_body(ast.body.body, true);
+            text += compile_body(ast.body.body, info, true);
             text += "})";
             return text;
         } break;
         case "ReturnStatement": {
-            let argument = compile_ast(ast.argument);
+            let argument = compile_ast(ast.argument, info);
             return "return " + argument;
         } break;
         case "BinaryExpression": {
-            let left = compile_ast(ast.left);
-            let right = compile_ast(ast.right);
+            let left = compile_ast(ast.left, info);
+            let right = compile_ast(ast.right, info);
             return "(" + `(*(${left}))` + ast.operator + `(*(${right}))` + ")";
         } break;
         case "Identifier": {
             return ast.name;
         } break;
         case "ExpressionStatement": {
-            return compile_ast(ast.expression);
+            return compile_ast(ast.expression, info);
         } break;
         case "CallExpression": {
             let text = `(*${ast.callee.name})({`;
             let args = [];
             for (let arg of ast.arguments) {
-                arg = compile_ast(arg);
+                arg = compile_ast(arg, info);
                 args.push(arg);
             }
             text += args.join(",");
@@ -143,7 +148,7 @@ export function compile_ast(ast) {
             if (declarations.length !== 1) throw new Error("VariableDeclaration error(1)");
             let declaration = declarations[0];
             let text = "auto " + declaration.id.name + "=";
-            let init = compile_ast(declaration.init);
+            let init = compile_ast(declaration.init, info);
             //let conv = function(x) { return x.type==="om_register*"||x.type==="FunctionExpression" ? x.text : `new_register(${x.text})`; };
             //text += conv(init);
             text += init;
@@ -155,7 +160,7 @@ export function compile_ast(ast) {
             let text = "new_list({";
             let list = [];
             for (let e of elements) {
-                list.push(compile_ast(e));
+                list.push(compile_ast(e, info));
             }
             text += list.join(",");
             //text += "})";
@@ -180,7 +185,7 @@ export function compile_ast(ast) {
                 }
                 ptext += key;
                 ptext += ",";
-                ptext += compile_ast(p.value);
+                ptext += compile_ast(p.value, info);
                 ptext += "}";
                 plist.push(ptext);
             }
@@ -200,7 +205,7 @@ export function compile_ast(ast) {
                 list.push(`std::string(${JSON.stringify(q.value.raw)})`);
                 if (q.tail) break;
                 let e = expressions[i];
-                list.push(`string_value(${compile_ast(e)})`);
+                list.push(`string_value(${compile_ast(e, info)})`);
             }
             text += list.join("+");
             text += ")";
@@ -208,12 +213,14 @@ export function compile_ast(ast) {
         } break;
         case "SwitchStatement": {
             common.printAsJson(ast);
-            return compile_switch(ast);
+            return compile_switch(ast, info);
         } break;
         case "BlockStatement": {
-            return compile_body(ast.body);
+            return compile_body(ast.body, info);
         } break;
         case "BreakStatement": {
+            if (info.break_label)
+                return `goto ${info.break_label}`;
             return "break";
         } break;
         default:
