@@ -65,6 +65,9 @@ __break3__:
     };
     s=new_string("XYZ");
     (*print)({s});
+    list1=new_list({new_number(11),new_number(22),new_number(33)});
+    dict=new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
+    (*print)({(*list1)[new_number(1)]});
 
     return 0;
 }

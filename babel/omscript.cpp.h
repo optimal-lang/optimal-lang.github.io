@@ -6,6 +6,7 @@
 #include <map>
 #include <functional>
 #include <algorithm>
+#include <exception>
 
 #include <gc/gc.h>
 #include <gc/gc_cpp.h>
@@ -54,8 +55,9 @@ public:
     virtual void push(om_register *x)
     {
     }
-    om_register *operator+(om_register &other);
+    virtual om_register *operator+(om_register &other);
     virtual om_register *operator()(om_list_data __arguments__);
+    virtual om_register *operator[](om_register *);
 };
 
 namespace om
@@ -315,6 +317,21 @@ public:
         this->value->push_back(x);
     }
     friend bool om::equal(om_register *a, om_register *b);
+    virtual om_register *operator[](om_register *index);
+    /*
+    {
+        if (index->type_of() != om_register::type::NUMBER)
+        {
+            std::string key = ::string_value(index);
+            throw new std::runtime_error("string index not supported");
+        }
+        double n = ::number_value(index);
+        std::size_t i = (std::size_t)n;
+        if (i != n) throw new std::runtime_error("float index not supported");
+        if (i >= this->value->size()) return new_undefined();
+        return (*this->value)[i];
+    }
+    */
 };
 
 class om_dict : public om_register
@@ -487,6 +504,27 @@ om_register *om_register::operator+(om_register &other)
 om_register *om_register::operator()(om_list_data __arguments__)
 {
     return new_undefined();
+}
+
+om_register *om_register::operator[](om_register *)
+{
+    return new_undefined();
+}
+
+om_register *om_list::operator[](om_register *index)
+{
+    if (index->type_of() != om_register::type::NUMBER)
+    {
+        std::string key = ::string_value(index);
+        throw new (GC) std::runtime_error("string index not supported");
+    }
+    double n = ::number_value(index);
+    std::size_t i = (std::size_t)n;
+    if (i != n)
+        throw new (GC) std::runtime_error("float index not supported");
+    if (i < 0 || i >= this->value->size())
+        return new_undefined();
+    return (*this->value)[i];
 }
 
 om_register *console_log(om_register *x)

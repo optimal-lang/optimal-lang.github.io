@@ -229,6 +229,10 @@ export function compile_ast(ast, info = {}) {
             let text = compile_ast(ast.left) + "=" + compile_ast(ast.right);
             return text;
        } break;
+       case "MemberExpression": {
+        let text = `(*${compile_ast(ast.object)})[${compile_ast(ast.property)}]`;
+        return text;
+       } break;
         default:
             common.printAsJson(ast);
             throw new Error(`AST node type "${ast.type}" is not expected.`);
