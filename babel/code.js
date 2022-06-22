@@ -62,17 +62,5 @@ switch (s+"C") {
   }
 }
 
-/*
-let s = "XYZ";
-switch (s) {
-  case "ABC":
-    let abc = "abc";
-    print(`ABC: ${abc}`);
-  case "XYZ": {
-    let xyz = "xyz";
-    //print(`XYZ: ${abc+xyz}`);
-  }
-  default:
-    print(`${x}def: ${abc} ${xyz}`);
-}
-*/
+s = "XYZ";
+print(s);

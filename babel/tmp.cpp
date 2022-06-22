@@ -63,6 +63,8 @@ __default2__:
 __break3__:
         ;
     };
+    s=new_string("XYZ");
+    (*print)({s});
 
     return 0;
 }

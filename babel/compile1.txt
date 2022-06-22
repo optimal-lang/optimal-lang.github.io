@@ -25,3 +25,4 @@ function
 "test: 34"
 "abc"
 "xyz"
+"XYZ"

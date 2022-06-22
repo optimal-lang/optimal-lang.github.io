@@ -1,4 +1,5 @@
 import * as common from "./omscript.common.mjs";
+import { assert } from "https://deno.land/std/testing/asserts.ts";
 
 let sym_count = 0;
 
@@ -223,6 +224,11 @@ export function compile_ast(ast, info = {}) {
                 return `goto ${info.break_label}`;
             return "break";
         } break;
+        case "AssignmentExpression": {
+            assert(ast.left.type === "Identifier");
+            let text = compile_ast(ast.left) + "=" + compile_ast(ast.right);
+            return text;
+       } break;
         default:
             common.printAsJson(ast);
             throw new Error(`AST node type "${ast.type}" is not expected.`);
