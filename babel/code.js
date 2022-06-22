@@ -64,3 +64,8 @@ switch (s+"C") {
 
 s = "XYZ";
 print(s);
+
+list1 = [11, 22, 33];
+dict = { a: 11, "b": 22, c: 33 };
+
+print(list1[1]);
