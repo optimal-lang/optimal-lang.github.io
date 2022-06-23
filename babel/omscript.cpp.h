@@ -57,7 +57,7 @@ public:
     }
     virtual om_register *operator+(om_register &other);
     virtual om_register *operator()(om_list_data __arguments__);
-    virtual om_register *operator[](om_register *) const;
+    //virtual om_register *operator[](om_register *) const;
     virtual om_register *&operator[](om_register *);
 };
 
@@ -318,7 +318,7 @@ public:
         this->value->push_back(x);
     }
     friend bool om::equal(om_register *a, om_register *b);
-    virtual om_register *operator[](om_register *index) const;
+    //virtual om_register *operator[](om_register *index) const;
     virtual om_register *&operator[](om_register *);
 };
 
@@ -494,10 +494,12 @@ om_register *om_register::operator()(om_list_data __arguments__)
     return new_undefined();
 }
 
+/*
 om_register *om_register::operator[](om_register *) const
 {
     return new_undefined();
 }
+*/
 
 om_register *&om_register::operator[](om_register *)
 {
@@ -506,6 +508,7 @@ om_register *&om_register::operator[](om_register *)
     return dummy;
 }
 
+/*
 om_register *om_list::operator[](om_register *index) const
 {
     if (index->type_of() != om_register::type::NUMBER)
@@ -521,6 +524,7 @@ om_register *om_list::operator[](om_register *index) const
         return new_undefined();
     return (*this->value)[i];
 }
+*/
 
 om_register *&om_list::operator[](om_register *index)
 {
