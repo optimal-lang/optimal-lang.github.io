@@ -11,10 +11,14 @@ int main() {
     GC_INIT();
     static om_register *null = new_null();
     static om_register *undefined = new_undefined();
+    try {
 `;
 
 const CPP_TAIL =
     `
+    } catch(std::runtime_error e) {
+        std::cerr << "std::runtime_error: " << e.what() << std::endl;
+    }
     return 0;
 }
 `

@@ -71,3 +71,4 @@ dict = { a: 11, "b": 22, c: 33 };
 print(list1[1]);
 list1[1] = 222;
 print(list1);
+print(list1[4]);
