@@ -71,4 +71,10 @@ dict = { a: 11, "b": 22, c: 33 };
 print(list1[1]);
 list1[1] = 222;
 print(list1);
-print(list1[4]);
+//print(list1[4]);
+
+list1 = [11, [10, 20, 30], 33];
+print(list1[1][2]);
+
+list1[1][2] = 777;
+print(list1);

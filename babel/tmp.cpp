@@ -72,7 +72,10 @@ __break3__:
         (*print)({(*list1)[new_number(1)]});
         (*list1)[new_number(1)]=new_number(222);
         (*print)({list1});
-        (*print)({(*list1)[new_number(4)]});
+        list1=new_list({new_number(11),new_list({new_number(10),new_number(20),new_number(30)}),new_number(33)});
+        (*print)({(*(*list1)[new_number(1)])[new_number(2)]});
+        (*(*list1)[new_number(1)])[new_number(2)]=new_number(777);
+        (*print)({list1});
 
     }
     catch(std::runtime_error e)
