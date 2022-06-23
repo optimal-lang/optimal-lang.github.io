@@ -57,7 +57,8 @@ public:
     }
     virtual om_register *operator+(om_register &other);
     virtual om_register *operator()(om_list_data __arguments__);
-    virtual om_register *operator[](om_register *);
+    virtual om_register *operator[](om_register *) const;
+    virtual om_register *&operator[](om_register *);
 };
 
 namespace om
@@ -317,21 +318,8 @@ public:
         this->value->push_back(x);
     }
     friend bool om::equal(om_register *a, om_register *b);
-    virtual om_register *operator[](om_register *index);
-    /*
-    {
-        if (index->type_of() != om_register::type::NUMBER)
-        {
-            std::string key = ::string_value(index);
-            throw new std::runtime_error("string index not supported");
-        }
-        double n = ::number_value(index);
-        std::size_t i = (std::size_t)n;
-        if (i != n) throw new std::runtime_error("float index not supported");
-        if (i >= this->value->size()) return new_undefined();
-        return (*this->value)[i];
-    }
-    */
+    virtual om_register *operator[](om_register *index) const;
+    virtual om_register *&operator[](om_register *);
 };
 
 class om_dict : public om_register
@@ -506,12 +494,19 @@ om_register *om_register::operator()(om_list_data __arguments__)
     return new_undefined();
 }
 
-om_register *om_register::operator[](om_register *)
+om_register *om_register::operator[](om_register *) const
 {
     return new_undefined();
 }
 
-om_register *om_list::operator[](om_register *index)
+om_register *&om_register::operator[](om_register *)
+{
+    //static om_register *dummy = new_undefined();
+    static om_register *dummy = new_number(123);
+    return dummy;
+}
+
+om_register *om_list::operator[](om_register *index) const
 {
     if (index->type_of() != om_register::type::NUMBER)
     {
@@ -524,6 +519,22 @@ om_register *om_list::operator[](om_register *index)
         throw new (NoGC) std::runtime_error("float index not supported");
     if (i < 0 || i >= this->value->size())
         return new_undefined();
+    return (*this->value)[i];
+}
+
+om_register *&om_list::operator[](om_register *index)
+{
+    if (index->type_of() != om_register::type::NUMBER)
+    {
+        std::string key = ::string_value(index);
+        throw new (NoGC) std::runtime_error("string index not supported");
+    }
+    double n = ::number_value(index);
+    std::size_t i = (std::size_t)n;
+    if (i != n)
+        throw new (NoGC) std::runtime_error("float index not supported");
+    if (i < 0 || i >= this->value->size())
+        throw new (NoGC) std::runtime_error("index out of range");
     return (*this->value)[i];
 }
 

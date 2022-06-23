@@ -225,7 +225,7 @@ export function compile_ast(ast, info = {}) {
             return "break";
         } break;
         case "AssignmentExpression": {
-            assert(ast.left.type === "Identifier");
+            //assert(ast.left.type === "Identifier");
             let text = compile_ast(ast.left) + "=" + compile_ast(ast.right);
             return text;
        } break;
