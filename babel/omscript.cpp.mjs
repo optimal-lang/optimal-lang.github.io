@@ -9,8 +9,8 @@ const CPP_HEAD =
 
 int main() {
     GC_INIT();
-    static om_register *null = new_null();
-    static om_register *undefined = new_undefined();
+    static om_register_ptr null = new_null();
+    static om_register_ptr undefined = new_undefined();
     try {
 `;
 

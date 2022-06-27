@@ -3,8 +3,8 @@
 int main()
 {
     GC_INIT();
-    static om_register *null = new_null();
-    static om_register *undefined = new_undefined();
+    static om_register_ptr null = new_null();
+    static om_register_ptr undefined = new_undefined();
     try
     {
         om_register_ptr add2= new_func([&](om_list_data __arguments__)->om_register_ptr{om_register_ptr a=get_arg(__arguments__, 0); om_register_ptr b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});

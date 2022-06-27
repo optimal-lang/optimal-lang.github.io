@@ -17,12 +17,17 @@
 #endif
 
 #if defined(OM_USE_GC)
+#define DEFPTR(CLS) CLS*
+#define NEWPTR(CLS,ARGS) (new (GC) CLS ARGS)
 using om_register_ptr = class om_register *;
 using om_list_data = std::vector<om_register_ptr, gc_allocator<om_register_ptr>>;
 using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
 using om_dict_data = std::map<om_dict_key, om_register_ptr, std::less<om_dict_key>, gc_allocator<std::pair<om_dict_key, om_register_ptr>>>;
 #else
-using om_register_ptr = std::shared_ptr<class om_register *>;
+#define DEFPTR(CLS) std::shared_ptr<CLS>
+#define NEWPTR(CLS,ARGS) std::shared_ptr<CLS>(new CLS ARGS)
+#define GC_INIT()
+using om_register_ptr = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_register_ptr>;
 using om_dict_key = std::string;
 using om_dict_data = std::map<om_dict_key, om_register_ptr>;
@@ -134,12 +139,27 @@ static inline bool bool_value(om_register_ptr x)
     return x->bool_value();
 }
 
+static inline bool bool_value(om_register *x)
+{
+    return x->bool_value();
+}
+
 static inline double number_value(om_register_ptr x)
 {
     return x->number_value();
 }
 
+static inline double number_value(om_register *x)
+{
+    return x->number_value();
+}
+
 static inline const std::string string_value(om_register_ptr x)
+{
+    return x->string_value();
+}
+
+static inline const std::string string_value(om_register *x)
 {
     return x->string_value();
 }
@@ -262,17 +282,17 @@ public:
 
 class om_list : public om_register
 {
-    om_list_data *value;
-    om_dict_data *props;
+    DEFPTR(om_list_data) value;
+    DEFPTR(om_dict_data) props;
 
 public:
-    om_list(om_list_data *data = nullptr, om_dict_data *props = nullptr)
+    om_list(DEFPTR(om_list_data) data = nullptr, DEFPTR(om_dict_data) props = nullptr)
     {
         if (data == nullptr)
-            data = new (GC) om_list_data();
+            data = NEWPTR(om_list_data, ());
         this->value = data;
         if (props == nullptr)
-            props = new (GC) om_dict_data();
+            props = NEWPTR(om_dict_data, ());
         this->props = props;
     }
     virtual type type_of()
@@ -288,7 +308,11 @@ public:
                 result += " ";
             result += ::printable_text((*this->value)[i]);
         }
-        std::vector<om_dict_key, gc_allocator<om_dict_key>> keys;
+        std::vector<om_dict_key
+        #if defined(OM_USE_GC)
+                , gc_allocator<om_dict_key>
+        #endif
+                > keys;
         for (om_dict_data::iterator it = this->props->begin(); it != this->props->end(); ++it)
         {
             keys.push_back(it->first);
@@ -338,13 +362,13 @@ public:
 
 class om_dict : public om_register
 {
-    om_dict_data *value;
+    DEFPTR(om_dict_data) value;
 
 public:
-    om_dict(om_dict_data *data = nullptr)
+    om_dict(DEFPTR(om_dict_data) data = nullptr)
     {
         if (data == nullptr)
-            data = new (GC) om_dict_data();
+            data = NEWPTR(om_dict_data, ());
         this->value = data;
     }
     virtual type type_of()
@@ -354,7 +378,11 @@ public:
     virtual std::string printable_text()
     {
         std::string result = "{ ";
-        std::vector<om_dict_key, gc_allocator<om_dict_key>> keys;
+        std::vector<om_dict_key
+        #if defined(OM_USE_GC)
+                , gc_allocator<om_dict_key>
+        #endif
+                > keys;
         for (om_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
         {
             keys.push_back(it->first);
@@ -418,64 +446,64 @@ public:
 
 static inline om_register_ptr new_undefined()
 {
-    static om_undefined *undefined = nullptr;
+    static DEFPTR(om_register) undefined = nullptr;
     if (!undefined)
-        undefined = new (GC) om_undefined();
+        undefined = NEWPTR(om_undefined, ());
     return undefined;
 }
 
 static inline om_register_ptr new_null()
 {
-    static om_null *null = nullptr;
+    static DEFPTR(om_register) null = nullptr;
     if (!null)
-        null = new (GC) om_null();
+        null = NEWPTR(om_null, ());
     return null;
 }
 
 static inline om_register_ptr new_bool(bool b)
 {
-    static om_bool *true_ = nullptr;
-    static om_bool *false_ = nullptr;
+    static DEFPTR(om_register) true_ = nullptr;
+    static DEFPTR(om_register) false_ = nullptr;
     if (!true_)
-        true_ = new (GC) om_bool(true);
+        true_ = NEWPTR(om_bool, (true));
     if (!false_)
-        false_ = new (GC) om_bool(false);
+        false_ = NEWPTR(om_bool, (false));
     return b ? true_ : false_;
 }
 
 static inline om_register_ptr new_number(double n)
 {
-    return new (GC) om_number(n);
+    return NEWPTR(om_number, (n));
 }
 
 static inline om_register_ptr new_string(const std::string &s)
 {
-    return new (GC) om_string(s);
+    return NEWPTR(om_string, (s));
 }
 
 om_register_ptr new_list(std::initializer_list<om_register_ptr > args)
 {
-    om_list_data *data = new (GC) om_list_data();
+    DEFPTR(om_list_data) data = NEWPTR(om_list_data, ());
     for (om_register_ptr i : args)
     {
         data->push_back(i);
     }
-    return new (GC) om_list(data);
+    return NEWPTR(om_list, (data));
 }
 
 om_register_ptr new_dict(std::initializer_list<std::pair<om_dict_key, om_register_ptr >> args)
 {
-    om_dict_data *data = new (GC) om_dict_data();
+    DEFPTR(om_dict_data) data = NEWPTR(om_dict_data, ());
     for (std::pair<om_dict_key, om_register_ptr > i : args)
     {
         data->insert(i);
     }
-    return new (GC) om_dict(data);
+    return NEWPTR(om_dict, (data));
 }
 
 om_register_ptr new_func(om_func_def def)
 {
-    return new (GC) om_func(def);
+    return NEWPTR(om_func, (def));
 }
 
 static inline om_register_ptr get_arg(om_list_data &args, std::size_t index)
@@ -622,8 +650,13 @@ namespace om
             break;
         case om_register::type::LIST:
         {
-            om_list_data *la = ((om_list *)a)->value;
-            om_list_data *lb = ((om_list *)b)->value;
+#if defined(OM_USE_GC)
+            DEFPTR(om_list_data)  = ((om_list *)a)->value;
+            DEFPTR(om_list_data) = ((om_list *)b)->value;
+#else
+            DEFPTR(om_list_data) la = ((om_list *)a.get())->value;
+            DEFPTR(om_list_data) lb = ((om_list *)b.get())->value;
+#endif
             if (la->size() != lb->size())
                 return (false);
             for (std::size_t i = 0; i < la->size(); i++)
@@ -631,15 +664,28 @@ namespace om
                 if (!bool_value(equal((*la)[i], (*lb)[i])))
                     return (false);
             }
-            om_dict_data *da = ((om_list *)a)->props;
-            om_dict_data *db = ((om_list *)b)->props;
-            std::vector<om_dict_key, gc_allocator<om_dict_key>> a_keys;
+#if defined(OM_USE_GC)
+            DEFPTR(om_dict_data) da = ((om_list *)a)->props;
+            DEFPTR(om_dict_data) db = ((om_list *)b)->props;
+#else
+            DEFPTR(om_dict_data) da = ((om_list *)a.get())->props;
+            DEFPTR(om_dict_data) db = ((om_list *)b.get())->props;
+#endif
+            std::vector<om_dict_key
+        #if defined(OM_USE_GC)
+                    , gc_allocator<om_dict_key>
+        #endif
+                    > a_keys;
             for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
             {
                 a_keys.push_back(it->first);
             }
             std::sort(a_keys.begin(), a_keys.end());
-            std::vector<om_dict_key, gc_allocator<om_dict_key>> b_keys;
+            std::vector<om_dict_key
+        #if defined(OM_USE_GC)
+                    , gc_allocator<om_dict_key>
+        #endif
+                    > b_keys;
             for (om_dict_data::iterator it = db->begin(); it != db->end(); ++it)
             {
                 b_keys.push_back(it->first);
@@ -658,15 +704,28 @@ namespace om
         break;
         case om_register::type::DICTIONARY:
         {
-            om_dict_data *da = ((om_dict *)a)->value;
-            om_dict_data *db = ((om_dict *)b)->value;
-            std::vector<om_dict_key, gc_allocator<om_dict_key>> a_keys;
+#if defined(OM_USE_GC)
+            DEFPTR(om_dict_data) da = ((om_dict *)a)->value;
+            DEFPTR(om_dict_data) db = ((om_dict *)b)->value;
+#else
+            DEFPTR(om_dict_data) da = ((om_dict *)a.get())->value;
+            DEFPTR(om_dict_data) db = ((om_dict *)b.get())->value;
+#endif
+            std::vector<om_dict_key
+        #if defined(OM_USE_GC)
+                    , gc_allocator<om_dict_key>
+        #endif
+                    > a_keys;
             for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
             {
                 a_keys.push_back(it->first);
             }
             std::sort(a_keys.begin(), a_keys.end());
-            std::vector<om_dict_key, gc_allocator<om_dict_key>> b_keys;
+            std::vector<om_dict_key
+        #if defined(OM_USE_GC)
+                    , gc_allocator<om_dict_key>
+        #endif
+                    > b_keys;
             for (om_dict_data::iterator it = db->begin(); it != db->end(); ++it)
             {
                 b_keys.push_back(it->first);
