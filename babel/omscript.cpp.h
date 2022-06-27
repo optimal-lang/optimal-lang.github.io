@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <cmath>
@@ -8,16 +9,29 @@
 #include <algorithm>
 #include <exception>
 
+#if defined(OM_USE_GC)
 #include <gc/gc.h>
 #include <gc/gc_cpp.h>
 #include <gc/gc_allocator.h>
 #include <gc/javaxfc.h>
+#endif
 
-using om_list_data = std::vector<class om_register *, gc_allocator<class om_register *>>;
+#if defined(OM_USE_GC)
+using om_register_ptr = class om_register *;
+using om_list_data = std::vector<om_register_ptr, gc_allocator<om_register_ptr>>;
 using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
-using om_dict_data = std::map<om_dict_key, class om_register *, std::less<om_dict_key>, gc_allocator<std::pair<om_dict_key, class om_register *>>>;
+using om_dict_data = std::map<om_dict_key, om_register_ptr, std::less<om_dict_key>, gc_allocator<std::pair<om_dict_key, om_register_ptr>>>;
+#else
+using om_register_ptr = std::shared_ptr<class om_register *>;
+using om_list_data = std::vector<om_register_ptr>;
+using om_dict_key = std::string;
+using om_dict_data = std::map<om_dict_key, om_register_ptr>;
+#endif
 
-class om_register : public gc_cleanup
+class om_register
+        #if defined(OM_USE_GC)
+        : public gc_cleanup
+        #endif
 {
 public:
     enum type
@@ -52,19 +66,19 @@ public:
         static std::string empty = "";
         return empty;
     }
-    virtual void push(om_register *x)
+    virtual void push(om_register_ptr x)
     {
     }
-    virtual om_register *operator+(om_register &other);
-    virtual om_register *operator()(om_list_data __arguments__);
-    //virtual om_register *operator[](om_register *index) const;
-    virtual om_register *&operator[](om_register *index);
+    virtual om_register_ptr operator+(om_register &other);
+    virtual om_register_ptr operator()(om_list_data __arguments__);
+    //virtual om_register_ptr operator[](om_register_ptr index) const;
+    virtual om_register_ptr &operator[](om_register_ptr index);
 };
 
 namespace om
 {
-    bool eq(om_register *a, om_register *b);
-    bool equal(om_register *a, om_register *b);
+    bool eq(om_register_ptr a, om_register_ptr b);
+    bool equal(om_register_ptr a, om_register_ptr b);
 }
 
 class om_undefined : public om_register
@@ -107,30 +121,30 @@ public:
     }
 };
 
-// static om_register *null = (om_register *)nullptr;
-// static om_register *undefined = (om_register *)-1;
+// static om_register_ptr null = (om_register_ptr )nullptr;
+// static om_register_ptr undefined = (om_register_ptr )-1;
 
 static inline bool bool_value(bool x)
 {
     return x;
 }
 
-static inline bool bool_value(om_register *x)
+static inline bool bool_value(om_register_ptr x)
 {
     return x->bool_value();
 }
 
-static inline double number_value(om_register *x)
+static inline double number_value(om_register_ptr x)
 {
     return x->number_value();
 }
 
-static inline const std::string string_value(om_register *x)
+static inline const std::string string_value(om_register_ptr x)
 {
     return x->string_value();
 }
 
-static inline const std::string printable_text(om_register *x)
+static inline const std::string printable_text(om_register_ptr x)
 {
     return x->printable_text();
 }
@@ -313,13 +327,13 @@ public:
     {
         return true;
     }
-    virtual void push(om_register *x)
+    virtual void push(om_register_ptr x)
     {
         this->value->push_back(x);
     }
-    friend bool om::equal(om_register *a, om_register *b);
-    //virtual om_register *operator[](om_register *index) const;
-    virtual om_register *&operator[](om_register *index);
+    friend bool om::equal(om_register_ptr a, om_register_ptr b);
+    //virtual om_register_ptr operator[](om_register_ptr index) const;
+    virtual om_register_ptr &operator[](om_register_ptr index);
 };
 
 class om_dict : public om_register
@@ -366,10 +380,10 @@ public:
     {
         return true;
     }
-    friend bool om::equal(om_register *a, om_register *b);
+    friend bool om::equal(om_register_ptr a, om_register_ptr b);
 };
 
-using om_func_def = std::function<om_register *(om_list_data)>;
+using om_func_def = std::function<om_register_ptr (om_list_data)>;
 
 class om_func : public om_register
 {
@@ -395,14 +409,14 @@ public:
     {
         return true;
     }
-    virtual om_register *operator()(om_list_data __arguments__)
+    virtual om_register_ptr operator()(om_list_data __arguments__)
     {
         return this->value(__arguments__);
     }
-    // friend bool om::equal(om_register *a, om_register *b);
+    // friend bool om::equal(om_register_ptr a, om_register_ptr b);
 };
 
-static inline om_register *new_undefined()
+static inline om_register_ptr new_undefined()
 {
     static om_undefined *undefined = nullptr;
     if (!undefined)
@@ -410,7 +424,7 @@ static inline om_register *new_undefined()
     return undefined;
 }
 
-static inline om_register *new_null()
+static inline om_register_ptr new_null()
 {
     static om_null *null = nullptr;
     if (!null)
@@ -418,7 +432,7 @@ static inline om_register *new_null()
     return null;
 }
 
-static inline om_register *new_bool(bool b)
+static inline om_register_ptr new_bool(bool b)
 {
     static om_bool *true_ = nullptr;
     static om_bool *false_ = nullptr;
@@ -429,49 +443,49 @@ static inline om_register *new_bool(bool b)
     return b ? true_ : false_;
 }
 
-static inline om_register *new_number(double n)
+static inline om_register_ptr new_number(double n)
 {
     return new (GC) om_number(n);
 }
 
-static inline om_register *new_string(const std::string &s)
+static inline om_register_ptr new_string(const std::string &s)
 {
     return new (GC) om_string(s);
 }
 
-om_register *new_list(std::initializer_list<om_register *> args)
+om_register_ptr new_list(std::initializer_list<om_register_ptr > args)
 {
     om_list_data *data = new (GC) om_list_data();
-    for (om_register *i : args)
+    for (om_register_ptr i : args)
     {
         data->push_back(i);
     }
     return new (GC) om_list(data);
 }
 
-om_register *new_dict(std::initializer_list<std::pair<om_dict_key, om_register *>> args)
+om_register_ptr new_dict(std::initializer_list<std::pair<om_dict_key, om_register_ptr >> args)
 {
     om_dict_data *data = new (GC) om_dict_data();
-    for (std::pair<om_dict_key, om_register *> i : args)
+    for (std::pair<om_dict_key, om_register_ptr > i : args)
     {
         data->insert(i);
     }
     return new (GC) om_dict(data);
 }
 
-om_register *new_func(om_func_def def)
+om_register_ptr new_func(om_func_def def)
 {
     return new (GC) om_func(def);
 }
 
-static inline om_register *get_arg(om_list_data &args, std::size_t index)
+static inline om_register_ptr get_arg(om_list_data &args, std::size_t index)
 {
     if (index >= args.size())
         return new_undefined();
     return args[index];
 }
 
-om_register *om_register::operator+(om_register &other)
+om_register_ptr om_register::operator+(om_register &other)
 {
     if ((this->type_of() == om_register::type::NULL_ || this->type_of() == om_register::type::UNDEFINED) &&
         (other.type_of() == om_register::type::NULL_ || other.type_of() == om_register::type::UNDEFINED))
@@ -489,27 +503,27 @@ om_register *om_register::operator+(om_register &other)
     return new_number(::number_value(this) + ::number_value(&other));
 }
 
-om_register *om_register::operator()(om_list_data __arguments__)
+om_register_ptr om_register::operator()(om_list_data __arguments__)
 {
     return new_undefined();
 }
 
 /*
-om_register *om_register::operator[](om_register *index) const
+om_register_ptr om_register::operator[](om_register_ptr index) const
 {
     return new_undefined();
 }
 */
 
-om_register *&om_register::operator[](om_register *index)
+om_register_ptr &om_register::operator[](om_register_ptr index)
 {
-    //static om_register *dummy = new_undefined();
-    static om_register *dummy = new_number(123);
+    //static om_register_ptr dummy = new_undefined();
+    static om_register_ptr dummy = new_number(123);
     return dummy;
 }
 
 /*
-om_register *om_list::operator[](om_register *index) const
+om_register_ptr om_list::operator[](om_register_ptr index) const
 {
     if (index->type_of() != om_register::type::NUMBER)
     {
@@ -526,7 +540,7 @@ om_register *om_list::operator[](om_register *index) const
 }
 */
 
-om_register *&om_list::operator[](om_register *index)
+om_register_ptr &om_list::operator[](om_register_ptr index)
 {
     if (index->type_of() != om_register::type::NUMBER)
     {
@@ -542,13 +556,13 @@ om_register *&om_list::operator[](om_register *index)
     return (*this->value)[i];
 }
 
-om_register *console_log(om_register *x)
+om_register_ptr console_log(om_register_ptr x)
 {
     std::cout << string_value(x) << std::endl;
     return new_null();
 }
 
-om_register *print(om_register *x)
+om_register_ptr print(om_register_ptr x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
@@ -556,7 +570,7 @@ om_register *print(om_register *x)
 
 namespace om
 {
-    bool eq(om_register *a, om_register *b)
+    bool eq(om_register_ptr a, om_register_ptr b)
     {
         if (a == b)
             return true;
@@ -585,7 +599,7 @@ namespace om
         }
         return (false);
     }
-    bool equal(om_register *a, om_register *b)
+    bool equal(om_register_ptr a, om_register_ptr b)
     {
         if (a == new_null())
             return (b == new_null());
@@ -674,11 +688,11 @@ namespace om
     }
 }
 
-om_register *eq(om_register *a, om_register *b)
+om_register_ptr eq(om_register_ptr a, om_register_ptr b)
 {
     return new_bool(om::eq(a, b));
 }
-om_register *equal(om_register *a, om_register *b)
+om_register_ptr equal(om_register_ptr a, om_register_ptr b)
 {
     return new_bool(om::equal(a, b));
 }

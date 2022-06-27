@@ -38,7 +38,7 @@ function compile_switch(ast, info) {
     //text += "do {";
     text += "{{";
     let sym = gensym("switch");
-    text += `om_register *${sym}=${compile_ast(discriminant, info)};`;
+    text += `om_register_ptr ${sym}=${compile_ast(discriminant, info)};`;
     let cases = [];
     let has_default = false;
     let default_label = gensym("default");
@@ -79,11 +79,11 @@ export function compile_ast(ast, info = {}) {
     switch (ast.type) {
         case "FunctionExpression": {
             let text = "new_func(";
-            text += "[&](om_list_data __arguments__)->om_register*{";
+            text += "[&](om_list_data __arguments__)->om_register_ptr{";
             let params = [];
             let i = 0;
             for (let param of ast.params) {
-                params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
+                params.push(`om_register_ptr ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
@@ -93,12 +93,12 @@ export function compile_ast(ast, info = {}) {
         } break;
         case "FunctionDeclaration": {
             let text = "";
-            text += "om_register* " + ast.id.name + "= new_func("
-            text += "[&](om_list_data __arguments__)->om_register*{";
+            text += "om_register_ptr " + ast.id.name + "= new_func("
+            text += "[&](om_list_data __arguments__)->om_register_ptr{";
             let params = [];
             let i = 0;
             for (let param of ast.params) {
-                params.push(`om_register* ${param.name}=get_arg(__arguments__, ${i});`);
+                params.push(`om_register_ptr ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
@@ -150,8 +150,6 @@ export function compile_ast(ast, info = {}) {
             let declaration = declarations[0];
             let text = "auto " + declaration.id.name + "=";
             let init = compile_ast(declaration.init, info);
-            //let conv = function(x) { return x.type==="om_register*"||x.type==="FunctionExpression" ? x.text : `new_register(${x.text})`; };
-            //text += conv(init);
             text += init;
             return text;
         } break;
