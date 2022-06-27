@@ -44,4 +44,7 @@ include($$(HOME)/include/include.pri)
 #include($$(HOME)/qt/common/common.pri)
 #include($$(HOME)/qt/common/boost/boost.pri)
 
-LIBS += -lgc -lgccpp
+DEFINES += OM_USE_GC
+contains(DEFINES, OM_USE_GC) {
+  LIBS += -lgc -lgccpp
+}
