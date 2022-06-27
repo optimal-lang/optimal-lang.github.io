@@ -2,3 +2,5 @@ node_modules
 *.exe
 *.orig
 .vscode
+build-*
+*.user
