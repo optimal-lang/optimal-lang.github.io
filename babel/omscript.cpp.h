@@ -19,6 +19,7 @@
 #if defined(OM_USE_GC)
 #define DEFPTR(CLS) CLS*
 #define NEWPTR(CLS,ARGS) (new (GC) CLS ARGS)
+#define GETPTR(P) (P)
 using om_register_ptr = class om_register *;
 using om_list_data = std::vector<om_register_ptr, gc_allocator<om_register_ptr>>;
 using om_dict_key = std::basic_string<char, std::char_traits<char>, gc_allocator<char>>;
@@ -26,6 +27,7 @@ using om_dict_data = std::map<om_dict_key, om_register_ptr, std::less<om_dict_ke
 #else
 #define DEFPTR(CLS) std::shared_ptr<CLS>
 #define NEWPTR(CLS,ARGS) std::shared_ptr<CLS>(new CLS ARGS)
+#define GETPTR(P) (P.get())
 #define GC_INIT()
 using om_register_ptr = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_register_ptr>;
@@ -139,30 +141,36 @@ static inline bool bool_value(om_register_ptr x)
     return x->bool_value();
 }
 
+#if !defined(OM_USE_GC)
 static inline bool bool_value(om_register *x)
 {
     return x->bool_value();
 }
+#endif
 
 static inline double number_value(om_register_ptr x)
 {
     return x->number_value();
 }
 
+#if !defined(OM_USE_GC)
 static inline double number_value(om_register *x)
 {
     return x->number_value();
 }
+#endif
 
 static inline const std::string string_value(om_register_ptr x)
 {
     return x->string_value();
 }
 
+#if !defined(OM_USE_GC)
 static inline const std::string string_value(om_register *x)
 {
     return x->string_value();
 }
+#endif
 
 static inline const std::string printable_text(om_register_ptr x)
 {
@@ -650,13 +658,8 @@ namespace om
             break;
         case om_register::type::LIST:
         {
-#if defined(OM_USE_GC)
-            DEFPTR(om_list_data)  = ((om_list *)a)->value;
-            DEFPTR(om_list_data) = ((om_list *)b)->value;
-#else
-            DEFPTR(om_list_data) la = ((om_list *)a.get())->value;
-            DEFPTR(om_list_data) lb = ((om_list *)b.get())->value;
-#endif
+            DEFPTR(om_list_data) la = ((om_list *)GETPTR(a))->value;
+            DEFPTR(om_list_data) lb = ((om_list *)GETPTR(b))->value;
             if (la->size() != lb->size())
                 return (false);
             for (std::size_t i = 0; i < la->size(); i++)
@@ -664,13 +667,8 @@ namespace om
                 if (!bool_value(equal((*la)[i], (*lb)[i])))
                     return (false);
             }
-#if defined(OM_USE_GC)
-            DEFPTR(om_dict_data) da = ((om_list *)a)->props;
-            DEFPTR(om_dict_data) db = ((om_list *)b)->props;
-#else
-            DEFPTR(om_dict_data) da = ((om_list *)a.get())->props;
-            DEFPTR(om_dict_data) db = ((om_list *)b.get())->props;
-#endif
+            DEFPTR(om_dict_data) da = ((om_list *)GETPTR(a))->props;
+            DEFPTR(om_dict_data) db = ((om_list *)GETPTR(b))->props;
             std::vector<om_dict_key
         #if defined(OM_USE_GC)
                     , gc_allocator<om_dict_key>
@@ -704,13 +702,8 @@ namespace om
         break;
         case om_register::type::DICTIONARY:
         {
-#if defined(OM_USE_GC)
-            DEFPTR(om_dict_data) da = ((om_dict *)a)->value;
-            DEFPTR(om_dict_data) db = ((om_dict *)b)->value;
-#else
-            DEFPTR(om_dict_data) da = ((om_dict *)a.get())->value;
-            DEFPTR(om_dict_data) db = ((om_dict *)b.get())->value;
-#endif
+            DEFPTR(om_dict_data) da = ((om_dict *)GETPTR(a))->value;
+            DEFPTR(om_dict_data) db = ((om_dict *)GETPTR(b))->value;
             std::vector<om_dict_key
         #if defined(OM_USE_GC)
                     , gc_allocator<om_dict_key>
