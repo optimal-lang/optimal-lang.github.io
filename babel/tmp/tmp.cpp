@@ -8,6 +8,19 @@
 #include <iostream>
 #include <memory>
 
+class A {
+public:
+    explicit A() {
+        std::cout << "A()" << std::endl;
+    }
+    A(const double n) {
+        std::cout << "A()" << n << std::endl;
+    }
+    ~A() {
+        std::cout << "~A()" << std::endl;
+    }
+};
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -33,5 +46,10 @@ int main(int argc, char *argv[])
     // ここではまだ、リソースは解放されない。
 
     std::cout << *p1 << std::endl;
+
+    auto a = std::make_shared<A>();
+
+    A a2 = 1.23;
+
     return 0; // return app.exec();
 }
