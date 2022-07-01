@@ -330,7 +330,7 @@ SWIGINTERN bool std_map_Sl_std_string_Sc_om_register_ptr_Sg__has_key(std::map< s
 extern "C" {
 #endif
 
-SWIGEXPORT void * D_new_om_register_ptr() {
+SWIGEXPORT void * D_new_om_data() {
   void * jresult ;
   std::shared_ptr< om_register > *result = 0 ;
   
@@ -340,7 +340,7 @@ SWIGEXPORT void * D_new_om_register_ptr() {
 }
 
 
-SWIGEXPORT void D_delete_om_register_ptr(void * jarg1) {
+SWIGEXPORT void D_delete_om_data(void * jarg1) {
   std::shared_ptr< om_register > *arg1 = (std::shared_ptr< om_register > *) 0 ;
   
   arg1 = (std::shared_ptr< om_register > *)jarg1;
@@ -1399,24 +1399,6 @@ SWIGEXPORT void * D_new_dict(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_new_dict_pairs(void * jarg1) {
-  void * jresult ;
-  SwigValueWrapper< std::vector< std::pair< std::string,std::shared_ptr< om_register > > > > arg1 ;
-  std::vector< std::pair< std::string,om_register_ptr > > *argp1 ;
-  om_register_ptr result;
-  
-  argp1 = (std::vector< std::pair< std::string,om_register_ptr > > *)jarg1;
-  if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null std::vector< std::pair< std::string,om_register_ptr > >");
-    return 0;
-  }
-  arg1 = *argp1; 
-  result = new_dict_pairs(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
-  return jresult;
-}
-
-
 SWIGEXPORT void * D_new_func(void * jarg1) {
   void * jresult ;
   SwigValueWrapper< std::function< std::shared_ptr< om_register > (om_list_data) > > arg1 ;
@@ -1435,11 +1417,10 @@ SWIGEXPORT void * D_new_func(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_get_arg(void * jarg1, void * jarg2) {
+SWIGEXPORT void * D_get_arg(void * jarg1, unsigned long long jarg2) {
   void * jresult ;
   om_list_data *arg1 = 0 ;
-  std::size_t arg2 ;
-  std::size_t *argp2 ;
+  unsigned long long arg2 ;
   om_register_ptr result;
   
   arg1 = (om_list_data *)jarg1;
@@ -1447,12 +1428,7 @@ SWIGEXPORT void * D_get_arg(void * jarg1, void * jarg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "om_list_data & type is null");
     return 0;
   } 
-  argp2 = (std::size_t *)jarg2;
-  if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null std::size_t");
-    return 0;
-  }
-  arg2 = *argp2; 
+  arg2 = (unsigned long long)jarg2;
   result = get_arg(*arg1,arg2);
   jresult = new om_register_ptr((const om_register_ptr &)result); 
   return jresult;

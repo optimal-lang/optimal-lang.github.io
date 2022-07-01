@@ -111,7 +111,7 @@ const std::string printable_text(om_register_ptr x)
 std::string stringify_sting(const std::string &s)
 {
     std::string result = "\"";
-    for (std::size_t i = 0; i < s.size(); i++)
+    for (unsigned long long i = 0; i < s.size(); i++)
     {
         char c = s[i];
         switch (c)
@@ -233,7 +233,7 @@ om_register::type om_list::type_of()
 std::string om_list::printable_text()
 {
     std::string result = "( ";
-    for (std::size_t i = 0; i < this->value.size(); i++)
+    for (unsigned long long i = 0; i < this->value.size(); i++)
     {
         if (i > 0)
             result += " ";
@@ -250,7 +250,7 @@ std::string om_list::printable_text()
         if (this->value.size() > 0)
             result += " ";
         result += "?";
-        for (std::size_t i = 0; i < keys.size(); i++)
+        for (unsigned long long i = 0; i < keys.size(); i++)
         {
             std::string key = keys[i];
             result += " (";
@@ -267,7 +267,7 @@ std::string om_list::printable_text()
 const std::string om_list::string_value()
 {
     std::string result = "";
-    for (std::size_t i = 0; i < this->value.size(); i++)
+    for (unsigned long long i = 0; i < this->value.size(); i++)
     {
         if (i > 0)
             result += ",";
@@ -307,7 +307,7 @@ std::string om_dict::printable_text()
         keys.push_back(it->first);
     }
     std::sort(keys.begin(), keys.end());
-    for (std::size_t i = 0; i < keys.size(); i++)
+    for (unsigned long long i = 0; i < keys.size(); i++)
     {
         std::string key = keys[i];
         if (i > 0)
@@ -415,6 +415,7 @@ om_register_ptr new_dict(om_dict_data data)
     return NEWPTR(om_dict, (data));
 }
 
+/*
 om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_ptr>> args)
 {
 #if 0x0
@@ -433,13 +434,14 @@ om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_pt
     return NEWPTR(om_dict, (data));
 #endif
 }
+*/
 
 om_register_ptr new_func(om_func_def def)
 {
     return NEWPTR(om_func, (def));
 }
 
-om_register_ptr get_arg(om_list_data &args, std::size_t index)
+om_register_ptr get_arg(om_list_data &args, unsigned long long index)
 {
     if (index >= args.size())
         return new_undefined();
@@ -484,7 +486,7 @@ om_register_ptr &om_list::operator[](om_register_ptr index)
         throw std::runtime_error("string index not supported");
     }
     double n = ::number_value(index);
-    std::size_t i = (std::size_t)n;
+    unsigned long long i = (unsigned long long)n;
     if (i != n)
         throw std::runtime_error("float index not supported");
     if (i < 0 || i >= this->value.size())
@@ -560,7 +562,7 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
 #endif
         if (la->size() != lb->size())
             return (false);
-        for (std::size_t i = 0; i < la->size(); i++)
+        for (unsigned long long i = 0; i < la->size(); i++)
         {
             if (!bool_value(om::equal((*la)[i], (*lb)[i])))
                 return (false);
@@ -586,7 +588,7 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
         std::sort(b_keys.begin(), b_keys.end());
         if (a_keys != b_keys)
             return (false);
-        for (std::size_t i = 0; i < a_keys.size(); i++)
+        for (unsigned long long i = 0; i < a_keys.size(); i++)
         {
             std::string key = a_keys[i];
             if (!bool_value(om::equal(da->at(key), db->at(key))))
@@ -618,7 +620,7 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
         std::sort(b_keys.begin(), b_keys.end());
         if (a_keys != b_keys)
             return (false);
-        for (std::size_t i = 0; i < a_keys.size(); i++)
+        for (unsigned long long i = 0; i < a_keys.size(); i++)
         {
             std::string key = a_keys[i];
             if (!bool_value(om::equal(da->at(key), db->at(key))))

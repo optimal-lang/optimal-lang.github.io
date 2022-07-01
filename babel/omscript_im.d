@@ -295,8 +295,8 @@ static this() {
   mixin(bindCode("swigRegisterStringCallbackomscript", "SWIGRegisterStringCallback_omscript"));
   //#endif // SWIG_D_NO_STRING_HELPER
   
-  mixin(bindCode("new_om_register_ptr", "D_new_om_register_ptr"));
-  mixin(bindCode("delete_om_register_ptr", "D_delete_om_register_ptr"));
+  mixin(bindCode("new_om_data", "D_new_om_data"));
+  mixin(bindCode("delete_om_data", "D_delete_om_data"));
   mixin(bindCode("om_register_type_of", "D_om_register_type_of"));
   mixin(bindCode("om_register_printable_text", "D_om_register_printable_text"));
   mixin(bindCode("om_register_bool_value", "D_om_register_bool_value"));
@@ -386,7 +386,6 @@ static this() {
   mixin(bindCode("new_string", "D_new_string"));
   mixin(bindCode("new_list", "D_new_list"));
   mixin(bindCode("new_dict", "D_new_dict"));
-  mixin(bindCode("new_dict_pairs", "D_new_dict_pairs"));
   mixin(bindCode("new_func", "D_new_func"));
   mixin(bindCode("get_arg", "D_get_arg"));
   mixin(bindCode("print", "D_print"));
@@ -571,8 +570,8 @@ template SwigExternC(T) if (is(typeof(*(T.init)) P == function)) {
   }
 }
 
-SwigExternC!(void* function()) new_om_register_ptr;
-SwigExternC!(void function(void* jarg1)) delete_om_register_ptr;
+SwigExternC!(void* function()) new_om_data;
+SwigExternC!(void function(void* jarg1)) delete_om_data;
 SwigExternC!(int function(void* jarg1)) om_register_type_of;
 SwigExternC!(const(char)* function(void* jarg1)) om_register_printable_text;
 SwigExternC!(uint function(void* jarg1)) om_register_bool_value;
@@ -662,9 +661,8 @@ SwigExternC!(void* function(double jarg1)) new_number;
 SwigExternC!(void* function(const(char)* jarg1)) new_string;
 SwigExternC!(void* function(void* jarg1)) new_list;
 SwigExternC!(void* function(void* jarg1)) new_dict;
-SwigExternC!(void* function(void* jarg1)) new_dict_pairs;
 SwigExternC!(void* function(void* jarg1)) new_func;
-SwigExternC!(void* function(void* jarg1, void* jarg2)) get_arg;
+SwigExternC!(void* function(void* jarg1, ulong jarg2)) get_arg;
 SwigExternC!(void* function(void* jarg1)) print;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) eq;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) equal;

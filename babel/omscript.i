@@ -5,7 +5,7 @@
 %include "std_string.i"
 
 %include <std_shared_ptr.i>
-%template(om_register_ptr) std::shared_ptr<om_register>;
+%template(om_data) std::shared_ptr<om_register>;
 
 %{
 #include "omscript.h"
