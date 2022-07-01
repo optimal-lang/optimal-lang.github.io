@@ -15,7 +15,6 @@
 #define GC_INIT()
 using om_register_ptr = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_register_ptr>;
-//using om_dict_key = std::string;
 using om_dict_data = std::map<std::string, om_register_ptr>;
 
 #if !defined(SWIG)
@@ -130,10 +129,11 @@ class om_list : public om_register
 {
     //DEFPTR(om_list_data) value;
     om_list_data value;
-    DEFPTR(om_dict_data) props;
+    //DEFPTR(om_dict_data) props;
+    om_dict_data props;
 
 public:
-    om_list(om_list_data data = {}, std::shared_ptr<om_dict_data> props = nullptr);
+    om_list(om_list_data data = {}, om_dict_data props = {});
     virtual type type_of();
     virtual std::string printable_text();
     virtual const std::string string_value();
@@ -145,10 +145,11 @@ public:
 
 class om_dict : public om_register
 {
-    DEFPTR(om_dict_data) value;
+    //DEFPTR(om_dict_data) value;
+    om_dict_data props;
 
 public:
-    om_dict(std::shared_ptr<om_dict_data> data = nullptr);
+    om_dict(om_dict_data data = {});
     virtual type type_of();
     virtual std::string printable_text();
     virtual const std::string string_value();

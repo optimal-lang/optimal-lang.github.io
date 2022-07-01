@@ -215,13 +215,13 @@ bool om_string::bool_value()
     return !this->value.empty();
 }
 
-om_list::om_list(om_list_data data, std::shared_ptr<om_dict_data> props)
+om_list::om_list(om_list_data data, om_dict_data props)
 {
     //if (data == nullptr)
     //    data = NEWPTR(om_list_data, ());
     this->value = data;
-    if (props == nullptr)
-        props = NEWPTR(om_dict_data, ());
+    //if (props == nullptr)
+    //    props = NEWPTR(om_dict_data, ());
     this->props = props;
 }
 
@@ -240,7 +240,7 @@ std::string om_list::printable_text()
         result += ::printable_text(this->value[i]);
     }
     std::vector<std::string> keys;
-    for (om_dict_data::iterator it = this->props->begin(); it != this->props->end(); ++it)
+    for (om_dict_data::iterator it = this->props.begin(); it != this->props.end(); ++it)
     {
         keys.push_back(it->first);
     }
@@ -256,7 +256,7 @@ std::string om_list::printable_text()
             result += " (";
             result += stringify_sting(std::string(key.begin(), key.end()));
             result += " ";
-            result += ::printable_text(this->props->at(key));
+            result += ::printable_text(this->props.at(key));
             result += ")";
         }
     }
@@ -286,11 +286,11 @@ void om_list::push(om_register_ptr x)
     this->value.push_back(x);
 }
 
-om_dict::om_dict(std::shared_ptr<om_dict_data> data)
+om_dict::om_dict(om_dict_data data)
 {
-    if (data == nullptr)
-        data = NEWPTR(om_dict_data, ());
-    this->value = data;
+    //if (data == nullptr)
+    //    data = NEWPTR(om_dict_data, ());
+    this->props = data;
 }
 
 om_register::type om_dict::type_of()
@@ -302,7 +302,7 @@ std::string om_dict::printable_text()
 {
     std::string result = "{ ";
     std::vector<std::string> keys;
-    for (om_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
+    for (om_dict_data::iterator it = this->props.begin(); it != this->props.end(); ++it)
     {
         keys.push_back(it->first);
     }
@@ -314,7 +314,7 @@ std::string om_dict::printable_text()
             result += " ";
         result += stringify_sting(std::string(key.begin(), key.end()));
         result += " ";
-        result += ::printable_text(this->value->at(key));
+        result += ::printable_text(this->props.at(key));
     }
     result += " }";
     return result;
@@ -412,12 +412,21 @@ om_register_ptr new_list(std::vector<om_register_ptr> args)
 
 om_register_ptr new_dict(std::vector<std::pair<std::string, om_register_ptr> > args)
 {
+#if 0x0
     DEFPTR(om_dict_data) data = NEWPTR(om_dict_data, ());
     for (std::pair<std::string, om_register_ptr > i : args)
     {
         data->insert(i);
     }
     return NEWPTR(om_dict, (data));
+#else
+    om_dict_data data;
+    for (std::pair<std::string, om_register_ptr > i : args)
+    {
+        data.insert(i);
+    }
+    return NEWPTR(om_dict, (data));
+#endif
 }
 
 om_register_ptr new_func(om_func_def def)
@@ -551,8 +560,13 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
             if (!bool_value(om::equal((*la)[i], (*lb)[i])))
                 return (false);
         }
+#if 0x0
         DEFPTR(om_dict_data) da = ((om_list *)GETPTR(a))->props;
         DEFPTR(om_dict_data) db = ((om_list *)GETPTR(b))->props;
+#else
+        om_dict_data *da = &((om_list *)GETPTR(a))->props;
+        om_dict_data *db = &((om_list *)GETPTR(b))->props;
+#endif
         std::vector<std::string> a_keys;
         for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
         {
@@ -578,8 +592,13 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
         break;
     case om_register::type::DICTIONARY:
     {
-        DEFPTR(om_dict_data) da = ((om_dict *)GETPTR(a))->value;
-        DEFPTR(om_dict_data) db = ((om_dict *)GETPTR(b))->value;
+#if 0x0
+        DEFPTR(om_dict_data) da = ((om_dict *)GETPTR(a))->props;
+        DEFPTR(om_dict_data) db = ((om_dict *)GETPTR(b))->props;
+#else
+        om_dict_data *da = &((om_dict *)GETPTR(a))->props;
+        om_dict_data *db = &((om_dict *)GETPTR(b))->props;
+#endif
         std::vector<std::string> a_keys;
         for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
         {

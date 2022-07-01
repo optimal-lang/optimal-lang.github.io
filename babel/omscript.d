@@ -137,8 +137,8 @@ class om_register {
     return ret;
   }
 
-  public om_register_ptr opCall(om_register_ptr_vector __arguments__) {
-    om_register_ptr ret = new om_register_ptr(omscript_im.om_register_opCall(cast(void*)swigCPtr, om_register_ptr_vector.swigGetCPtr(__arguments__)), true);
+  public om_register_ptr opCall(om_list_data __arguments__) {
+    om_register_ptr ret = new om_register_ptr(omscript_im.om_register_opCall(cast(void*)swigCPtr, om_list_data.swigGetCPtr(__arguments__)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
@@ -516,13 +516,13 @@ class om_list : om_register {
     }
   }
 
-  public this(SWIGTYPE_p_std__shared_ptrT_std__vectorT_std__shared_ptrT_om_register_t_t_t data, SWIGTYPE_p_std__shared_ptrT_std__mapT_std__string_std__shared_ptrT_om_register_t_t_t props) {
-    this(omscript_im.new_om_list__SWIG_0(SWIGTYPE_p_std__shared_ptrT_std__vectorT_std__shared_ptrT_om_register_t_t_t.swigGetCPtr(data), SWIGTYPE_p_std__shared_ptrT_std__mapT_std__string_std__shared_ptrT_om_register_t_t_t.swigGetCPtr(props)), true);
+  public this(om_list_data data, om_dict_data props) {
+    this(omscript_im.new_om_list__SWIG_0(om_list_data.swigGetCPtr(data), om_dict_data.swigGetCPtr(props)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
-  public this(SWIGTYPE_p_std__shared_ptrT_std__vectorT_std__shared_ptrT_om_register_t_t_t data) {
-    this(omscript_im.new_om_list__SWIG_1(SWIGTYPE_p_std__shared_ptrT_std__vectorT_std__shared_ptrT_om_register_t_t_t.swigGetCPtr(data)), true);
+  public this(om_list_data data) {
+    this(omscript_im.new_om_list__SWIG_1(om_list_data.swigGetCPtr(data)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
@@ -593,8 +593,8 @@ class om_dict : om_register {
     }
   }
 
-  public this(SWIGTYPE_p_std__shared_ptrT_std__mapT_std__string_std__shared_ptrT_om_register_t_t_t data) {
-    this(omscript_im.new_om_dict__SWIG_0(SWIGTYPE_p_std__shared_ptrT_std__mapT_std__string_std__shared_ptrT_om_register_t_t_t.swigGetCPtr(data)), true);
+  public this(om_dict_data data) {
+    this(omscript_im.new_om_dict__SWIG_0(om_dict_data.swigGetCPtr(data)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
@@ -679,8 +679,8 @@ class om_func : om_register {
     return ret;
   }
 
-  public override om_register_ptr opCall(om_register_ptr_vector __arguments__) {
-    om_register_ptr ret = new om_register_ptr(omscript_im.om_func_opCall(cast(void*)swigCPtr, om_register_ptr_vector.swigGetCPtr(__arguments__)), true);
+  public override om_register_ptr opCall(om_list_data __arguments__) {
+    om_register_ptr ret = new om_register_ptr(omscript_im.om_func_opCall(cast(void*)swigCPtr, om_list_data.swigGetCPtr(__arguments__)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
@@ -712,8 +712,8 @@ om_register_ptr new_string(string s) {
   return ret;
 }
 
-om_register_ptr new_list(om_register_ptr_vector args) {
-  om_register_ptr ret = new om_register_ptr(omscript_im.new_list(om_register_ptr_vector.swigGetCPtr(args)), true);
+om_register_ptr new_list(om_list_data args) {
+  om_register_ptr ret = new om_register_ptr(omscript_im.new_list(om_list_data.swigGetCPtr(args)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
@@ -730,8 +730,8 @@ om_register_ptr new_func(SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_
   return ret;
 }
 
-om_register_ptr get_arg(om_register_ptr_vector args, SWIGTYPE_p_std__size_t index) {
-  om_register_ptr ret = new om_register_ptr(omscript_im.get_arg(om_register_ptr_vector.swigGetCPtr(args), SWIGTYPE_p_std__size_t.swigGetCPtr(index)), true);
+om_register_ptr get_arg(om_list_data args, SWIGTYPE_p_std__size_t index) {
+  om_register_ptr ret = new om_register_ptr(omscript_im.get_arg(om_list_data.swigGetCPtr(args), SWIGTYPE_p_std__size_t.swigGetCPtr(index)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
@@ -754,7 +754,7 @@ om_register_ptr equal(om_register_ptr a, om_register_ptr b) {
   return ret;
 }
 
-class om_register_ptr_vector {
+class om_list_data {
   private void* swigCPtr;
   protected bool swigCMemOwn;
 
@@ -778,7 +778,7 @@ class om_register_ptr_vector {
       if (swigCPtr !is null) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          omscript_im.delete_om_register_ptr_vector(cast(void*)swigCPtr);
+          omscript_im.delete_om_list_data(cast(void*)swigCPtr);
         }
         swigCPtr = null;
       }
@@ -797,17 +797,17 @@ class om_register_ptr_vector {
   }
 
   struct Range {
-    private om_register_ptr_vector _outer;
+    private om_list_data _outer;
     private size_t _a, _b;
 
-    this(om_register_ptr_vector data, size_t a, size_t b) {
+    this(om_list_data data, size_t a, size_t b) {
       _outer = data;
       _a = a;
       _b = b;
     }
 
     @property bool empty() const {
-      assert((cast(om_register_ptr_vector)_outer).length >= _b);
+      assert((cast(om_list_data)_outer).length >= _b);
       return _a >= _b;
     }
 
@@ -1039,100 +1039,98 @@ class om_register_ptr_vector {
   }
 
   public bool empty() const {
-    bool ret = omscript_im.om_register_ptr_vector_empty(cast(void*)swigCPtr) ? true : false;
+    bool ret = omscript_im.om_list_data_empty(cast(void*)swigCPtr) ? true : false;
     return ret;
   }
 
   public void clear() {
-    omscript_im.om_register_ptr_vector_clear(cast(void*)swigCPtr);
+    omscript_im.om_list_data_clear(cast(void*)swigCPtr);
   }
 
   public void push_back(om_register_ptr x) {
-    omscript_im.om_register_ptr_vector_push_back(cast(void*)swigCPtr, om_register_ptr.swigGetCPtr(x));
+    omscript_im.om_list_data_push_back(cast(void*)swigCPtr, om_register_ptr.swigGetCPtr(x));
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public void pop_back() {
-    omscript_im.om_register_ptr_vector_pop_back(cast(void*)swigCPtr);
+    omscript_im.om_list_data_pop_back(cast(void*)swigCPtr);
   }
 
   public size_t size() const {
-    auto ret = omscript_im.om_register_ptr_vector_size(cast(void*)swigCPtr);
+    auto ret = omscript_im.om_list_data_size(cast(void*)swigCPtr);
     return ret;
   }
 
   public size_t capacity() const {
-    auto ret = omscript_im.om_register_ptr_vector_capacity(cast(void*)swigCPtr);
+    auto ret = omscript_im.om_list_data_capacity(cast(void*)swigCPtr);
     return ret;
   }
 
   public void reserve(size_t n) {
-    omscript_im.om_register_ptr_vector_reserve(cast(void*)swigCPtr, n);
+    omscript_im.om_list_data_reserve(cast(void*)swigCPtr, n);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public this() {
-    this(omscript_im.new_om_register_ptr_vector__SWIG_0(), true);
+    this(omscript_im.new_om_list_data__SWIG_0(), true);
   }
 
-  public this(om_register_ptr_vector other) {
-    this(omscript_im.new_om_register_ptr_vector__SWIG_1(om_register_ptr_vector.swigGetCPtr(other)), true);
+  public this(om_list_data other) {
+    this(omscript_im.new_om_list_data__SWIG_1(om_list_data.swigGetCPtr(other)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public this(size_t capacity) {
-    this(omscript_im.new_om_register_ptr_vector__SWIG_2(capacity), true);
+    this(omscript_im.new_om_list_data__SWIG_2(capacity), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public om_register_ptr remove() {
-    om_register_ptr ret = new om_register_ptr(omscript_im.om_register_ptr_vector_remove__SWIG_0(cast(void*)swigCPtr), false);
+    om_register_ptr ret = new om_register_ptr(omscript_im.om_list_data_remove__SWIG_0(cast(void*)swigCPtr), false);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
 
   public om_register_ptr remove(size_t index) {
-    om_register_ptr ret = new om_register_ptr(omscript_im.om_register_ptr_vector_remove__SWIG_1(cast(void*)swigCPtr, index), false);
+    om_register_ptr ret = new om_register_ptr(omscript_im.om_list_data_remove__SWIG_1(cast(void*)swigCPtr, index), false);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
 
   public void removeBack(size_t how_many) {
-    omscript_im.om_register_ptr_vector_removeBack(cast(void*)swigCPtr, how_many);
+    omscript_im.om_list_data_removeBack(cast(void*)swigCPtr, how_many);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public void linearRemove(size_t start_index, size_t end_index) {
-    omscript_im.om_register_ptr_vector_linearRemove(cast(void*)swigCPtr, start_index, end_index);
+    omscript_im.om_list_data_linearRemove(cast(void*)swigCPtr, start_index, end_index);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public void insertAt(size_t index, om_register_ptr x) {
-    omscript_im.om_register_ptr_vector_insertAt(cast(void*)swigCPtr, index, om_register_ptr.swigGetCPtr(x));
+    omscript_im.om_list_data_insertAt(cast(void*)swigCPtr, index, om_register_ptr.swigGetCPtr(x));
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
   public om_register_ptr getElement(size_t index) {
-    om_register_ptr ret = new om_register_ptr(omscript_im.om_register_ptr_vector_getElement(cast(void*)swigCPtr, index), false);
+    om_register_ptr ret = new om_register_ptr(omscript_im.om_list_data_getElement(cast(void*)swigCPtr, index), false);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
 
   public void setElement(size_t index, om_register_ptr val) {
-    omscript_im.om_register_ptr_vector_setElement(cast(void*)swigCPtr, index, om_register_ptr.swigGetCPtr(val));
+    omscript_im.om_list_data_setElement(cast(void*)swigCPtr, index, om_register_ptr.swigGetCPtr(val));
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 }
 
-class SWIGTYPE_p_std__shared_ptrT_std__vectorT_std__shared_ptrT_om_register_t_t_t {
+class om_dict_data {
   private void* swigCPtr;
+  protected bool swigCMemOwn;
 
-  public this(void* cObject, bool futureUse) {
+  public this(void* cObject, bool ownCObject) {
     swigCPtr = cObject;
-  }
-
-  protected this() {
-    swigCPtr = null;
+    swigCMemOwn = ownCObject;
   }
 
   public static void* swigGetCPtr(typeof(this) obj) {
@@ -1140,6 +1138,67 @@ class SWIGTYPE_p_std__shared_ptrT_std__vectorT_std__shared_ptrT_om_register_t_t_
   }
 
   mixin omscript_im.SwigOperatorDefinitions;
+
+  ~this() {
+    dispose();
+  }
+
+  public void dispose() {
+    synchronized(this) {
+      if (swigCPtr !is null) {
+        if (swigCMemOwn) {
+          swigCMemOwn = false;
+          omscript_im.delete_om_dict_data(cast(void*)swigCPtr);
+        }
+        swigCPtr = null;
+      }
+    }
+  }
+
+  public this() {
+    this(omscript_im.new_om_dict_data__SWIG_0(), true);
+  }
+
+  public this(om_dict_data other) {
+    this(omscript_im.new_om_dict_data__SWIG_1(om_dict_data.swigGetCPtr(other)), true);
+    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  }
+
+  public uint size() const {
+    auto ret = omscript_im.om_dict_data_size(cast(void*)swigCPtr);
+    return ret;
+  }
+
+  public bool empty() const {
+    bool ret = omscript_im.om_dict_data_empty(cast(void*)swigCPtr) ? true : false;
+    return ret;
+  }
+
+  public void clear() {
+    omscript_im.om_dict_data_clear(cast(void*)swigCPtr);
+  }
+
+  public om_register_ptr get(string key) {
+    om_register_ptr ret = new om_register_ptr(omscript_im.om_dict_data_get(cast(void*)swigCPtr, (key ? std.string.toStringz(key) : null)), false);
+    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+    return ret;
+  }
+
+  public void set(string key, om_register_ptr x) {
+    omscript_im.om_dict_data_set(cast(void*)swigCPtr, (key ? std.string.toStringz(key) : null), om_register_ptr.swigGetCPtr(x));
+    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  }
+
+  public void del(string key) {
+    omscript_im.om_dict_data_del(cast(void*)swigCPtr, (key ? std.string.toStringz(key) : null));
+    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  }
+
+  public bool has_key(string key) {
+    bool ret = omscript_im.om_dict_data_has_key(cast(void*)swigCPtr, (key ? std.string.toStringz(key) : null)) ? true : false;
+    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+    return ret;
+  }
 }
 
 class SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t {
@@ -1161,24 +1220,6 @@ class SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t 
 }
 
 class SWIGTYPE_p_std__size_t {
-  private void* swigCPtr;
-
-  public this(void* cObject, bool futureUse) {
-    swigCPtr = cObject;
-  }
-
-  protected this() {
-    swigCPtr = null;
-  }
-
-  public static void* swigGetCPtr(typeof(this) obj) {
-    return (obj is null) ? null : obj.swigCPtr;
-  }
-
-  mixin omscript_im.SwigOperatorDefinitions;
-}
-
-class SWIGTYPE_p_std__shared_ptrT_std__mapT_std__string_std__shared_ptrT_om_register_t_t_t {
   private void* swigCPtr;
 
   public this(void* cObject, bool futureUse) {
