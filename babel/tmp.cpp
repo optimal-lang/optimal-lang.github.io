@@ -1,4 +1,4 @@
-#include "omscript.cpp.h"
+#include "omscript.h"
 
 int main()
 {

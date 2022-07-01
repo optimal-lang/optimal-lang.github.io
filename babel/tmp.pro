@@ -17,9 +17,10 @@ gcc:QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter -Wno-unused-function -Wno-ca
 msvc:QMAKE_CXXFLAGS += /bigobj
 
 HEADERS += utf8LogHandler.h \
-    omscript.cpp.h
+    omscript.h
 
-SOURCES += tmp.cpp
+SOURCES += tmp.cpp \
+    omscript.cpp
 
 INCLUDEPATH += $$PWD
 INCLUDEPATH += $$(HOME)/include
@@ -44,7 +45,7 @@ include($$(HOME)/include/include.pri)
 #include($$(HOME)/qt/common/common.pri)
 #include($$(HOME)/qt/common/boost/boost.pri)
 
-DEFINES += OM_USE_GC
+#DEFINES += OM_USE_GC
 contains(DEFINES, OM_USE_GC) {
   LIBS += -lgc -lgccpp
 }
