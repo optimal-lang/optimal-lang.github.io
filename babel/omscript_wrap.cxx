@@ -1485,7 +1485,7 @@ SWIGEXPORT void * D_equal(void * jarg1, void * jarg2) {
 }
 
 
-SWIGEXPORT unsigned int D_RegisterPtrVector_empty(void * jarg1) {
+SWIGEXPORT unsigned int D_om_register_ptr_vector_empty(void * jarg1) {
   unsigned int jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   bool result;
@@ -1497,7 +1497,7 @@ SWIGEXPORT unsigned int D_RegisterPtrVector_empty(void * jarg1) {
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_clear(void * jarg1) {
+SWIGEXPORT void D_om_register_ptr_vector_clear(void * jarg1) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   
   arg1 = (std::vector< std::shared_ptr< om_register > > *)jarg1;
@@ -1505,7 +1505,7 @@ SWIGEXPORT void D_RegisterPtrVector_clear(void * jarg1) {
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_push_back(void * jarg1, void * jarg2) {
+SWIGEXPORT void D_om_register_ptr_vector_push_back(void * jarg1, void * jarg2) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::shared_ptr< om_register > *arg2 = 0 ;
   
@@ -1519,7 +1519,7 @@ SWIGEXPORT void D_RegisterPtrVector_push_back(void * jarg1, void * jarg2) {
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_pop_back(void * jarg1) {
+SWIGEXPORT void D_om_register_ptr_vector_pop_back(void * jarg1) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   
   arg1 = (std::vector< std::shared_ptr< om_register > > *)jarg1;
@@ -1527,7 +1527,7 @@ SWIGEXPORT void D_RegisterPtrVector_pop_back(void * jarg1) {
 }
 
 
-SWIGEXPORT size_t D_RegisterPtrVector_size(void * jarg1) {
+SWIGEXPORT size_t D_om_register_ptr_vector_size(void * jarg1) {
   size_t jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type result;
@@ -1539,7 +1539,7 @@ SWIGEXPORT size_t D_RegisterPtrVector_size(void * jarg1) {
 }
 
 
-SWIGEXPORT size_t D_RegisterPtrVector_capacity(void * jarg1) {
+SWIGEXPORT size_t D_om_register_ptr_vector_capacity(void * jarg1) {
   size_t jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type result;
@@ -1551,7 +1551,7 @@ SWIGEXPORT size_t D_RegisterPtrVector_capacity(void * jarg1) {
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_reserve(void * jarg1, size_t jarg2) {
+SWIGEXPORT void D_om_register_ptr_vector_reserve(void * jarg1, size_t jarg2) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   
@@ -1566,7 +1566,7 @@ SWIGEXPORT void D_RegisterPtrVector_reserve(void * jarg1, size_t jarg2) {
 }
 
 
-SWIGEXPORT void * D_new_RegisterPtrVector__SWIG_0() {
+SWIGEXPORT void * D_new_om_register_ptr_vector__SWIG_0() {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > > *result = 0 ;
   
@@ -1576,7 +1576,7 @@ SWIGEXPORT void * D_new_RegisterPtrVector__SWIG_0() {
 }
 
 
-SWIGEXPORT void * D_new_RegisterPtrVector__SWIG_1(void * jarg1) {
+SWIGEXPORT void * D_new_om_register_ptr_vector__SWIG_1(void * jarg1) {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = 0 ;
   std::vector< std::shared_ptr< om_register > > *result = 0 ;
@@ -1592,7 +1592,7 @@ SWIGEXPORT void * D_new_RegisterPtrVector__SWIG_1(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_new_RegisterPtrVector__SWIG_2(size_t jarg1) {
+SWIGEXPORT void * D_new_om_register_ptr_vector__SWIG_2(size_t jarg1) {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > >::size_type arg1 ;
   std::vector< std::shared_ptr< om_register > > *result = 0 ;
@@ -1609,7 +1609,7 @@ SWIGEXPORT void * D_new_RegisterPtrVector__SWIG_2(size_t jarg1) {
 }
 
 
-SWIGEXPORT void * D_RegisterPtrVector_remove__SWIG_0(void * jarg1) {
+SWIGEXPORT void * D_om_register_ptr_vector_remove__SWIG_0(void * jarg1) {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::value_type *result = 0 ;
@@ -1626,7 +1626,7 @@ SWIGEXPORT void * D_RegisterPtrVector_remove__SWIG_0(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_RegisterPtrVector_remove__SWIG_1(void * jarg1, size_t jarg2) {
+SWIGEXPORT void * D_om_register_ptr_vector_remove__SWIG_1(void * jarg1, size_t jarg2) {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
@@ -1645,7 +1645,7 @@ SWIGEXPORT void * D_RegisterPtrVector_remove__SWIG_1(void * jarg1, size_t jarg2)
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_removeBack(void * jarg1, size_t jarg2) {
+SWIGEXPORT void D_om_register_ptr_vector_removeBack(void * jarg1, size_t jarg2) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   
@@ -1660,7 +1660,7 @@ SWIGEXPORT void D_RegisterPtrVector_removeBack(void * jarg1, size_t jarg2) {
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_linearRemove(void * jarg1, size_t jarg2, size_t jarg3) {
+SWIGEXPORT void D_om_register_ptr_vector_linearRemove(void * jarg1, size_t jarg2, size_t jarg3) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg3 ;
@@ -1677,7 +1677,7 @@ SWIGEXPORT void D_RegisterPtrVector_linearRemove(void * jarg1, size_t jarg2, siz
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_insertAt(void * jarg1, size_t jarg2, void * jarg3) {
+SWIGEXPORT void D_om_register_ptr_vector_insertAt(void * jarg1, size_t jarg2, void * jarg3) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::shared_ptr< om_register > *arg3 = 0 ;
@@ -1698,7 +1698,7 @@ SWIGEXPORT void D_RegisterPtrVector_insertAt(void * jarg1, size_t jarg2, void * 
 }
 
 
-SWIGEXPORT void * D_RegisterPtrVector_getElement(void * jarg1, size_t jarg2) {
+SWIGEXPORT void * D_om_register_ptr_vector_getElement(void * jarg1, size_t jarg2) {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
@@ -1717,7 +1717,7 @@ SWIGEXPORT void * D_RegisterPtrVector_getElement(void * jarg1, size_t jarg2) {
 }
 
 
-SWIGEXPORT void D_RegisterPtrVector_setElement(void * jarg1, size_t jarg2, void * jarg3) {
+SWIGEXPORT void D_om_register_ptr_vector_setElement(void * jarg1, size_t jarg2, void * jarg3) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::shared_ptr< om_register > *arg3 = 0 ;
@@ -1738,7 +1738,7 @@ SWIGEXPORT void D_RegisterPtrVector_setElement(void * jarg1, size_t jarg2, void 
 }
 
 
-SWIGEXPORT void D_delete_RegisterPtrVector(void * jarg1) {
+SWIGEXPORT void D_delete_om_register_ptr_vector(void * jarg1) {
   std::vector< std::shared_ptr< om_register > > *arg1 = (std::vector< std::shared_ptr< om_register > > *) 0 ;
   
   arg1 = (std::vector< std::shared_ptr< om_register > > *)jarg1;
