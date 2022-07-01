@@ -1358,12 +1358,12 @@ SWIGEXPORT void * D_new_list(void * jarg1) {
 SWIGEXPORT void * D_new_dict(void * jarg1) {
   void * jresult ;
   SwigValueWrapper< std::vector< std::pair< std::string,std::shared_ptr< om_register > > > > arg1 ;
-  std::vector< std::pair< om_dict_key,om_register_ptr > > *argp1 ;
+  std::vector< std::pair< std::string,om_register_ptr > > *argp1 ;
   om_register_ptr result;
   
-  argp1 = (std::vector< std::pair< om_dict_key,om_register_ptr > > *)jarg1;
+  argp1 = (std::vector< std::pair< std::string,om_register_ptr > > *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null std::vector< std::pair< om_dict_key,om_register_ptr > >");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null std::vector< std::pair< std::string,om_register_ptr > >");
     return 0;
   }
   arg1 = *argp1; 

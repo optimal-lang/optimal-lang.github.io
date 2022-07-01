@@ -15,8 +15,8 @@
 #define GC_INIT()
 using om_register_ptr = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_register_ptr>;
-using om_dict_key = std::string;
-using om_dict_data = std::map<om_dict_key, om_register_ptr>;
+//using om_dict_key = std::string;
+using om_dict_data = std::map<std::string, om_register_ptr>;
 
 #if !defined(SWIG)
 namespace om
@@ -128,11 +128,12 @@ public:
 
 class om_list : public om_register
 {
-    DEFPTR(om_list_data) value;
+    //DEFPTR(om_list_data) value;
+    om_list_data value;
     DEFPTR(om_dict_data) props;
 
 public:
-    om_list(std::shared_ptr<om_list_data> data = nullptr, std::shared_ptr<om_dict_data> props = nullptr);
+    om_list(om_list_data data = {}, std::shared_ptr<om_dict_data> props = nullptr);
     virtual type type_of();
     virtual std::string printable_text();
     virtual const std::string string_value();
@@ -182,7 +183,7 @@ om_register_ptr new_string(const std::string &s);
 
 om_register_ptr new_list(std::vector<om_register_ptr> args);
 
-om_register_ptr new_dict(std::vector<std::pair<om_dict_key, om_register_ptr>> args);
+om_register_ptr new_dict(std::vector<std::pair<std::string, om_register_ptr>> args);
 
 om_register_ptr new_func(om_func_def def);
 

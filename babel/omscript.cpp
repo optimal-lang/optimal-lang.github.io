@@ -215,10 +215,10 @@ bool om_string::bool_value()
     return !this->value.empty();
 }
 
-om_list::om_list(std::shared_ptr<om_list_data> data, std::shared_ptr<om_dict_data> props)
+om_list::om_list(om_list_data data, std::shared_ptr<om_dict_data> props)
 {
-    if (data == nullptr)
-        data = NEWPTR(om_list_data, ());
+    //if (data == nullptr)
+    //    data = NEWPTR(om_list_data, ());
     this->value = data;
     if (props == nullptr)
         props = NEWPTR(om_dict_data, ());
@@ -233,13 +233,13 @@ om_register::type om_list::type_of()
 std::string om_list::printable_text()
 {
     std::string result = "( ";
-    for (std::size_t i = 0; i < this->value->size(); i++)
+    for (std::size_t i = 0; i < this->value.size(); i++)
     {
         if (i > 0)
             result += " ";
-        result += ::printable_text((*this->value)[i]);
+        result += ::printable_text(this->value[i]);
     }
-    std::vector<om_dict_key> keys;
+    std::vector<std::string> keys;
     for (om_dict_data::iterator it = this->props->begin(); it != this->props->end(); ++it)
     {
         keys.push_back(it->first);
@@ -247,12 +247,12 @@ std::string om_list::printable_text()
     std::sort(keys.begin(), keys.end());
     if (keys.size() > 0)
     {
-        if (this->value->size() > 0)
+        if (this->value.size() > 0)
             result += " ";
         result += "?";
         for (std::size_t i = 0; i < keys.size(); i++)
         {
-            om_dict_key key = keys[i];
+            std::string key = keys[i];
             result += " (";
             result += stringify_sting(std::string(key.begin(), key.end()));
             result += " ";
@@ -267,11 +267,11 @@ std::string om_list::printable_text()
 const std::string om_list::string_value()
 {
     std::string result = "";
-    for (std::size_t i = 0; i < this->value->size(); i++)
+    for (std::size_t i = 0; i < this->value.size(); i++)
     {
         if (i > 0)
             result += ",";
-        result += ::string_value((*this->value)[i]);
+        result += ::string_value(this->value[i]);
     }
     return result;
 }
@@ -283,7 +283,7 @@ bool om_list::bool_value()
 
 void om_list::push(om_register_ptr x)
 {
-    this->value->push_back(x);
+    this->value.push_back(x);
 }
 
 om_dict::om_dict(std::shared_ptr<om_dict_data> data)
@@ -301,7 +301,7 @@ om_register::type om_dict::type_of()
 std::string om_dict::printable_text()
 {
     std::string result = "{ ";
-    std::vector<om_dict_key> keys;
+    std::vector<std::string> keys;
     for (om_dict_data::iterator it = this->value->begin(); it != this->value->end(); ++it)
     {
         keys.push_back(it->first);
@@ -309,7 +309,7 @@ std::string om_dict::printable_text()
     std::sort(keys.begin(), keys.end());
     for (std::size_t i = 0; i < keys.size(); i++)
     {
-        om_dict_key key = keys[i];
+        std::string key = keys[i];
         if (i > 0)
             result += " ";
         result += stringify_sting(std::string(key.begin(), key.end()));
@@ -398,18 +398,22 @@ om_register_ptr new_string(const std::string &s)
 
 om_register_ptr new_list(std::vector<om_register_ptr> args)
 {
+#if 0x0
     DEFPTR(om_list_data) data = NEWPTR(om_list_data, ());
     for (om_register_ptr i : args)
     {
         data->push_back(i);
     }
     return NEWPTR(om_list, (data));
+#else
+    return NEWPTR(om_list, (args));
+#endif
 }
 
-om_register_ptr new_dict(std::vector<std::pair<om_dict_key, om_register_ptr> > args)
+om_register_ptr new_dict(std::vector<std::pair<std::string, om_register_ptr> > args)
 {
     DEFPTR(om_dict_data) data = NEWPTR(om_dict_data, ());
-    for (std::pair<om_dict_key, om_register_ptr > i : args)
+    for (std::pair<std::string, om_register_ptr > i : args)
     {
         data->insert(i);
     }
@@ -469,9 +473,9 @@ om_register_ptr &om_list::operator[](om_register_ptr index)
     std::size_t i = (std::size_t)n;
     if (i != n)
         throw std::runtime_error("float index not supported");
-    if (i < 0 || i >= this->value->size())
+    if (i < 0 || i >= this->value.size())
         throw std::runtime_error("index out of range(1)");
-    return (*this->value)[i];
+    return this->value[i];
 }
 
 om_register_ptr print(om_register_ptr x)
@@ -533,8 +537,13 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
         break;
     case om_register::type::LIST:
     {
+#if 0x0
         DEFPTR(om_list_data) la = ((om_list *)GETPTR(a))->value;
         DEFPTR(om_list_data) lb = ((om_list *)GETPTR(b))->value;
+#else
+        om_list_data *la = &((om_list *)GETPTR(a))->value;
+        om_list_data *lb = &((om_list *)GETPTR(b))->value;
+#endif
         if (la->size() != lb->size())
             return (false);
         for (std::size_t i = 0; i < la->size(); i++)
@@ -544,13 +553,13 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
         }
         DEFPTR(om_dict_data) da = ((om_list *)GETPTR(a))->props;
         DEFPTR(om_dict_data) db = ((om_list *)GETPTR(b))->props;
-        std::vector<om_dict_key> a_keys;
+        std::vector<std::string> a_keys;
         for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
         {
             a_keys.push_back(it->first);
         }
         std::sort(a_keys.begin(), a_keys.end());
-        std::vector<om_dict_key> b_keys;
+        std::vector<std::string> b_keys;
         for (om_dict_data::iterator it = db->begin(); it != db->end(); ++it)
         {
             b_keys.push_back(it->first);
@@ -560,7 +569,7 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
             return (false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
-            om_dict_key key = a_keys[i];
+            std::string key = a_keys[i];
             if (!bool_value(om::equal(da->at(key), db->at(key))))
                 return (false);
         }
@@ -571,13 +580,13 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
     {
         DEFPTR(om_dict_data) da = ((om_dict *)GETPTR(a))->value;
         DEFPTR(om_dict_data) db = ((om_dict *)GETPTR(b))->value;
-        std::vector<om_dict_key> a_keys;
+        std::vector<std::string> a_keys;
         for (om_dict_data::iterator it = da->begin(); it != da->end(); ++it)
         {
             a_keys.push_back(it->first);
         }
         std::sort(a_keys.begin(), a_keys.end());
-        std::vector<om_dict_key> b_keys;
+        std::vector<std::string> b_keys;
         for (om_dict_data::iterator it = db->begin(); it != db->end(); ++it)
         {
             b_keys.push_back(it->first);
@@ -587,7 +596,7 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
             return (false);
         for (std::size_t i = 0; i < a_keys.size(); i++)
         {
-            om_dict_key key = a_keys[i];
+            std::string key = a_keys[i];
             if (!bool_value(om::equal(da->at(key), db->at(key))))
                 return (false);
         }
