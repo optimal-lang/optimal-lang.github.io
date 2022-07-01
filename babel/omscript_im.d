@@ -386,6 +386,7 @@ static this() {
   mixin(bindCode("new_string", "D_new_string"));
   mixin(bindCode("new_list", "D_new_list"));
   mixin(bindCode("new_dict", "D_new_dict"));
+  mixin(bindCode("new_dict_pairs", "D_new_dict_pairs"));
   mixin(bindCode("new_func", "D_new_func"));
   mixin(bindCode("get_arg", "D_get_arg"));
   mixin(bindCode("print", "D_print"));
@@ -661,6 +662,7 @@ SwigExternC!(void* function(double jarg1)) new_number;
 SwigExternC!(void* function(const(char)* jarg1)) new_string;
 SwigExternC!(void* function(void* jarg1)) new_list;
 SwigExternC!(void* function(void* jarg1)) new_dict;
+SwigExternC!(void* function(void* jarg1)) new_dict_pairs;
 SwigExternC!(void* function(void* jarg1)) new_func;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) get_arg;
 SwigExternC!(void* function(void* jarg1)) print;

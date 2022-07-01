@@ -22,9 +22,9 @@ int main()
         (*print)({((*(new_string("abc")))+(*(null)))});
         (*print)({((*(new_string("abc")))+(*(undefined)))});
         (*print)({new_list({new_number(11),new_number(22),new_number(33)})});
-        (*print)({new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}})});
+        (*print)({new_dict_pairs({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}})});
         auto list1=new_list({new_number(11),new_number(22),new_number(33)});
-        auto dict=new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
+        auto dict=new_dict_pairs({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
         (*print)({((*(list1))+(*(dict)))});
         auto list2=new_list({new_number(11),new_number(22),new_number(33),new_list({new_number(44),new_number(55)})});
         (*print)({((*(list2))+(*(dict)))});
@@ -68,7 +68,7 @@ __break3__:
         s=new_string("XYZ");
         (*print)({s});
         list1=new_list({new_number(11),new_number(22),new_number(33)});
-        dict=new_dict({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
+        dict=new_dict_pairs({{"a",new_number(11)},{"b",new_number(22)},{"c",new_number(33)}});
         (*print)({(*list1)[new_number(1)]});
         (*list1)[new_number(1)]=new_number(222);
         (*print)({list1});

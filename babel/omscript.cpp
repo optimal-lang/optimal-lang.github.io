@@ -410,7 +410,12 @@ om_register_ptr new_list(std::vector<om_register_ptr> args)
 #endif
 }
 
-om_register_ptr new_dict(std::vector<std::pair<std::string, om_register_ptr> > args)
+om_register_ptr new_dict(om_dict_data data)
+{
+    return NEWPTR(om_dict, (data));
+}
+
+om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_ptr>> args)
 {
 #if 0x0
     DEFPTR(om_dict_data) data = NEWPTR(om_dict_data, ());
@@ -421,7 +426,7 @@ om_register_ptr new_dict(std::vector<std::pair<std::string, om_register_ptr> > a
     return NEWPTR(om_dict, (data));
 #else
     om_dict_data data;
-    for (std::pair<std::string, om_register_ptr > i : args)
+    for (std::pair<std::string, om_register_ptr > i : data)
     {
         data.insert(i);
     }

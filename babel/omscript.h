@@ -184,7 +184,8 @@ om_register_ptr new_string(const std::string &s);
 
 om_register_ptr new_list(std::vector<om_register_ptr> args);
 
-om_register_ptr new_dict(std::vector<std::pair<std::string, om_register_ptr>> args);
+om_register_ptr new_dict(om_dict_data data);
+om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_ptr>> args);
 
 om_register_ptr new_func(om_func_def def);
 

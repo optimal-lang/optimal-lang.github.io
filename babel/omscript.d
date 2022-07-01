@@ -718,8 +718,14 @@ om_register_ptr new_list(om_list_data args) {
   return ret;
 }
 
-om_register_ptr new_dict(SWIGTYPE_p_std__vectorT_std__pairT_std__string_std__shared_ptrT_om_register_t_t_t args) {
-  om_register_ptr ret = new om_register_ptr(omscript_im.new_dict(SWIGTYPE_p_std__vectorT_std__pairT_std__string_std__shared_ptrT_om_register_t_t_t.swigGetCPtr(args)), true);
+om_register_ptr new_dict(om_dict_data data) {
+  om_register_ptr ret = new om_register_ptr(omscript_im.new_dict(om_dict_data.swigGetCPtr(data)), true);
+  if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  return ret;
+}
+
+om_register_ptr new_dict_pairs(SWIGTYPE_p_std__vectorT_std__pairT_std__string_std__shared_ptrT_om_register_t_t_t args) {
+  om_register_ptr ret = new om_register_ptr(omscript_im.new_dict_pairs(SWIGTYPE_p_std__vectorT_std__pairT_std__string_std__shared_ptrT_om_register_t_t_t.swigGetCPtr(args)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
