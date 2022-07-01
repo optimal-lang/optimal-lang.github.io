@@ -17,6 +17,8 @@
 using om_register_ptr = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_register_ptr>;
 using om_dict_data = std::map<std::string, om_register_ptr>;
+using om_func_def = std::function<om_register_ptr (om_list_data)>;
+typedef om_register_ptr (*om_callback)(om_list_data);
 
 #if !defined(SWIG)
 namespace om
@@ -158,13 +160,13 @@ public:
     friend bool om::equal(om_register_ptr a, om_register_ptr b);
 };
 
-using om_func_def = std::function<om_register_ptr (om_list_data)>;
-
 class om_func : public om_register
 {
-    om_func_def value;
+    om_callback callback = nullptr;
+    om_func_def value = nullptr;
 
 public:
+    om_func(om_callback data);
     om_func(om_func_def data);
     virtual type type_of();
     virtual std::string printable_text();
@@ -187,6 +189,8 @@ om_register_ptr new_list(om_list_data array = {}, om_dict_data props = {});
 
 om_register_ptr new_dict(om_dict_data data);
 //om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_ptr>> args);
+
+om_register_ptr new_func(om_callback callback);
 
 om_register_ptr new_func(om_func_def def);
 

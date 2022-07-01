@@ -1208,7 +1208,19 @@ SWIGEXPORT void D_delete_om_dict(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_new_om_func(void * jarg1) {
+SWIGEXPORT void * D_new_om_func__SWIG_0(void * jarg1) {
+  void * jresult ;
+  om_callback arg1 = (om_callback) 0 ;
+  om_func *result = 0 ;
+  
+  arg1 = (om_callback)jarg1;
+  result = (om_func *)new om_func(arg1);
+  jresult = (void *)result;
+  return jresult;
+}
+
+
+SWIGEXPORT void * D_new_om_func__SWIG_1(void * jarg1) {
   void * jresult ;
   SwigValueWrapper< std::function< std::shared_ptr< om_register > (om_list_data) > > arg1 ;
   om_func_def *argp1 ;
@@ -1435,7 +1447,19 @@ SWIGEXPORT void * D_new_dict(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_new_func(void * jarg1) {
+SWIGEXPORT void * D_new_func__SWIG_0(void * jarg1) {
+  void * jresult ;
+  om_callback arg1 = (om_callback) 0 ;
+  om_register_ptr result;
+  
+  arg1 = (om_callback)jarg1;
+  result = new_func(arg1);
+  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * D_new_func__SWIG_1(void * jarg1) {
   void * jresult ;
   SwigValueWrapper< std::function< std::shared_ptr< om_register > (om_list_data) > > arg1 ;
   om_func_def *argp1 ;

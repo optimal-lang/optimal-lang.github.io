@@ -330,6 +330,10 @@ bool om_dict::bool_value()
     return true;
 }
 
+om_func::om_func(om_callback data) : callback(data)
+{
+}
+
 om_func::om_func(om_func_def data) : value(data)
 {
 }
@@ -356,6 +360,8 @@ bool om_func::bool_value()
 
 om_register_ptr om_func::operator()(om_list_data __arguments__)
 {
+    if (this->callback)
+        return this->callback(__arguments__);
     return this->value(__arguments__);
 }
 
@@ -435,6 +441,11 @@ om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_pt
 #endif
 }
 */
+
+om_register_ptr new_func(om_callback callback)
+{
+    return NEWPTR(om_func, (callback));
+}
 
 om_register_ptr new_func(om_func_def def)
 {

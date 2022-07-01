@@ -1,8 +1,17 @@
 import std.stdio;
 import omscript;
 
+class X {
+	int x(int a, int b) { return 0; }
+}
+
 void main()
 {
+	auto obj = new class X
+	{
+		override int x(int a, int b) { return a+b; }
+	};
+	writeln(obj.x(11,22));
 	print(new_bool(true));
 	print(new_string("abc"));
 	print(new_number(1.23));
