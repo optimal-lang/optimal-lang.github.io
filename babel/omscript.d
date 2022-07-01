@@ -712,9 +712,20 @@ om_data new_string(string s) {
   return ret;
 }
 
-om_data new_list(om_list_data args) {
-  om_data ret = new om_data(omscript_im.new_list(om_list_data.swigGetCPtr(args)), true);
+om_data new_list(om_list_data array, om_dict_data props) {
+  om_data ret = new om_data(omscript_im.new_list__SWIG_0(om_list_data.swigGetCPtr(array), om_dict_data.swigGetCPtr(props)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  return ret;
+}
+
+om_data new_list(om_list_data array) {
+  om_data ret = new om_data(omscript_im.new_list__SWIG_1(om_list_data.swigGetCPtr(array)), true);
+  if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  return ret;
+}
+
+om_data new_list() {
+  om_data ret = new om_data(omscript_im.new_list__SWIG_2(), true);
   return ret;
 }
 
@@ -730,7 +741,7 @@ om_data new_func(SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_li
   return ret;
 }
 
-om_data get_arg(om_list_data args, ulong index) {
+om_data get_arg(om_list_data args, long index) {
   om_data ret = new om_data(omscript_im.get_arg(om_list_data.swigGetCPtr(args), index), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;

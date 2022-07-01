@@ -1363,19 +1363,55 @@ SWIGEXPORT void * D_new_string(char * jarg1) {
 }
 
 
-SWIGEXPORT void * D_new_list(void * jarg1) {
+SWIGEXPORT void * D_new_list__SWIG_0(void * jarg1, void * jarg2) {
   void * jresult ;
-  std::vector< om_register_ptr > arg1 ;
-  std::vector< om_register_ptr > *argp1 ;
+  om_list_data arg1 ;
+  om_dict_data arg2 ;
+  om_list_data *argp1 ;
+  om_dict_data *argp2 ;
   om_register_ptr result;
   
-  argp1 = (std::vector< om_register_ptr > *)jarg1;
+  argp1 = (om_list_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null std::vector< om_register_ptr >");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
+    return 0;
+  }
+  arg1 = *argp1; 
+  argp2 = (om_dict_data *)jarg2;
+  if (!argp2) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_dict_data");
+    return 0;
+  }
+  arg2 = *argp2; 
+  result = new_list(arg1,arg2);
+  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * D_new_list__SWIG_1(void * jarg1) {
+  void * jresult ;
+  om_list_data arg1 ;
+  om_list_data *argp1 ;
+  om_register_ptr result;
+  
+  argp1 = (om_list_data *)jarg1;
+  if (!argp1) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
     return 0;
   }
   arg1 = *argp1; 
   result = new_list(arg1);
+  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * D_new_list__SWIG_2() {
+  void * jresult ;
+  om_register_ptr result;
+  
+  result = new_list();
   jresult = new om_register_ptr((const om_register_ptr &)result); 
   return jresult;
 }
@@ -1417,10 +1453,10 @@ SWIGEXPORT void * D_new_func(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_get_arg(void * jarg1, unsigned long long jarg2) {
+SWIGEXPORT void * D_get_arg(void * jarg1, long long jarg2) {
   void * jresult ;
   om_list_data *arg1 = 0 ;
-  unsigned long long arg2 ;
+  long long arg2 ;
   om_register_ptr result;
   
   arg1 = (om_list_data *)jarg1;
@@ -1428,7 +1464,7 @@ SWIGEXPORT void * D_get_arg(void * jarg1, unsigned long long jarg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "om_list_data & type is null");
     return 0;
   } 
-  arg2 = (unsigned long long)jarg2;
+  arg2 = (long long)jarg2;
   result = get_arg(*arg1,arg2);
   jresult = new om_register_ptr((const om_register_ptr &)result); 
   return jresult;

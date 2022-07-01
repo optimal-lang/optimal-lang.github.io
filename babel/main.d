@@ -23,4 +23,5 @@ void main()
 	om_dict_data dict = new om_dict_data();
 	dict.set("abc", new_number(777));
 	print(new_dict(dict));
+	print(new_list(vect, dict));
 }
