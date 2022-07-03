@@ -14,17 +14,22 @@
 #define NEWPTR(CLS,ARGS) std::shared_ptr<CLS>(new CLS ARGS)
 #define GETPTR(P) (P.get())
 #define GC_INIT()
-using om_register_ptr = std::shared_ptr<class om_register>;
-using om_list_data = std::vector<om_register_ptr>;
-using om_dict_data = std::map<std::string, om_register_ptr>;
-using om_func_def = std::function<om_register_ptr (om_list_data)>;
-typedef om_register_ptr (*om_callback)(om_list_data);
+using om_data = std::shared_ptr<class om_register>;
+using om_list_data = std::vector<om_data>;
+using om_dict_data = std::map<std::string, om_data>;
+using om_func_def = std::function<om_data (om_list_data)>;
+//typedef om_data (*om_callback)(om_list_data);
+
+class om_callback {
+public:
+    virtual om_data run(om_list_data) = 0;
+};
 
 #if !defined(SWIG)
 namespace om
 {
-    bool eq(om_register_ptr a, om_register_ptr b);
-    bool equal(om_register_ptr a, om_register_ptr b);
+    bool eq(om_data a, om_data b);
+    bool equal(om_data a, om_data b);
 }
 #endif
 
@@ -47,17 +52,17 @@ public:
     virtual bool bool_value();
     virtual double number_value();
     virtual const std::string string_value();
-    virtual void push(om_register_ptr x);
-    virtual om_register_ptr operator+(om_register &other);
-    virtual om_register_ptr operator()(om_list_data __arguments__);
-    virtual om_register_ptr &operator[](om_register_ptr index);
+    virtual void push(om_data x);
+    virtual om_data operator+(om_register &other);
+    virtual om_data operator()(om_list_data __arguments__);
+    virtual om_data &operator[](om_data index);
 };
 
 /*
 namespace om
 {
-    bool eq(om_register_ptr a, om_register_ptr b);
-    bool equal(om_register_ptr a, om_register_ptr b);
+    bool eq(om_data a, om_data b);
+    bool equal(om_data a, om_data b);
 }
 */
 
@@ -80,13 +85,13 @@ public:
 };
 
 bool bool_value(bool x);
-bool bool_value(om_register_ptr x);
+bool bool_value(om_data x);
 bool bool_value(om_register *x);
-double number_value(om_register_ptr x);
+double number_value(om_data x);
 double number_value(om_register *x);
-const std::string string_value(om_register_ptr x);
+const std::string string_value(om_data x);
 const std::string string_value(om_register *x);
-const std::string printable_text(om_register_ptr x);
+const std::string printable_text(om_data x);
 
 std::string stringify_sting(const std::string &s);
 
@@ -141,9 +146,9 @@ public:
     virtual std::string printable_text();
     virtual const std::string string_value();
     virtual bool bool_value();
-    virtual void push(om_register_ptr x);
-    friend bool om::equal(om_register_ptr a, om_register_ptr b);
-    virtual om_register_ptr &operator[](om_register_ptr index);
+    virtual void push(om_data x);
+    friend bool om::equal(om_data a, om_data b);
+    virtual om_data &operator[](om_data index);
 };
 
 class om_dict : public om_register
@@ -157,54 +162,54 @@ public:
     virtual std::string printable_text();
     virtual const std::string string_value();
     virtual bool bool_value();
-    friend bool om::equal(om_register_ptr a, om_register_ptr b);
+    friend bool om::equal(om_data a, om_data b);
 };
 
 class om_func : public om_register
 {
-    om_callback callback = nullptr;
+    om_callback *callback = nullptr;
     om_func_def value = nullptr;
 
 public:
-    om_func(om_callback data);
+    om_func(om_callback *data);
     om_func(om_func_def data);
     virtual type type_of();
     virtual std::string printable_text();
     virtual const std::string string_value();
     virtual bool bool_value();
-    virtual om_register_ptr operator()(om_list_data __arguments__);
+    virtual om_data operator()(om_list_data __arguments__);
 };
 
-om_register_ptr new_undefined();
+om_data new_undefined();
 
-om_register_ptr new_null();
+om_data new_null();
 
-om_register_ptr new_bool(bool b);
+om_data new_bool(bool b);
 
-om_register_ptr new_number(double n);
+om_data new_number(double n);
 
-om_register_ptr new_string(const std::string &s);
+om_data new_string(const std::string &s);
 
-om_register_ptr new_list(om_list_data array = {}, om_dict_data props = {});
+om_data new_list(om_list_data array = {}, om_dict_data props = {});
 
-om_register_ptr new_dict(om_dict_data data);
-//om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_ptr>> args);
+om_data new_dict(om_dict_data data);
+//om_data new_dict_pairs(std::vector<std::pair<std::string, om_data>> args);
 
-om_register_ptr new_func(om_callback callback);
+om_data new_func(om_callback *callback);
 
-om_register_ptr new_func(om_func_def def);
+om_data new_func(om_func_def def);
 
-om_register_ptr get_arg(om_list_data &args, long long index);
+om_data get_arg(om_list_data &args, long long index);
 
 /*
-om_register_ptr console_log(om_register_ptr x)
+om_data console_log(om_data x)
 {
     std::cout << string_value(x) << std::endl;
     return new_null();
 }
 */
 
-om_register_ptr print(om_register_ptr x);
+om_data print(om_data x);
 
-om_register_ptr eq(om_register_ptr a, om_register_ptr b);
-om_register_ptr equal(om_register_ptr a, om_register_ptr b);
+om_data eq(om_data a, om_data b);
+om_data equal(om_data a, om_data b);

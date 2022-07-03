@@ -26,7 +26,7 @@ const std::string om_register::string_value()
     return empty;
 }
 
-void om_register::push(om_register_ptr x)
+void om_register::push(om_data x)
 {
 }
 
@@ -73,7 +73,7 @@ bool bool_value(bool x)
     return x;
 }
 
-bool bool_value(om_register_ptr x)
+bool bool_value(om_data x)
 {
     return x->bool_value();
 }
@@ -83,7 +83,7 @@ bool bool_value(om_register *x)
     return x->bool_value();
 }
 
-double number_value(om_register_ptr x)
+double number_value(om_data x)
 {
     return x->number_value();
 }
@@ -93,7 +93,7 @@ double number_value(om_register *x)
     return x->number_value();
 }
 
-const std::string string_value(om_register_ptr x)
+const std::string string_value(om_data x)
 {
     return x->string_value();
 }
@@ -103,7 +103,7 @@ const std::string string_value(om_register *x)
     return x->string_value();
 }
 
-const std::string printable_text(om_register_ptr x)
+const std::string printable_text(om_data x)
 {
     return x->printable_text();
 }
@@ -281,7 +281,7 @@ bool om_list::bool_value()
     return true;
 }
 
-void om_list::push(om_register_ptr x)
+void om_list::push(om_data x)
 {
     this->value.push_back(x);
 }
@@ -330,7 +330,7 @@ bool om_dict::bool_value()
     return true;
 }
 
-om_func::om_func(om_callback data) : callback(data)
+om_func::om_func(om_callback *data) : callback(data)
 {
 }
 
@@ -358,14 +358,14 @@ bool om_func::bool_value()
     return true;
 }
 
-om_register_ptr om_func::operator()(om_list_data __arguments__)
+om_data om_func::operator()(om_list_data __arguments__)
 {
     if (this->callback)
-        return this->callback(__arguments__);
+        return this->callback->run(__arguments__);
     return this->value(__arguments__);
 }
 
-om_register_ptr new_undefined()
+om_data new_undefined()
 {
     static DEFPTR(om_register) undefined = nullptr;
     if (!undefined)
@@ -373,7 +373,7 @@ om_register_ptr new_undefined()
     return undefined;
 }
 
-om_register_ptr new_null()
+om_data new_null()
 {
     static DEFPTR(om_register) null = nullptr;
     if (!null)
@@ -381,7 +381,7 @@ om_register_ptr new_null()
     return null;
 }
 
-om_register_ptr new_bool(bool b)
+om_data new_bool(bool b)
 {
     static DEFPTR(om_register) true_ = nullptr;
     static DEFPTR(om_register) false_ = nullptr;
@@ -392,21 +392,21 @@ om_register_ptr new_bool(bool b)
     return b ? true_ : false_;
 }
 
-om_register_ptr new_number(double n)
+om_data new_number(double n)
 {
     return NEWPTR(om_number, (n));
 }
 
-om_register_ptr new_string(const std::string &s)
+om_data new_string(const std::string &s)
 {
     return NEWPTR(om_string, (s));
 }
 
-om_register_ptr new_list(om_list_data array, om_dict_data props)
+om_data new_list(om_list_data array, om_dict_data props)
 {
 #if 0x0
     DEFPTR(om_list_data) data = NEWPTR(om_list_data, ());
-    for (om_register_ptr i : args)
+    for (om_data i : args)
     {
         data->push_back(i);
     }
@@ -416,24 +416,24 @@ om_register_ptr new_list(om_list_data array, om_dict_data props)
 #endif
 }
 
-om_register_ptr new_dict(om_dict_data data)
+om_data new_dict(om_dict_data data)
 {
     return NEWPTR(om_dict, (data));
 }
 
 /*
-om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_ptr>> args)
+om_data new_dict_pairs(std::vector<std::pair<std::string, om_data>> args)
 {
 #if 0x0
     DEFPTR(om_dict_data) data = NEWPTR(om_dict_data, ());
-    for (std::pair<std::string, om_register_ptr > i : args)
+    for (std::pair<std::string, om_data > i : args)
     {
         data->insert(i);
     }
     return NEWPTR(om_dict, (data));
 #else
     om_dict_data data;
-    for (std::pair<std::string, om_register_ptr > i : data)
+    for (std::pair<std::string, om_data > i : data)
     {
         data.insert(i);
     }
@@ -442,24 +442,24 @@ om_register_ptr new_dict_pairs(std::vector<std::pair<std::string, om_register_pt
 }
 */
 
-om_register_ptr new_func(om_callback callback)
+om_data new_func(om_callback *callback)
 {
     return NEWPTR(om_func, (callback));
 }
 
-om_register_ptr new_func(om_func_def def)
+om_data new_func(om_func_def def)
 {
     return NEWPTR(om_func, (def));
 }
 
-om_register_ptr get_arg(om_list_data &args, long long index)
+om_data get_arg(om_list_data &args, long long index)
 {
     if (index >= args.size())
         return new_undefined();
     return args[index];
 }
 
-om_register_ptr om_register::operator+(om_register &other)
+om_data om_register::operator+(om_register &other)
 {
     if ((this->type_of() == om_register::type::NULL_ || this->type_of() == om_register::type::UNDEFINED) &&
             (other.type_of() == om_register::type::NULL_ || other.type_of() == om_register::type::UNDEFINED))
@@ -477,19 +477,19 @@ om_register_ptr om_register::operator+(om_register &other)
     return new_number(::number_value(this) + ::number_value(&other));
 }
 
-om_register_ptr om_register::operator()(om_list_data __arguments__)
+om_data om_register::operator()(om_list_data __arguments__)
 {
     return new_undefined();
 }
 
-om_register_ptr &om_register::operator[](om_register_ptr index)
+om_data &om_register::operator[](om_data index)
 {
-    //static om_register_ptr dummy = new_undefined();
-    static om_register_ptr dummy = new_number(123);
+    //static om_data dummy = new_undefined();
+    static om_data dummy = new_number(123);
     return dummy;
 }
 
-om_register_ptr &om_list::operator[](om_register_ptr index)
+om_data &om_list::operator[](om_data index)
 {
     if (index->type_of() != om_register::type::NUMBER)
     {
@@ -505,13 +505,13 @@ om_register_ptr &om_list::operator[](om_register_ptr index)
     return this->value[i];
 }
 
-om_register_ptr print(om_register_ptr x)
+om_data print(om_data x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
 }
 
-bool om::eq(om_register_ptr a, om_register_ptr b)
+bool om::eq(om_data a, om_data b)
 {
     if (a == b)
         return true;
@@ -541,7 +541,7 @@ bool om::eq(om_register_ptr a, om_register_ptr b)
     return (false);
 }
 
-bool om::equal(om_register_ptr a, om_register_ptr b)
+bool om::equal(om_data a, om_data b)
 {
     if (a == new_null())
         return (b == new_null());
@@ -644,12 +644,12 @@ bool om::equal(om_register_ptr a, om_register_ptr b)
     return (false);
 }
 
-om_register_ptr eq(om_register_ptr a, om_register_ptr b)
+om_data eq(om_data a, om_data b)
 {
     return new_bool(om::eq(a, b));
 }
 
-om_register_ptr equal(om_register_ptr a, om_register_ptr b)
+om_data equal(om_data a, om_data b)
 {
     return new_bool(om::equal(a, b));
 }

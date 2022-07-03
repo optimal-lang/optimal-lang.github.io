@@ -3,17 +3,17 @@
 int main()
 {
     //GC_INIT();
-    static om_register_ptr null = new_null();
-    static om_register_ptr undefined = new_undefined();
+    static om_data null = new_null();
+    static om_data undefined = new_undefined();
     try
     {
-        om_register_ptr add2= new_func([&](om_list_data __arguments__)->om_register_ptr{om_register_ptr a=get_arg(__arguments__, 0); om_register_ptr b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
+        om_data add2= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
         (*print)({(*add2)({new_number(11),new_number(22)})});
         auto x=new_number(123);
         (*print)({x});
-        auto add3=new_func([&](om_list_data __arguments__)->om_register_ptr{om_register_ptr a=get_arg(__arguments__, 0); om_register_ptr b=get_arg(__arguments__, 1); om_register_ptr c=get_arg(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
+        auto add3=new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); om_data c=get_arg(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
         (*print)({(*add3)({new_number(11),new_number(22),new_number(33)})});
-        om_register_ptr test01= new_func([&](om_list_data __arguments__)->om_register_ptr{om_register_ptr a=get_arg(__arguments__, 0); {{auto a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
+        om_data test01= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); {{auto a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
         (*print)({(*test01)({new_number(22)})});
         auto y=((*(((*(new_number(1)))+(*(new_number(2))))))+(*(new_number(3))));
         (*print)({y});
@@ -43,7 +43,7 @@ int main()
         auto s=new_string("AB");
         {
             {
-                om_register_ptr __switch1__=((*(s))+(*(new_string("C"))));
+                om_data __switch1__=((*(s))+(*(new_string("C"))));
                 if(eq(__switch1__,new_string("ABC"))) goto __label4__;
                 if(eq(__switch1__,new_string("XYZ"))) goto __label5__;
                 goto __default2__;

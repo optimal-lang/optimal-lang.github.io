@@ -38,7 +38,7 @@ function compile_switch(ast, info) {
     //text += "do {";
     text += "{{";
     let sym = gensym("switch");
-    text += `om_register_ptr ${sym}=${compile_ast(discriminant, info)};`;
+    text += `om_data ${sym}=${compile_ast(discriminant, info)};`;
     let cases = [];
     let has_default = false;
     let default_label = gensym("default");
@@ -79,11 +79,11 @@ export function compile_ast(ast, info = {}) {
     switch (ast.type) {
         case "FunctionExpression": {
             let text = "new_func(";
-            text += "[&](om_list_data __arguments__)->om_register_ptr{";
+            text += "[&](om_list_data __arguments__)->om_data{";
             let params = [];
             let i = 0;
             for (let param of ast.params) {
-                params.push(`om_register_ptr ${param.name}=get_arg(__arguments__, ${i});`);
+                params.push(`om_data ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
@@ -93,12 +93,12 @@ export function compile_ast(ast, info = {}) {
         } break;
         case "FunctionDeclaration": {
             let text = "";
-            text += "om_register_ptr " + ast.id.name + "= new_func("
-            text += "[&](om_list_data __arguments__)->om_register_ptr{";
+            text += "om_data " + ast.id.name + "= new_func("
+            text += "[&](om_list_data __arguments__)->om_data{";
             let params = [];
             let i = 0;
             for (let param of ast.params) {
-                params.push(`om_register_ptr ${param.name}=get_arg(__arguments__, ${i});`);
+                params.push(`om_data ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
