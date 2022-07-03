@@ -7,12 +7,13 @@ class X {
 
 void main()
 {
+	om_data c = new_number(10);
 	auto obj = new class om_callback
 	{
 		public override om_data run(om_list_data __arguments__) {
 			om_data a = get_arg(__arguments__, 0);
 			om_data b = get_arg(__arguments__, 1);
-			return new_number( number_value(a)+number_value(b) );
+			return new_number( (number_value(a)+number_value(b)) * number_value(c) );
 		}
 	};
 	om_list_data args = new om_list_data();
@@ -20,6 +21,7 @@ void main()
 	args.push_back(new_number(22));
 	print(new_list(args));
 	print(obj.run(args));
+	c = new_number(20);
 	om_data add2 = new_func(obj);
 	print(call(add2, args));
 	/*
