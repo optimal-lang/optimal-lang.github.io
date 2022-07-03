@@ -297,9 +297,11 @@ static this() {
   
   mixin(bindCode("new_om_data", "D_new_om_data"));
   mixin(bindCode("delete_om_data", "D_delete_om_data"));
-  mixin(bindCode("om_callback_run", "D_om_callback_run"));
-  mixin(bindCode("new_om_callback", "D_new_om_callback"));
   mixin(bindCode("delete_om_callback", "D_delete_om_callback"));
+  mixin(bindCode("om_callback_run", "D_om_callback_run"));
+  mixin(bindCode("om_callback_runSwigExplicitom_callback", "D_om_callback_runSwigExplicitom_callback"));
+  mixin(bindCode("new_om_callback", "D_new_om_callback"));
+  mixin(bindCode("om_callback_director_connect", "D_om_callback_director_connect"));
   mixin(bindCode("om_register_type_of", "D_om_register_type_of"));
   mixin(bindCode("om_register_printable_text", "D_om_register_printable_text"));
   mixin(bindCode("om_register_bool_value", "D_om_register_bool_value"));
@@ -578,9 +580,12 @@ template SwigExternC(T) if (is(typeof(*(T.init)) P == function)) {
 
 SwigExternC!(void* function()) new_om_data;
 SwigExternC!(void function(void* jarg1)) delete_om_data;
-SwigExternC!(void* function(void* jarg1, void* jarg2)) om_callback_run;
-SwigExternC!(void* function()) new_om_callback;
+alias extern(C) void* function(void*, void* arg0) SwigDirector_om_callback_Callback0;
 SwigExternC!(void function(void* jarg1)) delete_om_callback;
+SwigExternC!(void* function(void* jarg1, void* jarg2)) om_callback_run;
+SwigExternC!(void* function(void* jarg1, void* jarg2)) om_callback_runSwigExplicitom_callback;
+SwigExternC!(void* function()) new_om_callback;
+extern(C) void function(void* cObject, void* dObject, SwigDirector_om_callback_Callback0 callback0) om_callback_director_connect;
 SwigExternC!(int function(void* jarg1)) om_register_type_of;
 SwigExternC!(const(char)* function(void* jarg1)) om_register_printable_text;
 SwigExternC!(uint function(void* jarg1)) om_register_bool_value;

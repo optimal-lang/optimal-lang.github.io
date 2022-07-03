@@ -1,4 +1,4 @@
-%module omscript
+%module(directors="1") omscript
 
 //%include "std_except.i"
 
@@ -10,6 +10,9 @@
 %{
 #include "omscript.h"
 %}
+
+/* turn on director wrapping Callback */
+%feature("director") om_callback;
  
 %include "omscript.h"
 

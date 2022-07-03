@@ -13,6 +13,7 @@
 #define SWIGD
 #endif
 
+#define SWIG_DIRECTORS
 
 
 #ifdef __cplusplus
@@ -231,6 +232,70 @@ SWIGEXPORT void SWIGRegisterStringCallback_omscript(SWIG_DStringHelperCallback c
   SWIG_d_string_callback = callback;
 }
 
+/* -----------------------------------------------------------------------------
+ * director_common.swg
+ *
+ * This file contains support for director classes which is common between
+ * languages.
+ * ----------------------------------------------------------------------------- */
+
+/*
+  Use -DSWIG_DIRECTOR_STATIC if you prefer to avoid the use of the
+  'Swig' namespace. This could be useful for multi-modules projects.
+*/
+#ifdef SWIG_DIRECTOR_STATIC
+/* Force anonymous (static) namespace */
+#define Swig
+#endif
+/* -----------------------------------------------------------------------------
+ * director.swg
+ *
+ * This file contains support for director classes so that D proxy
+ * methods can be called from C++.
+ * ----------------------------------------------------------------------------- */
+
+#if defined(DEBUG_DIRECTOR_OWNED)
+#include <iostream>
+#endif
+#include <string>
+#include <exception>
+
+namespace Swig {
+
+  // Director base class – not used in D directors.
+  class Director {
+  };
+
+  // Base class for director exceptions.
+  class DirectorException : public std::exception {
+  protected:
+    std::string swig_msg;
+
+  public:
+    DirectorException(const std::string &msg) : swig_msg(msg) {
+    }
+
+    virtual ~DirectorException() throw() {
+    }
+
+    const char *what() const throw() {
+      return swig_msg.c_str();
+    }
+  };
+
+  // Exception which is thrown when attempting to call a pure virtual method
+  // from D code through the director layer.
+  class DirectorPureVirtualException : public DirectorException {
+  public:
+    DirectorPureVirtualException(const char *msg) : DirectorException(std::string("Attempted to invoke pure virtual method ") + msg) {
+    }
+
+    static void raise(const char *msg) {
+      throw DirectorPureVirtualException(msg);
+    }
+  };
+}
+
 
 #include <string>
 
@@ -326,6 +391,50 @@ SWIGINTERN bool std_map_Sl_std_string_Sc_om_data_Sg__has_key(std::map< std::stri
           return i != self->end();
         }
 
+
+/* ---------------------------------------------------
+ * C++ director class methods
+ * --------------------------------------------------- */
+
+#include "omscript_wrap.h"
+
+SwigDirector_om_callback::SwigDirector_om_callback() : om_callback(), Swig::Director() {
+  swig_init_callbacks();
+}
+
+SwigDirector_om_callback::~SwigDirector_om_callback() {
+  
+}
+
+
+om_data SwigDirector_om_callback::run(om_list_data arg0) {
+  om_data c_result ;
+  void * jresult = 0 ;
+  void * jarg0  ;
+  
+  if (!swig_callback_run) {
+    return om_callback::run(arg0);
+  } else {
+    jarg0 = (void *)new om_list_data((const om_list_data &)arg0);
+    jresult = (void *) swig_callback_run(d_object, jarg0);
+    if (!jresult) {
+      SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Unexpected null return for type om_data");
+      return c_result;
+    }
+    c_result = *(om_data *)jresult; 
+  }
+  return c_result;
+}
+
+void SwigDirector_om_callback::swig_connect_director(void* dobj, SWIG_Callback0_t callback_run) {
+  d_object = dobj;swig_callback_run = callback_run;
+}
+
+void SwigDirector_om_callback::swig_init_callbacks() {
+  swig_callback_run = 0;
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -344,6 +453,14 @@ SWIGEXPORT void D_delete_om_data(void * jarg1) {
   std::shared_ptr< om_register > *arg1 = (std::shared_ptr< om_register > *) 0 ;
   
   arg1 = (std::shared_ptr< om_register > *)jarg1;
+  delete arg1;
+}
+
+
+SWIGEXPORT void D_delete_om_callback(void * jarg1) {
+  om_callback *arg1 = (om_callback *) 0 ;
+  
+  arg1 = (om_callback *)jarg1;
   delete arg1;
 }
 
@@ -368,21 +485,40 @@ SWIGEXPORT void * D_om_callback_run(void * jarg1, void * jarg2) {
 }
 
 
+SWIGEXPORT void * D_om_callback_runSwigExplicitom_callback(void * jarg1, void * jarg2) {
+  void * jresult ;
+  om_callback *arg1 = (om_callback *) 0 ;
+  om_list_data arg2 ;
+  om_list_data *argp2 ;
+  om_data result;
+  
+  arg1 = (om_callback *)jarg1;
+  argp2 = (om_list_data *)jarg2;
+  if (!argp2) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
+    return 0;
+  }
+  arg2 = *argp2; 
+  result = (arg1)->om_callback::run(arg2);
+  jresult = new om_data((const om_data &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT void * D_new_om_callback() {
   void * jresult ;
   om_callback *result = 0 ;
   
-  result = (om_callback *)new om_callback();
+  result = (om_callback *)new SwigDirector_om_callback();
   jresult = (void *)result;
   return jresult;
 }
 
 
-SWIGEXPORT void D_delete_om_callback(void * jarg1) {
-  om_callback *arg1 = (om_callback *) 0 ;
-  
-  arg1 = (om_callback *)jarg1;
-  delete arg1;
+SWIGEXPORT void D_om_callback_director_connect(void *objarg, void *dobj, SwigDirector_om_callback::SWIG_Callback0_t callback0) {
+  om_callback *obj = (om_callback *)objarg;
+  SwigDirector_om_callback *director = static_cast<SwigDirector_om_callback *>(obj);
+  director->swig_connect_director(dobj, callback0);
 }
 
 

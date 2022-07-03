@@ -23,7 +23,7 @@ using om_func_def = std::function<om_data(om_list_data)>;
 class om_callback
 {
 public:
-    //om_callback() {}
+    virtual ~om_callback() {}
     virtual om_data run(om_list_data)
     {
         throw std::runtime_error("run is not overridden");

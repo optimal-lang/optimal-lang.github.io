@@ -91,14 +91,37 @@ class om_callback {
   }
 
   public om_data run(om_list_data arg0) {
-    om_data ret = new om_data(omscript_im.om_callback_run(cast(void*)swigCPtr, om_list_data.swigGetCPtr(arg0)), true);
+    om_data ret = new om_data(((swigIsMethodOverridden!(om_data delegate(om_list_data), om_data function(om_list_data), run)()) ? omscript_im.om_callback_runSwigExplicitom_callback(cast(void*)swigCPtr, om_list_data.swigGetCPtr(arg0)) : omscript_im.om_callback_run(cast(void*)swigCPtr, om_list_data.swigGetCPtr(arg0))), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
 
   public this() {
     this(omscript_im.new_om_callback(), true);
+    swigDirectorConnect();
   }
+
+  private void swigDirectorConnect() {
+    omscript_im.SwigDirector_om_callback_Callback0 callback0;
+    if (swigIsMethodOverridden!(om_data delegate(om_list_data), om_data function(om_list_data), run)()) {
+      callback0 = &swigDirectorCallback_om_callback_run;
+    }
+
+    omscript_im.om_callback_director_connect(cast(void*)swigCPtr, cast(void*)this, callback0);
+  }
+
+  private bool swigIsMethodOverridden(DelegateType, FunctionType, alias fn)() {
+    DelegateType dg = &fn;
+    return dg.funcptr != SwigNonVirtualAddressOf!(FunctionType, fn);
+  }
+
+  private static Function SwigNonVirtualAddressOf(Function, alias fn)() {
+    return cast(Function) &fn;
+  }
+}
+
+private extern(C) void* swigDirectorCallback_om_callback_run(void* dObject, void* arg0) {
+  return om_data.swigGetCPtr((cast(om_callback)dObject).run(new om_list_data(arg0, true)));
 }
 
 class om_register {
