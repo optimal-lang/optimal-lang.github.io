@@ -11,18 +11,23 @@
 #include <exception>
 
 #define DEFPTR(CLS) std::shared_ptr<CLS>
-#define NEWPTR(CLS,ARGS) std::shared_ptr<CLS>(new CLS ARGS)
+#define NEWPTR(CLS, ARGS) std::shared_ptr<CLS>(new CLS ARGS)
 #define GETPTR(P) (P.get())
 #define GC_INIT()
 using om_data = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_data>;
 using om_dict_data = std::map<std::string, om_data>;
-using om_func_def = std::function<om_data (om_list_data)>;
-//typedef om_data (*om_callback)(om_list_data);
+using om_func_def = std::function<om_data(om_list_data)>;
+// typedef om_data (*om_callback)(om_list_data);
 
-class om_callback {
+class om_callback
+{
 public:
-    virtual om_data run(om_list_data) = 0;
+    //om_callback() {}
+    virtual om_data run(om_list_data)
+    {
+        throw std::runtime_error("run is not overridden");
+    }
 };
 
 #if !defined(SWIG)
@@ -135,9 +140,9 @@ public:
 
 class om_list : public om_register
 {
-    //DEFPTR(om_list_data) value;
+    // DEFPTR(om_list_data) value;
     om_list_data value;
-    //DEFPTR(om_dict_data) props;
+    // DEFPTR(om_dict_data) props;
     om_dict_data props;
 
 public:
@@ -153,7 +158,7 @@ public:
 
 class om_dict : public om_register
 {
-    //DEFPTR(om_dict_data) value;
+    // DEFPTR(om_dict_data) value;
     om_dict_data props;
 
 public:
@@ -172,7 +177,9 @@ class om_func : public om_register
 
 public:
     om_func(om_callback *data);
+#if !defined(SWIG)
     om_func(om_func_def data);
+#endif
     virtual type type_of();
     virtual std::string printable_text();
     virtual const std::string string_value();
@@ -193,11 +200,13 @@ om_data new_string(const std::string &s);
 om_data new_list(om_list_data array = {}, om_dict_data props = {});
 
 om_data new_dict(om_dict_data data);
-//om_data new_dict_pairs(std::vector<std::pair<std::string, om_data>> args);
+// om_data new_dict_pairs(std::vector<std::pair<std::string, om_data>> args);
 
 om_data new_func(om_callback *callback);
 
+#if !defined(SWIG)
 om_data new_func(om_func_def def);
+#endif
 
 om_data get_arg(om_list_data &args, long long index);
 
@@ -213,3 +222,5 @@ om_data print(om_data x);
 
 om_data eq(om_data a, om_data b);
 om_data equal(om_data a, om_data b);
+
+om_data call(om_data f, om_list_data __arguments__);

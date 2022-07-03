@@ -653,3 +653,8 @@ om_data equal(om_data a, om_data b)
 {
     return new_bool(om::equal(a, b));
 }
+
+om_data call(om_data f, om_list_data __arguments__)
+{
+    return (*GETPTR(f))(__arguments__);
+}

@@ -59,6 +59,48 @@ class om_data {
   }
 }
 
+class om_callback {
+  private void* swigCPtr;
+  protected bool swigCMemOwn;
+
+  public this(void* cObject, bool ownCObject) {
+    swigCPtr = cObject;
+    swigCMemOwn = ownCObject;
+  }
+
+  public static void* swigGetCPtr(typeof(this) obj) {
+    return (obj is null) ? null : obj.swigCPtr;
+  }
+
+  mixin omscript_im.SwigOperatorDefinitions;
+
+  ~this() {
+    dispose();
+  }
+
+  public void dispose() {
+    synchronized(this) {
+      if (swigCPtr !is null) {
+        if (swigCMemOwn) {
+          swigCMemOwn = false;
+          omscript_im.delete_om_callback(cast(void*)swigCPtr);
+        }
+        swigCPtr = null;
+      }
+    }
+  }
+
+  public om_data run(om_list_data arg0) {
+    om_data ret = new om_data(omscript_im.om_callback_run(cast(void*)swigCPtr, om_list_data.swigGetCPtr(arg0)), true);
+    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+    return ret;
+  }
+
+  public this() {
+    this(omscript_im.new_om_callback(), true);
+  }
+}
+
 class om_register {
   private void* swigCPtr;
   protected bool swigCMemOwn;
@@ -654,13 +696,8 @@ class om_func : om_register {
     }
   }
 
-  public this(SWIGTYPE_p_f_om_list_data__std__shared_ptrT_om_register_t data) {
-    this(omscript_im.new_om_func__SWIG_0(SWIGTYPE_p_f_om_list_data__std__shared_ptrT_om_register_t.swigGetCPtr(data)), true);
-  }
-
-  public this(SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t data) {
-    this(omscript_im.new_om_func__SWIG_1(SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t.swigGetCPtr(data)), true);
-    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  public this(om_callback data) {
+    this(omscript_im.new_om_func(om_callback.swigGetCPtr(data)), true);
   }
 
   public override om_register.type type_of() {
@@ -739,14 +776,8 @@ om_data new_dict(om_dict_data data) {
   return ret;
 }
 
-om_data new_func(SWIGTYPE_p_f_om_list_data__std__shared_ptrT_om_register_t callback) {
-  om_data ret = new om_data(omscript_im.new_func__SWIG_0(SWIGTYPE_p_f_om_list_data__std__shared_ptrT_om_register_t.swigGetCPtr(callback)), true);
-  return ret;
-}
-
-om_data new_func(SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t def) {
-  om_data ret = new om_data(omscript_im.new_func__SWIG_1(SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t.swigGetCPtr(def)), true);
-  if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+om_data new_func(om_callback callback) {
+  om_data ret = new om_data(omscript_im.new_func(om_callback.swigGetCPtr(callback)), true);
   return ret;
 }
 
@@ -770,6 +801,12 @@ om_data eq(om_data a, om_data b) {
 
 om_data equal(om_data a, om_data b) {
   om_data ret = new om_data(omscript_im.equal(om_data.swigGetCPtr(a), om_data.swigGetCPtr(b)), true);
+  if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  return ret;
+}
+
+om_data call(om_data f, om_list_data __arguments__) {
+  om_data ret = new om_data(omscript_im.call(om_data.swigGetCPtr(f), om_list_data.swigGetCPtr(__arguments__)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
@@ -1219,40 +1256,4 @@ class om_dict_data {
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
-}
-
-class SWIGTYPE_p_std__functionT_std__shared_ptrT_om_register_t_fom_list_dataF_t {
-  private void* swigCPtr;
-
-  public this(void* cObject, bool futureUse) {
-    swigCPtr = cObject;
-  }
-
-  protected this() {
-    swigCPtr = null;
-  }
-
-  public static void* swigGetCPtr(typeof(this) obj) {
-    return (obj is null) ? null : obj.swigCPtr;
-  }
-
-  mixin omscript_im.SwigOperatorDefinitions;
-}
-
-class SWIGTYPE_p_f_om_list_data__std__shared_ptrT_om_register_t {
-  private void* swigCPtr;
-
-  public this(void* cObject, bool futureUse) {
-    swigCPtr = cObject;
-  }
-
-  protected this() {
-    swigCPtr = null;
-  }
-
-  public static void* swigGetCPtr(typeof(this) obj) {
-    return (obj is null) ? null : obj.swigCPtr;
-  }
-
-  mixin omscript_im.SwigOperatorDefinitions;
 }

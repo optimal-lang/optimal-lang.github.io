@@ -250,7 +250,7 @@ SWIGEXPORT void SWIGRegisterStringCallback_omscript(SWIG_DStringHelperCallback c
 #include <algorithm>
 #include <stdexcept>
 
-SWIGINTERN std::vector< om_register_ptr > *new_std_vector_Sl_om_register_ptr_Sg___SWIG_2(std::vector< std::shared_ptr< om_register > >::size_type capacity){
+SWIGINTERN std::vector< om_data > *new_std_vector_Sl_om_data_Sg___SWIG_2(std::vector< std::shared_ptr< om_register > >::size_type capacity){
         std::vector< std::shared_ptr< class om_register > >* pv = 0;
         pv = new std::vector< std::shared_ptr< class om_register > >();
 
@@ -259,7 +259,7 @@ SWIGINTERN std::vector< om_register_ptr > *new_std_vector_Sl_om_register_ptr_Sg_
 
         return pv;
       }
-SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_vector_Sl_om_register_ptr_Sg__remove__SWIG_0(std::vector< om_register_ptr > *self){
+SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_vector_Sl_om_data_Sg__remove__SWIG_0(std::vector< om_data > *self){
         if (self->empty()) {
           throw std::out_of_range("Tried to remove last element from empty vector.");
         }
@@ -268,7 +268,7 @@ SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_ve
         self->pop_back();
         return value;
       }
-SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_vector_Sl_om_register_ptr_Sg__remove__SWIG_1(std::vector< om_register_ptr > *self,std::vector< std::shared_ptr< om_register > >::size_type index){
+SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_vector_Sl_om_data_Sg__remove__SWIG_1(std::vector< om_data > *self,std::vector< std::shared_ptr< om_register > >::size_type index){
         if (index >= self->size()) {
           throw std::out_of_range("Tried to remove element with invalid index.");
         }
@@ -278,50 +278,50 @@ SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_ve
         self->erase(it);
         return value;
       }
-SWIGINTERN void std_vector_Sl_om_register_ptr_Sg__removeBack(std::vector< om_register_ptr > *self,std::vector< std::shared_ptr< om_register > >::size_type how_many){
+SWIGINTERN void std_vector_Sl_om_data_Sg__removeBack(std::vector< om_data > *self,std::vector< std::shared_ptr< om_register > >::size_type how_many){
         std::vector< std::shared_ptr< class om_register > >::iterator end = self->end();
         std::vector< std::shared_ptr< class om_register > >::iterator start = end - how_many;
         self->erase(start, end);
       }
-SWIGINTERN void std_vector_Sl_om_register_ptr_Sg__linearRemove(std::vector< om_register_ptr > *self,std::vector< std::shared_ptr< om_register > >::size_type start_index,std::vector< std::shared_ptr< om_register > >::size_type end_index){
+SWIGINTERN void std_vector_Sl_om_data_Sg__linearRemove(std::vector< om_data > *self,std::vector< std::shared_ptr< om_register > >::size_type start_index,std::vector< std::shared_ptr< om_register > >::size_type end_index){
         std::vector< std::shared_ptr< class om_register > >::iterator start = self->begin() + start_index;
         std::vector< std::shared_ptr< class om_register > >::iterator end = self->begin() + end_index;
         self->erase(start, end);
       }
-SWIGINTERN void std_vector_Sl_om_register_ptr_Sg__insertAt(std::vector< om_register_ptr > *self,std::vector< std::shared_ptr< om_register > >::size_type index,std::shared_ptr< om_register > const &x){
+SWIGINTERN void std_vector_Sl_om_data_Sg__insertAt(std::vector< om_data > *self,std::vector< std::shared_ptr< om_register > >::size_type index,std::shared_ptr< om_register > const &x){
         std::vector< std::shared_ptr< class om_register > >::iterator it = self->begin() + index;
         self->insert(it, x);
       }
-SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_vector_Sl_om_register_ptr_Sg__getElement(std::vector< om_register_ptr > *self,std::vector< std::shared_ptr< om_register > >::size_type index){
+SWIGINTERN std::vector< std::shared_ptr< om_register > >::const_reference std_vector_Sl_om_data_Sg__getElement(std::vector< om_data > *self,std::vector< std::shared_ptr< om_register > >::size_type index){
         if ((index < 0) || (self->size() <= index)) {
           throw std::out_of_range("Tried to get value of element with invalid index.");
         }
         return (*self)[index];
       }
-SWIGINTERN void std_vector_Sl_om_register_ptr_Sg__setElement(std::vector< om_register_ptr > *self,std::vector< std::shared_ptr< om_register > >::size_type index,std::shared_ptr< om_register > const &val){
+SWIGINTERN void std_vector_Sl_om_data_Sg__setElement(std::vector< om_data > *self,std::vector< std::shared_ptr< om_register > >::size_type index,std::shared_ptr< om_register > const &val){
         if ((index < 0) || (self->size() <= index)) {
           throw std::out_of_range("Tried to set value of element with invalid index.");
         }
         (*self)[index] = val;
       }
-SWIGINTERN std::shared_ptr< om_register > const &std_map_Sl_std_string_Sc_om_register_ptr_Sg__get(std::map< std::string,om_register_ptr > *self,std::string const &key){
+SWIGINTERN std::shared_ptr< om_register > const &std_map_Sl_std_string_Sc_om_data_Sg__get(std::map< std::string,om_data > *self,std::string const &key){
           std::map< std::string, std::shared_ptr< class om_register >, std::less< std::string > >::iterator i = self->find(key);
           if (i != self->end())
             return i->second;
           else
             throw std::out_of_range("key not found");
         }
-SWIGINTERN void std_map_Sl_std_string_Sc_om_register_ptr_Sg__set(std::map< std::string,om_register_ptr > *self,std::string const &key,std::shared_ptr< om_register > const &x){
+SWIGINTERN void std_map_Sl_std_string_Sc_om_data_Sg__set(std::map< std::string,om_data > *self,std::string const &key,std::shared_ptr< om_register > const &x){
           (*self)[key] = x;
         }
-SWIGINTERN void std_map_Sl_std_string_Sc_om_register_ptr_Sg__del(std::map< std::string,om_register_ptr > *self,std::string const &key){
+SWIGINTERN void std_map_Sl_std_string_Sc_om_data_Sg__del(std::map< std::string,om_data > *self,std::string const &key){
           std::map< std::string, std::shared_ptr< class om_register >, std::less< std::string > >::iterator i = self->find(key);
           if (i != self->end())
             self->erase(i);
           else
             throw std::out_of_range("key not found");
         }
-SWIGINTERN bool std_map_Sl_std_string_Sc_om_register_ptr_Sg__has_key(std::map< std::string,om_register_ptr > *self,std::string const &key){
+SWIGINTERN bool std_map_Sl_std_string_Sc_om_data_Sg__has_key(std::map< std::string,om_data > *self,std::string const &key){
           std::map< std::string, std::shared_ptr< class om_register >, std::less< std::string > >::iterator i = self->find(key);
           return i != self->end();
         }
@@ -344,6 +344,44 @@ SWIGEXPORT void D_delete_om_data(void * jarg1) {
   std::shared_ptr< om_register > *arg1 = (std::shared_ptr< om_register > *) 0 ;
   
   arg1 = (std::shared_ptr< om_register > *)jarg1;
+  delete arg1;
+}
+
+
+SWIGEXPORT void * D_om_callback_run(void * jarg1, void * jarg2) {
+  void * jresult ;
+  om_callback *arg1 = (om_callback *) 0 ;
+  om_list_data arg2 ;
+  om_list_data *argp2 ;
+  om_data result;
+  
+  arg1 = (om_callback *)jarg1;
+  argp2 = (om_list_data *)jarg2;
+  if (!argp2) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
+    return 0;
+  }
+  arg2 = *argp2; 
+  result = (arg1)->run(arg2);
+  jresult = new om_data((const om_data &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * D_new_om_callback() {
+  void * jresult ;
+  om_callback *result = 0 ;
+  
+  result = (om_callback *)new om_callback();
+  jresult = (void *)result;
+  return jresult;
+}
+
+
+SWIGEXPORT void D_delete_om_callback(void * jarg1) {
+  om_callback *arg1 = (om_callback *) 0 ;
+  
+  arg1 = (om_callback *)jarg1;
   delete arg1;
 }
 
@@ -410,13 +448,13 @@ SWIGEXPORT char * D_om_register_string_value(void * jarg1) {
 
 SWIGEXPORT void D_om_register_push(void * jarg1, void * jarg2) {
   om_register *arg1 = (om_register *) 0 ;
-  om_register_ptr arg2 ;
-  om_register_ptr *argp2 ;
+  om_data arg2 ;
+  om_data *argp2 ;
   
   arg1 = (om_register *)jarg1;
-  argp2 = (om_register_ptr *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return ;
   }
   arg2 = *argp2; 
@@ -428,7 +466,7 @@ SWIGEXPORT void * D_om_register_swigOpAdd(void * jarg1, void * jarg2) {
   void * jresult ;
   om_register *arg1 = (om_register *) 0 ;
   om_register *arg2 = 0 ;
-  om_register_ptr result;
+  om_data result;
   
   arg1 = (om_register *)jarg1;
   arg2 = (om_register *)jarg2;
@@ -437,7 +475,7 @@ SWIGEXPORT void * D_om_register_swigOpAdd(void * jarg1, void * jarg2) {
     return 0;
   } 
   result = (arg1)->operator +(*arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -447,7 +485,7 @@ SWIGEXPORT void * D_om_register_opCall(void * jarg1, void * jarg2) {
   om_register *arg1 = (om_register *) 0 ;
   om_list_data arg2 ;
   om_list_data *argp2 ;
-  om_register_ptr result;
+  om_data result;
   
   arg1 = (om_register *)jarg1;
   argp2 = (om_list_data *)jarg2;
@@ -457,7 +495,7 @@ SWIGEXPORT void * D_om_register_opCall(void * jarg1, void * jarg2) {
   }
   arg2 = *argp2; 
   result = (arg1)->operator ()(arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -465,18 +503,18 @@ SWIGEXPORT void * D_om_register_opCall(void * jarg1, void * jarg2) {
 SWIGEXPORT void * D_om_register_opIndex(void * jarg1, void * jarg2) {
   void * jresult ;
   om_register *arg1 = (om_register *) 0 ;
-  om_register_ptr arg2 ;
-  om_register_ptr *argp2 ;
-  om_register_ptr *result = 0 ;
+  om_data arg2 ;
+  om_data *argp2 ;
+  om_data *result = 0 ;
   
   arg1 = (om_register *)jarg1;
-  argp2 = (om_register_ptr *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg2 = *argp2; 
-  result = (om_register_ptr *) &(arg1)->operator [](arg2);
+  result = (om_data *) &(arg1)->operator [](arg2);
   jresult = (void *)result;
   return jresult;
 }
@@ -622,13 +660,13 @@ SWIGEXPORT unsigned int D_bool_value__SWIG_0(unsigned int jarg1) {
 
 SWIGEXPORT unsigned int D_bool_value__SWIG_1(void * jarg1) {
   unsigned int jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr *argp1 ;
+  om_data arg1 ;
+  om_data *argp1 ;
   bool result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
@@ -652,13 +690,13 @@ SWIGEXPORT unsigned int D_bool_value__SWIG_2(void * jarg1) {
 
 SWIGEXPORT double D_number_value__SWIG_0(void * jarg1) {
   double jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr *argp1 ;
+  om_data arg1 ;
+  om_data *argp1 ;
   double result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
@@ -682,13 +720,13 @@ SWIGEXPORT double D_number_value__SWIG_1(void * jarg1) {
 
 SWIGEXPORT char * D_string_value__SWIG_0(void * jarg1) {
   char * jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr *argp1 ;
+  om_data arg1 ;
+  om_data *argp1 ;
   std::string result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
@@ -712,13 +750,13 @@ SWIGEXPORT char * D_string_value__SWIG_1(void * jarg1) {
 
 SWIGEXPORT char * D_printable_text(void * jarg1) {
   char * jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr *argp1 ;
+  om_data arg1 ;
+  om_data *argp1 ;
   std::string result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
@@ -1082,13 +1120,13 @@ SWIGEXPORT unsigned int D_om_list_bool_value(void * jarg1) {
 
 SWIGEXPORT void D_om_list_push(void * jarg1, void * jarg2) {
   om_list *arg1 = (om_list *) 0 ;
-  om_register_ptr arg2 ;
-  om_register_ptr *argp2 ;
+  om_data arg2 ;
+  om_data *argp2 ;
   
   arg1 = (om_list *)jarg1;
-  argp2 = (om_register_ptr *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return ;
   }
   arg2 = *argp2; 
@@ -1099,18 +1137,18 @@ SWIGEXPORT void D_om_list_push(void * jarg1, void * jarg2) {
 SWIGEXPORT void * D_om_list_opIndex(void * jarg1, void * jarg2) {
   void * jresult ;
   om_list *arg1 = (om_list *) 0 ;
-  om_register_ptr arg2 ;
-  om_register_ptr *argp2 ;
-  om_register_ptr *result = 0 ;
+  om_data arg2 ;
+  om_data *argp2 ;
+  om_data *result = 0 ;
   
   arg1 = (om_list *)jarg1;
-  argp2 = (om_register_ptr *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg2 = *argp2; 
-  result = (om_register_ptr *) &(arg1)->operator [](arg2);
+  result = (om_data *) &(arg1)->operator [](arg2);
   jresult = (void *)result;
   return jresult;
 }
@@ -1208,30 +1246,12 @@ SWIGEXPORT void D_delete_om_dict(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_new_om_func__SWIG_0(void * jarg1) {
+SWIGEXPORT void * D_new_om_func(void * jarg1) {
   void * jresult ;
-  om_callback arg1 = (om_callback) 0 ;
+  om_callback *arg1 = (om_callback *) 0 ;
   om_func *result = 0 ;
   
-  arg1 = (om_callback)jarg1;
-  result = (om_func *)new om_func(arg1);
-  jresult = (void *)result;
-  return jresult;
-}
-
-
-SWIGEXPORT void * D_new_om_func__SWIG_1(void * jarg1) {
-  void * jresult ;
-  SwigValueWrapper< std::function< std::shared_ptr< om_register > (om_list_data) > > arg1 ;
-  om_func_def *argp1 ;
-  om_func *result = 0 ;
-  
-  argp1 = (om_func_def *)jarg1;
-  if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_func_def");
-    return 0;
-  }
-  arg1 = *argp1; 
+  arg1 = (om_callback *)jarg1;
   result = (om_func *)new om_func(arg1);
   jresult = (void *)result;
   return jresult;
@@ -1291,7 +1311,7 @@ SWIGEXPORT void * D_om_func_opCall(void * jarg1, void * jarg2) {
   om_func *arg1 = (om_func *) 0 ;
   om_list_data arg2 ;
   om_list_data *argp2 ;
-  om_register_ptr result;
+  om_data result;
   
   arg1 = (om_func *)jarg1;
   argp2 = (om_list_data *)jarg2;
@@ -1301,7 +1321,7 @@ SWIGEXPORT void * D_om_func_opCall(void * jarg1, void * jarg2) {
   }
   arg2 = *argp2; 
   result = (arg1)->operator ()(arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1316,20 +1336,20 @@ SWIGEXPORT void D_delete_om_func(void * jarg1) {
 
 SWIGEXPORT void * D_new_undefined() {
   void * jresult ;
-  om_register_ptr result;
+  om_data result;
   
   result = new_undefined();
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT void * D_new_null() {
   void * jresult ;
-  om_register_ptr result;
+  om_data result;
   
   result = new_null();
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1337,11 +1357,11 @@ SWIGEXPORT void * D_new_null() {
 SWIGEXPORT void * D_new_bool(unsigned int jarg1) {
   void * jresult ;
   bool arg1 ;
-  om_register_ptr result;
+  om_data result;
   
   arg1 = jarg1 ? true : false;
   result = new_bool(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1349,11 +1369,11 @@ SWIGEXPORT void * D_new_bool(unsigned int jarg1) {
 SWIGEXPORT void * D_new_number(double jarg1) {
   void * jresult ;
   double arg1 ;
-  om_register_ptr result;
+  om_data result;
   
   arg1 = (double)jarg1;
   result = new_number(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1361,7 +1381,7 @@ SWIGEXPORT void * D_new_number(double jarg1) {
 SWIGEXPORT void * D_new_string(char * jarg1) {
   void * jresult ;
   std::string *arg1 = 0 ;
-  om_register_ptr result;
+  om_data result;
   
   if (!jarg1) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "null string");
@@ -1370,7 +1390,7 @@ SWIGEXPORT void * D_new_string(char * jarg1) {
   std::string arg1_str(jarg1);
   arg1 = &arg1_str; 
   result = new_string((std::string const &)*arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1381,7 +1401,7 @@ SWIGEXPORT void * D_new_list__SWIG_0(void * jarg1, void * jarg2) {
   om_dict_data arg2 ;
   om_list_data *argp1 ;
   om_dict_data *argp2 ;
-  om_register_ptr result;
+  om_data result;
   
   argp1 = (om_list_data *)jarg1;
   if (!argp1) {
@@ -1396,7 +1416,7 @@ SWIGEXPORT void * D_new_list__SWIG_0(void * jarg1, void * jarg2) {
   }
   arg2 = *argp2; 
   result = new_list(arg1,arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1405,7 +1425,7 @@ SWIGEXPORT void * D_new_list__SWIG_1(void * jarg1) {
   void * jresult ;
   om_list_data arg1 ;
   om_list_data *argp1 ;
-  om_register_ptr result;
+  om_data result;
   
   argp1 = (om_list_data *)jarg1;
   if (!argp1) {
@@ -1414,17 +1434,17 @@ SWIGEXPORT void * D_new_list__SWIG_1(void * jarg1) {
   }
   arg1 = *argp1; 
   result = new_list(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT void * D_new_list__SWIG_2() {
   void * jresult ;
-  om_register_ptr result;
+  om_data result;
   
   result = new_list();
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1433,7 +1453,7 @@ SWIGEXPORT void * D_new_dict(void * jarg1) {
   void * jresult ;
   om_dict_data arg1 ;
   om_dict_data *argp1 ;
-  om_register_ptr result;
+  om_data result;
   
   argp1 = (om_dict_data *)jarg1;
   if (!argp1) {
@@ -1442,37 +1462,19 @@ SWIGEXPORT void * D_new_dict(void * jarg1) {
   }
   arg1 = *argp1; 
   result = new_dict(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * D_new_func__SWIG_0(void * jarg1) {
+SWIGEXPORT void * D_new_func(void * jarg1) {
   void * jresult ;
-  om_callback arg1 = (om_callback) 0 ;
-  om_register_ptr result;
+  om_callback *arg1 = (om_callback *) 0 ;
+  om_data result;
   
-  arg1 = (om_callback)jarg1;
+  arg1 = (om_callback *)jarg1;
   result = new_func(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
-  return jresult;
-}
-
-
-SWIGEXPORT void * D_new_func__SWIG_1(void * jarg1) {
-  void * jresult ;
-  SwigValueWrapper< std::function< std::shared_ptr< om_register > (om_list_data) > > arg1 ;
-  om_func_def *argp1 ;
-  om_register_ptr result;
-  
-  argp1 = (om_func_def *)jarg1;
-  if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_func_def");
-    return 0;
-  }
-  arg1 = *argp1; 
-  result = new_func(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
@@ -1481,7 +1483,7 @@ SWIGEXPORT void * D_get_arg(void * jarg1, long long jarg2) {
   void * jresult ;
   om_list_data *arg1 = 0 ;
   long long arg2 ;
-  om_register_ptr result;
+  om_data result;
   
   arg1 = (om_list_data *)jarg1;
   if (!arg1) {
@@ -1490,106 +1492,132 @@ SWIGEXPORT void * D_get_arg(void * jarg1, long long jarg2) {
   } 
   arg2 = (long long)jarg2;
   result = get_arg(*arg1,arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT void * D_print(void * jarg1) {
   void * jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr *argp1 ;
-  om_register_ptr result;
+  om_data arg1 ;
+  om_data *argp1 ;
+  om_data result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
   result = print(arg1);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT void * D_eq(void * jarg1, void * jarg2) {
   void * jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr arg2 ;
-  om_register_ptr *argp1 ;
-  om_register_ptr *argp2 ;
-  om_register_ptr result;
+  om_data arg1 ;
+  om_data arg2 ;
+  om_data *argp1 ;
+  om_data *argp2 ;
+  om_data result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
-  argp2 = (om_register_ptr *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg2 = *argp2; 
   result = eq(arg1,arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT void * D_equal(void * jarg1, void * jarg2) {
   void * jresult ;
-  om_register_ptr arg1 ;
-  om_register_ptr arg2 ;
-  om_register_ptr *argp1 ;
-  om_register_ptr *argp2 ;
-  om_register_ptr result;
+  om_data arg1 ;
+  om_data arg2 ;
+  om_data *argp1 ;
+  om_data *argp2 ;
+  om_data result;
   
-  argp1 = (om_register_ptr *)jarg1;
+  argp1 = (om_data *)jarg1;
   if (!argp1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg1 = *argp1; 
-  argp2 = (om_register_ptr *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_register_ptr");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg2 = *argp2; 
   result = equal(arg1,arg2);
-  jresult = new om_register_ptr((const om_register_ptr &)result); 
+  jresult = new om_data((const om_data &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * D_call(void * jarg1, void * jarg2) {
+  void * jresult ;
+  om_data arg1 ;
+  om_list_data arg2 ;
+  om_data *argp1 ;
+  om_list_data *argp2 ;
+  om_data result;
+  
+  argp1 = (om_data *)jarg1;
+  if (!argp1) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
+    return 0;
+  }
+  arg1 = *argp1; 
+  argp2 = (om_list_data *)jarg2;
+  if (!argp2) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
+    return 0;
+  }
+  arg2 = *argp2; 
+  result = call(arg1,arg2);
+  jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT unsigned int D_om_list_data_empty(void * jarg1) {
   unsigned int jresult ;
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   bool result;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
-  result = (bool)((std::vector< om_register_ptr > const *)arg1)->empty();
+  arg1 = (std::vector< om_data > *)jarg1;
+  result = (bool)((std::vector< om_data > const *)arg1)->empty();
   jresult = result;
   return jresult;
 }
 
 
 SWIGEXPORT void D_om_list_data_clear(void * jarg1) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   (arg1)->clear();
 }
 
 
 SWIGEXPORT void D_om_list_data_push_back(void * jarg1, void * jarg2) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::shared_ptr< om_register > *arg2 = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::shared_ptr< om_register > *)jarg2;
   if (!arg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "std::shared_ptr< om_register > const & type is null");
@@ -1600,20 +1628,20 @@ SWIGEXPORT void D_om_list_data_push_back(void * jarg1, void * jarg2) {
 
 
 SWIGEXPORT void D_om_list_data_pop_back(void * jarg1) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   (arg1)->pop_back();
 }
 
 
 SWIGEXPORT size_t D_om_list_data_size(void * jarg1) {
   size_t jresult ;
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type result;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
-  result = ((std::vector< om_register_ptr > const *)arg1)->size();
+  arg1 = (std::vector< om_data > *)jarg1;
+  result = ((std::vector< om_data > const *)arg1)->size();
   jresult = result;
   return jresult;
 }
@@ -1621,21 +1649,21 @@ SWIGEXPORT size_t D_om_list_data_size(void * jarg1) {
 
 SWIGEXPORT size_t D_om_list_data_capacity(void * jarg1) {
   size_t jresult ;
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type result;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
-  result = ((std::vector< om_register_ptr > const *)arg1)->capacity();
+  arg1 = (std::vector< om_data > *)jarg1;
+  result = ((std::vector< om_data > const *)arg1)->capacity();
   jresult = result;
   return jresult;
 }
 
 
 SWIGEXPORT void D_om_list_data_reserve(void * jarg1, size_t jarg2) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   try {
     (arg1)->reserve(arg2);
@@ -1648,9 +1676,9 @@ SWIGEXPORT void D_om_list_data_reserve(void * jarg1, size_t jarg2) {
 
 SWIGEXPORT void * D_new_om_list_data__SWIG_0() {
   void * jresult ;
-  std::vector< om_register_ptr > *result = 0 ;
+  std::vector< om_data > *result = 0 ;
   
-  result = (std::vector< om_register_ptr > *)new std::vector< om_register_ptr >();
+  result = (std::vector< om_data > *)new std::vector< om_data >();
   jresult = (void *)result;
   return jresult;
 }
@@ -1658,15 +1686,15 @@ SWIGEXPORT void * D_new_om_list_data__SWIG_0() {
 
 SWIGEXPORT void * D_new_om_list_data__SWIG_1(void * jarg1) {
   void * jresult ;
-  std::vector< om_register_ptr > *arg1 = 0 ;
-  std::vector< om_register_ptr > *result = 0 ;
+  std::vector< om_data > *arg1 = 0 ;
+  std::vector< om_data > *result = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   if (!arg1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "std::vector< om_register_ptr > const & type is null");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "std::vector< om_data > const & type is null");
     return 0;
   } 
-  result = (std::vector< om_register_ptr > *)new std::vector< om_register_ptr >((std::vector< om_register_ptr > const &)*arg1);
+  result = (std::vector< om_data > *)new std::vector< om_data >((std::vector< om_data > const &)*arg1);
   jresult = (void *)result;
   return jresult;
 }
@@ -1675,11 +1703,11 @@ SWIGEXPORT void * D_new_om_list_data__SWIG_1(void * jarg1) {
 SWIGEXPORT void * D_new_om_list_data__SWIG_2(size_t jarg1) {
   void * jresult ;
   std::vector< std::shared_ptr< om_register > >::size_type arg1 ;
-  std::vector< om_register_ptr > *result = 0 ;
+  std::vector< om_data > *result = 0 ;
   
   arg1 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg1;
   try {
-    result = (std::vector< om_register_ptr > *)new_std_vector_Sl_om_register_ptr_Sg___SWIG_2(arg1);
+    result = (std::vector< om_data > *)new_std_vector_Sl_om_data_Sg___SWIG_2(arg1);
   } catch(std::length_error &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return 0;
@@ -1691,12 +1719,12 @@ SWIGEXPORT void * D_new_om_list_data__SWIG_2(size_t jarg1) {
 
 SWIGEXPORT void * D_om_list_data_remove__SWIG_0(void * jarg1) {
   void * jresult ;
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::value_type *result = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   try {
-    result = (std::vector< std::shared_ptr< om_register > >::value_type *) &std_vector_Sl_om_register_ptr_Sg__remove__SWIG_0(arg1);
+    result = (std::vector< std::shared_ptr< om_register > >::value_type *) &std_vector_Sl_om_data_Sg__remove__SWIG_0(arg1);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return 0;
@@ -1708,14 +1736,14 @@ SWIGEXPORT void * D_om_list_data_remove__SWIG_0(void * jarg1) {
 
 SWIGEXPORT void * D_om_list_data_remove__SWIG_1(void * jarg1, size_t jarg2) {
   void * jresult ;
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::vector< std::shared_ptr< om_register > >::value_type *result = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   try {
-    result = (std::vector< std::shared_ptr< om_register > >::value_type *) &std_vector_Sl_om_register_ptr_Sg__remove__SWIG_1(arg1,arg2);
+    result = (std::vector< std::shared_ptr< om_register > >::value_type *) &std_vector_Sl_om_data_Sg__remove__SWIG_1(arg1,arg2);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return 0;
@@ -1726,13 +1754,13 @@ SWIGEXPORT void * D_om_list_data_remove__SWIG_1(void * jarg1, size_t jarg2) {
 
 
 SWIGEXPORT void D_om_list_data_removeBack(void * jarg1, size_t jarg2) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   try {
-    std_vector_Sl_om_register_ptr_Sg__removeBack(arg1,arg2);
+    std_vector_Sl_om_data_Sg__removeBack(arg1,arg2);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return ;
@@ -1741,15 +1769,15 @@ SWIGEXPORT void D_om_list_data_removeBack(void * jarg1, size_t jarg2) {
 
 
 SWIGEXPORT void D_om_list_data_linearRemove(void * jarg1, size_t jarg2, size_t jarg3) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg3 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   arg3 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg3;
   try {
-    std_vector_Sl_om_register_ptr_Sg__linearRemove(arg1,arg2,arg3);
+    std_vector_Sl_om_data_Sg__linearRemove(arg1,arg2,arg3);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return ;
@@ -1758,11 +1786,11 @@ SWIGEXPORT void D_om_list_data_linearRemove(void * jarg1, size_t jarg2, size_t j
 
 
 SWIGEXPORT void D_om_list_data_insertAt(void * jarg1, size_t jarg2, void * jarg3) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::shared_ptr< om_register > *arg3 = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   arg3 = (std::shared_ptr< om_register > *)jarg3;
   if (!arg3) {
@@ -1770,7 +1798,7 @@ SWIGEXPORT void D_om_list_data_insertAt(void * jarg1, size_t jarg2, void * jarg3
     return ;
   } 
   try {
-    std_vector_Sl_om_register_ptr_Sg__insertAt(arg1,arg2,(std::shared_ptr< om_register > const &)*arg3);
+    std_vector_Sl_om_data_Sg__insertAt(arg1,arg2,(std::shared_ptr< om_register > const &)*arg3);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return ;
@@ -1780,14 +1808,14 @@ SWIGEXPORT void D_om_list_data_insertAt(void * jarg1, size_t jarg2, void * jarg3
 
 SWIGEXPORT void * D_om_list_data_getElement(void * jarg1, size_t jarg2) {
   void * jresult ;
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::vector< std::shared_ptr< om_register > >::value_type *result = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   try {
-    result = (std::vector< std::shared_ptr< om_register > >::value_type *) &std_vector_Sl_om_register_ptr_Sg__getElement(arg1,arg2);
+    result = (std::vector< std::shared_ptr< om_register > >::value_type *) &std_vector_Sl_om_data_Sg__getElement(arg1,arg2);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return 0;
@@ -1798,11 +1826,11 @@ SWIGEXPORT void * D_om_list_data_getElement(void * jarg1, size_t jarg2) {
 
 
 SWIGEXPORT void D_om_list_data_setElement(void * jarg1, size_t jarg2, void * jarg3) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   std::vector< std::shared_ptr< om_register > >::size_type arg2 ;
   std::shared_ptr< om_register > *arg3 = 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   arg2 = (std::vector< std::shared_ptr< om_register > >::size_type)jarg2;
   arg3 = (std::shared_ptr< om_register > *)jarg3;
   if (!arg3) {
@@ -1810,7 +1838,7 @@ SWIGEXPORT void D_om_list_data_setElement(void * jarg1, size_t jarg2, void * jar
     return ;
   } 
   try {
-    std_vector_Sl_om_register_ptr_Sg__setElement(arg1,arg2,(std::shared_ptr< om_register > const &)*arg3);
+    std_vector_Sl_om_data_Sg__setElement(arg1,arg2,(std::shared_ptr< om_register > const &)*arg3);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return ;
@@ -1819,18 +1847,18 @@ SWIGEXPORT void D_om_list_data_setElement(void * jarg1, size_t jarg2, void * jar
 
 
 SWIGEXPORT void D_delete_om_list_data(void * jarg1) {
-  std::vector< om_register_ptr > *arg1 = (std::vector< om_register_ptr > *) 0 ;
+  std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;
   
-  arg1 = (std::vector< om_register_ptr > *)jarg1;
+  arg1 = (std::vector< om_data > *)jarg1;
   delete arg1;
 }
 
 
 SWIGEXPORT void * D_new_om_dict_data__SWIG_0() {
   void * jresult ;
-  std::map< std::string,om_register_ptr > *result = 0 ;
+  std::map< std::string,om_data > *result = 0 ;
   
-  result = (std::map< std::string,om_register_ptr > *)new std::map< std::string,om_register_ptr >();
+  result = (std::map< std::string,om_data > *)new std::map< std::string,om_data >();
   jresult = (void *)result;
   return jresult;
 }
@@ -1838,15 +1866,15 @@ SWIGEXPORT void * D_new_om_dict_data__SWIG_0() {
 
 SWIGEXPORT void * D_new_om_dict_data__SWIG_1(void * jarg1) {
   void * jresult ;
-  std::map< std::string,om_register_ptr > *arg1 = 0 ;
-  std::map< std::string,om_register_ptr > *result = 0 ;
+  std::map< std::string,om_data > *arg1 = 0 ;
+  std::map< std::string,om_data > *result = 0 ;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   if (!arg1) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "std::map< std::string,om_register_ptr > const & type is null");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "std::map< std::string,om_data > const & type is null");
     return 0;
   } 
-  result = (std::map< std::string,om_register_ptr > *)new std::map< std::string,om_register_ptr >((std::map< std::string,om_register_ptr > const &)*arg1);
+  result = (std::map< std::string,om_data > *)new std::map< std::string,om_data >((std::map< std::string,om_data > const &)*arg1);
   jresult = (void *)result;
   return jresult;
 }
@@ -1854,11 +1882,11 @@ SWIGEXPORT void * D_new_om_dict_data__SWIG_1(void * jarg1) {
 
 SWIGEXPORT unsigned int D_om_dict_data_size(void * jarg1) {
   unsigned int jresult ;
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   unsigned int result;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
-  result = (unsigned int)((std::map< std::string,om_register_ptr > const *)arg1)->size();
+  arg1 = (std::map< std::string,om_data > *)jarg1;
+  result = (unsigned int)((std::map< std::string,om_data > const *)arg1)->size();
   jresult = result;
   return jresult;
 }
@@ -1866,31 +1894,31 @@ SWIGEXPORT unsigned int D_om_dict_data_size(void * jarg1) {
 
 SWIGEXPORT unsigned int D_om_dict_data_empty(void * jarg1) {
   unsigned int jresult ;
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   bool result;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
-  result = (bool)((std::map< std::string,om_register_ptr > const *)arg1)->empty();
+  arg1 = (std::map< std::string,om_data > *)jarg1;
+  result = (bool)((std::map< std::string,om_data > const *)arg1)->empty();
   jresult = result;
   return jresult;
 }
 
 
 SWIGEXPORT void D_om_dict_data_clear(void * jarg1) {
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   (arg1)->clear();
 }
 
 
 SWIGEXPORT void * D_om_dict_data_get(void * jarg1, char * jarg2) {
   void * jresult ;
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   std::string *arg2 = 0 ;
   std::shared_ptr< om_register > *result = 0 ;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   if (!jarg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "null string");
     return 0;
@@ -1898,7 +1926,7 @@ SWIGEXPORT void * D_om_dict_data_get(void * jarg1, char * jarg2) {
   std::string arg2_str(jarg2);
   arg2 = &arg2_str; 
   try {
-    result = (std::shared_ptr< om_register > *) &std_map_Sl_std_string_Sc_om_register_ptr_Sg__get(arg1,(std::string const &)*arg2);
+    result = (std::shared_ptr< om_register > *) &std_map_Sl_std_string_Sc_om_data_Sg__get(arg1,(std::string const &)*arg2);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return 0;
@@ -1909,11 +1937,11 @@ SWIGEXPORT void * D_om_dict_data_get(void * jarg1, char * jarg2) {
 
 
 SWIGEXPORT void D_om_dict_data_set(void * jarg1, char * jarg2, void * jarg3) {
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   std::string *arg2 = 0 ;
   std::shared_ptr< om_register > *arg3 = 0 ;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   if (!jarg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "null string");
     return ;
@@ -1925,15 +1953,15 @@ SWIGEXPORT void D_om_dict_data_set(void * jarg1, char * jarg2, void * jarg3) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "std::shared_ptr< om_register > const & type is null");
     return ;
   } 
-  std_map_Sl_std_string_Sc_om_register_ptr_Sg__set(arg1,(std::string const &)*arg2,(std::shared_ptr< om_register > const &)*arg3);
+  std_map_Sl_std_string_Sc_om_data_Sg__set(arg1,(std::string const &)*arg2,(std::shared_ptr< om_register > const &)*arg3);
 }
 
 
 SWIGEXPORT void D_om_dict_data_del(void * jarg1, char * jarg2) {
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   std::string *arg2 = 0 ;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   if (!jarg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "null string");
     return ;
@@ -1941,7 +1969,7 @@ SWIGEXPORT void D_om_dict_data_del(void * jarg1, char * jarg2) {
   std::string arg2_str(jarg2);
   arg2 = &arg2_str; 
   try {
-    std_map_Sl_std_string_Sc_om_register_ptr_Sg__del(arg1,(std::string const &)*arg2);
+    std_map_Sl_std_string_Sc_om_data_Sg__del(arg1,(std::string const &)*arg2);
   } catch(std::out_of_range &_e) {
     SWIG_DSetPendingException(SWIG_DNoSuchElementException, (&_e)->what());
     return ;
@@ -1951,27 +1979,27 @@ SWIGEXPORT void D_om_dict_data_del(void * jarg1, char * jarg2) {
 
 SWIGEXPORT unsigned int D_om_dict_data_has_key(void * jarg1, char * jarg2) {
   unsigned int jresult ;
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   std::string *arg2 = 0 ;
   bool result;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   if (!jarg2) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "null string");
     return 0;
   }
   std::string arg2_str(jarg2);
   arg2 = &arg2_str; 
-  result = (bool)std_map_Sl_std_string_Sc_om_register_ptr_Sg__has_key(arg1,(std::string const &)*arg2);
+  result = (bool)std_map_Sl_std_string_Sc_om_data_Sg__has_key(arg1,(std::string const &)*arg2);
   jresult = result;
   return jresult;
 }
 
 
 SWIGEXPORT void D_delete_om_dict_data(void * jarg1) {
-  std::map< std::string,om_register_ptr > *arg1 = (std::map< std::string,om_register_ptr > *) 0 ;
+  std::map< std::string,om_data > *arg1 = (std::map< std::string,om_data > *) 0 ;
   
-  arg1 = (std::map< std::string,om_register_ptr > *)jarg1;
+  arg1 = (std::map< std::string,om_data > *)jarg1;
   delete arg1;
 }
 

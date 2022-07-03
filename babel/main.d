@@ -7,11 +7,23 @@ class X {
 
 void main()
 {
-	auto obj = new class X
+	auto obj = new class om_callback
 	{
-		override int x(int a, int b) { return a+b; }
+		public override om_data run(om_list_data __arguments__) {
+			om_data a = get_arg(__arguments__, 0);
+			om_data b = get_arg(__arguments__, 1);
+			return new_number( number_value(a)+number_value(b) );
+		}
 	};
-	writeln(obj.x(11,22));
+	om_list_data args = new om_list_data();
+	args.push_back(new_number(11));
+	args.push_back(new_number(22));
+	print(new_list(args));
+	print(obj.run(args));
+	om_data add2 = new_func(obj);
+	print(call(add2, args));
+	/*
+	*/
 	print(new_bool(true));
 	print(new_string("abc"));
 	print(new_number(1.23));
