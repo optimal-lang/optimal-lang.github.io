@@ -2,7 +2,7 @@
 
 int main()
 {
-    GC_INIT();
+    //GC_INIT();
     static om_register_ptr null = new_null();
     static om_register_ptr undefined = new_undefined();
     try
