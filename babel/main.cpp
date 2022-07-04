@@ -7,8 +7,10 @@ int main()
     static om_data undefined = new_undefined();
     try
     {
-        var v1;
-        var_print(v1);
+        var v1 = 111;
+        var v2 = 222;
+        var_print(v1+v2);
+        var_print(var_concat({v1, v2}));
         om_data add2= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
         (*print)({(*add2)({new_number(11),new_number(22)})});
         auto x=new_number(123);
