@@ -658,3 +658,8 @@ om_data call(om_data f, om_list_data __arguments__)
 {
     return (*GETPTR(f))(__arguments__);
 }
+
+long double test_long_double()
+{
+    return 1.77;
+}

@@ -1729,6 +1729,16 @@ SWIGEXPORT void * D_call(void * jarg1, void * jarg2) {
 }
 
 
+SWIGEXPORT void * D_test_long_double() {
+  void * jresult ;
+  long double result;
+  
+  result = (long double)test_long_double();
+  jresult = new long double((const long double &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT unsigned int D_om_list_data_empty(void * jarg1) {
   unsigned int jresult ;
   std::vector< om_data > *arg1 = (std::vector< om_data > *) 0 ;

@@ -3,6 +3,7 @@ import omscript;
 
 void main()
 {
+	//test_long_double();
     om_data c = new_number(10);
     auto obj = new class om_callback
     {

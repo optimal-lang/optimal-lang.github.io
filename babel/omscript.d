@@ -834,6 +834,11 @@ om_data call(om_data f, om_list_data __arguments__) {
   return ret;
 }
 
+SWIGTYPE_p_long_double test_long_double() {
+  SWIGTYPE_p_long_double ret = new SWIGTYPE_p_long_double(omscript_im.test_long_double(), true);
+  return ret;
+}
+
 class om_list_data {
   private void* swigCPtr;
   protected bool swigCMemOwn;
@@ -1279,4 +1284,22 @@ class om_dict_data {
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
+}
+
+class SWIGTYPE_p_long_double {
+  private void* swigCPtr;
+
+  public this(void* cObject, bool futureUse) {
+    swigCPtr = cObject;
+  }
+
+  protected this() {
+    swigCPtr = null;
+  }
+
+  public static void* swigGetCPtr(typeof(this) obj) {
+    return (obj is null) ? null : obj.swigCPtr;
+  }
+
+  mixin omscript_im.SwigOperatorDefinitions;
 }

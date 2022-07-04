@@ -399,6 +399,7 @@ static this() {
   mixin(bindCode("eq", "D_eq"));
   mixin(bindCode("equal", "D_equal"));
   mixin(bindCode("call", "D_call"));
+  mixin(bindCode("test_long_double", "D_test_long_double"));
   mixin(bindCode("om_list_data_empty", "D_om_list_data_empty"));
   mixin(bindCode("om_list_data_clear", "D_om_list_data_clear"));
   mixin(bindCode("om_list_data_push_back", "D_om_list_data_push_back"));
@@ -683,6 +684,7 @@ SwigExternC!(void* function(void* jarg1)) print;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) eq;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) equal;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) call;
+SwigExternC!(void* function()) test_long_double;
 SwigExternC!(uint function(void* jarg1)) om_list_data_empty;
 SwigExternC!(void function(void* jarg1)) om_list_data_clear;
 SwigExternC!(void function(void* jarg1, void* jarg2)) om_list_data_push_back;

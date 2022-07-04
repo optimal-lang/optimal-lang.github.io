@@ -224,3 +224,5 @@ om_data eq(om_data a, om_data b);
 om_data equal(om_data a, om_data b);
 
 om_data call(om_data f, om_list_data __arguments__);
+
+long double test_long_double();
