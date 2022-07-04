@@ -1,14 +1,6 @@
 import std.stdio;
 import omscript;
 
-class X
-{
-    int x(int a, int b)
-    {
-        return 0;
-    }
-}
-
 void main()
 {
     om_data c = new_number(10);
