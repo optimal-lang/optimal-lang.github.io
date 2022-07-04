@@ -17,9 +17,11 @@ gcc:QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter -Wno-unused-function -Wno-ca
 msvc:QMAKE_CXXFLAGS += /bigobj
 
 HEADERS += utf8LogHandler.h \
-    omscript.h
+    omscript.h \
+    omvar.h
 
-SOURCES += tmp.cpp \
+SOURCES += \
+    main.cpp \
     omscript.cpp
 
 INCLUDEPATH += $$PWD
