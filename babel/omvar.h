@@ -20,6 +20,18 @@ public:
     {
         this->data = ::new_number(x);
     }
+    var(const std::string &x)
+    {
+        this->data = ::new_string(x);
+    }
+    var(const char *x)
+    {
+        this->data = ::new_string(x);
+    }
+    operator bool()
+    {
+        return ::bool_value(this->data);
+    }
     var operator+(var &other)
     {
         om_data sum = ::new_number(::number_value(this->data) + ::number_value(other.data));
