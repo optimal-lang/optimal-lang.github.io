@@ -13,13 +13,13 @@ int main()
         var_print(var_concat({v1, v2}));
         if(v1) var_print("v1 is true"); else var_print("v1 is false");
         //var add2v=(om_func_def)([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
-        var add2v=(om_func_def)([&](om_list_data __arguments__)->om_data{var a=get_arg(__arguments__, 0); var b=get_arg(__arguments__, 1); {{return (a+b).data;} return undefined;}});
-        var_print({add2v({new_number(110),new_number(220)})});
-        var add2v2=(var_func)([&](std::vector<var> __arguments__)->var{var a=__arguments__[0]; var b=__arguments__[1]; {{return a+b;} return undefined;}});
-        var_print({add2v2({1100,2200})});
+        //var add2v=(om_func_def)([&](om_list_data __arguments__)->om_data{var a=get_arg(__arguments__, 0); var b=get_arg(__arguments__, 1); {{return (a+b).data;} return undefined;}});
+        //var_print({add2v({new_number(110),new_number(220)})});
+        var add2=(var_func)([&](std::vector<var> __arguments__)->var{var a=__arguments__[0]; var b=__arguments__[1]; {{return a+b;} return undefined;}});
+        var_print({add2({1100,2200})});
 
-        om_data add2= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
-        (*print)({(*add2)({new_number(11),new_number(22)})});
+        //om_data add2= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
+        //(*print)({(*add2)({new_number(11),new_number(22)})});
         auto x=new_number(123);
         (*print)({x});
         auto add3=new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); om_data c=get_arg(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
@@ -47,10 +47,11 @@ int main()
         (*print)({((*(new_string("abc")))+(*(null)))});
         (*print)({((*(null))+(*(new_string("abc"))))});
         (*print)({((*(null))+(*(new_number(0))))});
-        (*print)({add2});
+        //(*print)({add2});
+        var_print(add2);
         auto abc=new_number(1);
         (*print)({new_string(std::string("ABC+1: ")+string_value(((*(abc))+(*(new_number(1)))))+std::string(""))});
-        (*print)({new_string(std::string("test: ")+string_value(((*((*add2)({new_number(11),new_number(22)})))+(*(new_number(1)))))+std::string(""))});
+        //(*print)({new_string(std::string("test: ")+string_value(((*((*add2)({new_number(11),new_number(22)})))+(*(new_number(1)))))+std::string(""))});
         auto s=new_string("AB");
         {
             {
