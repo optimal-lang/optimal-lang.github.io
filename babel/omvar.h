@@ -3,6 +3,10 @@
 
 #include "omscript.h"
 
+class var;
+
+using var_func = std::function<var(std::vector<var>)>;
+
 class var
 {
 //protected:
@@ -31,6 +35,17 @@ public:
     var(om_func_def x)
     {
         this->data = ::new_func(x);
+    }
+    var(var_func x)
+    {
+        this->data = ::new_func([x](om_list_data __arguments__)->om_data{
+            std::vector<var> args;
+            for (long long i=0; i<__arguments__.size(); i++)
+            {
+                args.push_back(var(__arguments__[i]));
+            }
+            return (x(args)).data;
+        });
     }
     operator bool()
     {
