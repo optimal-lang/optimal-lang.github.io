@@ -85,4 +85,11 @@ var var_concat(std::vector<var> args)
     return ::new_string(result);
 }
 
+var var_get_arg(std::vector<var> args, long long index)
+{
+    if (index >= args.size())
+        return new_undefined();
+    return args[index];
+}
+
 #endif // OMVAR_H
