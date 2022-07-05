@@ -28,6 +28,10 @@ public:
     {
         this->data = ::new_string(x);
     }
+    var(om_func_def x)
+    {
+        this->data = ::new_func(x);
+    }
     operator bool()
     {
         return ::bool_value(this->data);
@@ -36,6 +40,16 @@ public:
     {
         om_data sum = ::new_number(::number_value(this->data) + ::number_value(other.data));
         var result = sum;
+        return result;
+    }
+    var operator()(std::vector<var> __arguments__)
+    {
+        om_list_data args;
+        for(long long i=0; i<__arguments__.size(); i++)
+        {
+            args.push_back(__arguments__[i].data);
+        }
+        var result = (*(this->data.get()))(args);
         return result;
     }
 };
