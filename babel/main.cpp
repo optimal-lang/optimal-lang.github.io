@@ -9,11 +9,11 @@ int main()
     {
         var v1 = 111;
         var v2 = 222;
-        var_print(v1+v2);
-        var_print(var_concat({v1, v2}));
-        if(v1) var_print("v1 is true"); else var_print("v1 is false");
+        print(v1+v2);
+        print(concat({v1, v2}));
+        if(v1) print("v1 is true"); else print("v1 is false");
         var add2=(var_func)([&](std::vector<var> __arguments__)->var{var a=var_get_arg(__arguments__,0); var b=var_get_arg(__arguments__,1); {{return a+b;} return undefined;}});
-        var_print({add2({1100,2200})});
+        print({add2({1100,2200})});
 
         auto x=new_number(123);
         (*print)({x});
@@ -43,7 +43,7 @@ int main()
         (*print)({((*(null))+(*(new_string("abc"))))});
         (*print)({((*(null))+(*(new_number(0))))});
         //(*print)({add2});
-        var_print(add2);
+        print(add2);
         auto abc=new_number(1);
         (*print)({new_string(std::string("ABC+1: ")+string_value(((*(abc))+(*(new_number(1)))))+std::string(""))});
         //(*print)({new_string(std::string("test: ")+string_value(((*((*add2)({new_number(11),new_number(22)})))+(*(new_number(1)))))+std::string(""))});

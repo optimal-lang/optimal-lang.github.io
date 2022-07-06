@@ -69,13 +69,18 @@ public:
     }
 };
 
-var var_print(const var &x)
+var print(const var &x)
 {
-    ::print(x.data);
+    ::__print__(x.data);
     return x;
 }
 
-var var_concat(std::vector<var> args)
+var eq(const var &a, const var &b)
+{
+    return ::__eq__(a.data, b.data);
+}
+
+var concat(std::vector<var> args)
 {
     std::string result;
     for (long long i=0; i<args.size(); i++)

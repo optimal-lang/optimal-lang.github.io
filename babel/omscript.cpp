@@ -505,7 +505,7 @@ om_data &om_list::operator[](om_data index)
     return this->value[i];
 }
 
-om_data print(om_data x)
+om_data __print__(om_data x)
 {
     std::cout << printable_text(x) << std::endl;
     return x;
@@ -644,22 +644,17 @@ bool om::equal(om_data a, om_data b)
     return (false);
 }
 
-om_data eq(om_data a, om_data b)
+om_data __eq__(om_data a, om_data b)
 {
     return new_bool(om::eq(a, b));
 }
 
-om_data equal(om_data a, om_data b)
+om_data __equal__(om_data a, om_data b)
 {
     return new_bool(om::equal(a, b));
 }
 
-om_data call(om_data f, om_list_data __arguments__)
+om_data call(om_data f, om_data __this__, om_list_data __arguments__)
 {
     return (*GETPTR(f))(__arguments__);
-}
-
-long double test_long_double()
-{
-    return 1.77;
 }

@@ -221,13 +221,11 @@ om_data console_log(om_data x)
 }
 */
 
-om_data print(om_data x);
+om_data __print__(om_data x);
 
-om_data eq(om_data a, om_data b);
-om_data equal(om_data a, om_data b);
+om_data __eq__(om_data a, om_data b);
+om_data __equal__(om_data a, om_data b);
 
-om_data call(om_data f, om_list_data __arguments__);
-
-long double test_long_double();
+om_data __call__(om_data f, om_data __this__, om_list_data __arguments__);
 
 #endif //OMSCRIPT_H
