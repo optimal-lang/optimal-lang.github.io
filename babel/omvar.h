@@ -80,6 +80,11 @@ var eq(const var &a, const var &b)
     return ::__eq__(a.data, b.data);
 }
 
+var equal(const var &a, const var &b)
+{
+    return ::__equal__(a.data, b.data);
+}
+
 var concat(std::vector<var> args)
 {
     std::string result;
