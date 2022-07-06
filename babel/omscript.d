@@ -810,32 +810,27 @@ om_data get_arg(om_list_data args, long index) {
   return ret;
 }
 
-om_data print(om_data x) {
-  om_data ret = new om_data(omscript_im.print(om_data.swigGetCPtr(x)), true);
+om_data __print__(om_data x) {
+  om_data ret = new om_data(omscript_im.__print__(om_data.swigGetCPtr(x)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
 
-om_data eq(om_data a, om_data b) {
-  om_data ret = new om_data(omscript_im.eq(om_data.swigGetCPtr(a), om_data.swigGetCPtr(b)), true);
+om_data __eq__(om_data a, om_data b) {
+  om_data ret = new om_data(omscript_im.__eq__(om_data.swigGetCPtr(a), om_data.swigGetCPtr(b)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
 
-om_data equal(om_data a, om_data b) {
-  om_data ret = new om_data(omscript_im.equal(om_data.swigGetCPtr(a), om_data.swigGetCPtr(b)), true);
+om_data __equal__(om_data a, om_data b) {
+  om_data ret = new om_data(omscript_im.__equal__(om_data.swigGetCPtr(a), om_data.swigGetCPtr(b)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }
 
-om_data call(om_data f, om_list_data __arguments__) {
-  om_data ret = new om_data(omscript_im.call(om_data.swigGetCPtr(f), om_list_data.swigGetCPtr(__arguments__)), true);
+om_data __call__(om_data f, om_data __this__, om_list_data __arguments__) {
+  om_data ret = new om_data(omscript_im.__call__(om_data.swigGetCPtr(f), om_data.swigGetCPtr(__this__), om_list_data.swigGetCPtr(__arguments__)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
-  return ret;
-}
-
-SWIGTYPE_p_long_double test_long_double() {
-  SWIGTYPE_p_long_double ret = new SWIGTYPE_p_long_double(omscript_im.test_long_double(), true);
   return ret;
 }
 
@@ -1284,22 +1279,4 @@ class om_dict_data {
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
-}
-
-class SWIGTYPE_p_long_double {
-  private void* swigCPtr;
-
-  public this(void* cObject, bool futureUse) {
-    swigCPtr = cObject;
-  }
-
-  protected this() {
-    swigCPtr = null;
-  }
-
-  public static void* swigGetCPtr(typeof(this) obj) {
-    return (obj is null) ? null : obj.swigCPtr;
-  }
-
-  mixin omscript_im.SwigOperatorDefinitions;
 }

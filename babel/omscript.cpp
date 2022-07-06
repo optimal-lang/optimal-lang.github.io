@@ -654,7 +654,7 @@ om_data __equal__(om_data a, om_data b)
     return new_bool(om::equal(a, b));
 }
 
-om_data call(om_data f, om_data __this__, om_list_data __arguments__)
+om_data __call__(om_data f, om_data __this__, om_list_data __arguments__)
 {
     return (*GETPTR(f))(__arguments__);
 }

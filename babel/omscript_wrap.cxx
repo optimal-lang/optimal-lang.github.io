@@ -1633,7 +1633,7 @@ SWIGEXPORT void * D_get_arg(void * jarg1, long long jarg2) {
 }
 
 
-SWIGEXPORT void * D_print(void * jarg1) {
+SWIGEXPORT void * D___print__(void * jarg1) {
   void * jresult ;
   om_data arg1 ;
   om_data *argp1 ;
@@ -1645,13 +1645,13 @@ SWIGEXPORT void * D_print(void * jarg1) {
     return 0;
   }
   arg1 = *argp1; 
-  result = print(arg1);
+  result = __print__(arg1);
   jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * D_eq(void * jarg1, void * jarg2) {
+SWIGEXPORT void * D___eq__(void * jarg1, void * jarg2) {
   void * jresult ;
   om_data arg1 ;
   om_data arg2 ;
@@ -1671,13 +1671,13 @@ SWIGEXPORT void * D_eq(void * jarg1, void * jarg2) {
     return 0;
   }
   arg2 = *argp2; 
-  result = eq(arg1,arg2);
+  result = __eq__(arg1,arg2);
   jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * D_equal(void * jarg1, void * jarg2) {
+SWIGEXPORT void * D___equal__(void * jarg1, void * jarg2) {
   void * jresult ;
   om_data arg1 ;
   om_data arg2 ;
@@ -1697,18 +1697,20 @@ SWIGEXPORT void * D_equal(void * jarg1, void * jarg2) {
     return 0;
   }
   arg2 = *argp2; 
-  result = equal(arg1,arg2);
+  result = __equal__(arg1,arg2);
   jresult = new om_data((const om_data &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * D_call(void * jarg1, void * jarg2) {
+SWIGEXPORT void * D___call__(void * jarg1, void * jarg2, void * jarg3) {
   void * jresult ;
   om_data arg1 ;
-  om_list_data arg2 ;
+  om_data arg2 ;
+  om_list_data arg3 ;
   om_data *argp1 ;
-  om_list_data *argp2 ;
+  om_data *argp2 ;
+  om_list_data *argp3 ;
   om_data result;
   
   argp1 = (om_data *)jarg1;
@@ -1717,24 +1719,20 @@ SWIGEXPORT void * D_call(void * jarg1, void * jarg2) {
     return 0;
   }
   arg1 = *argp1; 
-  argp2 = (om_list_data *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
+    return 0;
+  }
+  arg2 = *argp2; 
+  argp3 = (om_list_data *)jarg3;
+  if (!argp3) {
     SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
     return 0;
   }
-  arg2 = *argp2; 
-  result = call(arg1,arg2);
+  arg3 = *argp3; 
+  result = __call__(arg1,arg2,arg3);
   jresult = new om_data((const om_data &)result); 
-  return jresult;
-}
-
-
-SWIGEXPORT void * D_test_long_double() {
-  void * jresult ;
-  long double result;
-  
-  result = (long double)test_long_double();
-  jresult = new long double((const long double &)result); 
   return jresult;
 }
 
