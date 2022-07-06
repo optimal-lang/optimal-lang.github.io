@@ -12,7 +12,7 @@ int main()
         print(v1+v2);
         print(concat({v1, v2}));
         if(v1) print("v1 is true"); else print("v1 is false");
-        var add2=(var_func)([&](std::vector<var> __arguments__)->var{var a=var_get_arg(__arguments__,0); var b=var_get_arg(__arguments__,1); {{return a+b;} return undefined;}});
+        var add2=(var_func)([&](std::vector<var> __arguments__)->var{var a=get_arg(__arguments__,0); var b=get_arg(__arguments__,1); {{return (((var)(a+b))+var(111));} return undefined;}});
         print({add2({1100,2200})});
 
         auto x=new_number(123);

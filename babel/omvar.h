@@ -47,12 +47,20 @@ public:
             return (x(args)).data;
         });
     }
+    /*
+    bool to_bool()
+    {
+        return ::bool_value(this->data);
+    }
+    */
     operator bool()
     {
         return ::bool_value(this->data);
     }
-    var operator+(var &other)
+    var operator+(const var &other)
     {
+        //__print__(this->data);
+        //__print__(other.data);
         om_data sum = ::new_number(::number_value(this->data) + ::number_value(other.data));
         var result = sum;
         return result;
@@ -95,7 +103,7 @@ var concat(std::vector<var> args)
     return ::new_string(result);
 }
 
-var var_get_arg(std::vector<var> args, long long index)
+var get_arg(std::vector<var> args, long long index)
 {
     if (index >= args.size())
         return new_undefined();

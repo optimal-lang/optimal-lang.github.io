@@ -21,7 +21,6 @@ using om_data = std::shared_ptr<class om_register>;
 using om_list_data = std::vector<om_data>;
 using om_dict_data = std::map<std::string, om_data>;
 using om_func_def = std::function<om_data(om_list_data)>;
-// typedef om_data (*om_callback)(om_list_data);
 
 class om_callback
 {
@@ -212,14 +211,6 @@ om_data new_func(om_func_def def);
 #endif
 
 om_data __get_arg__(om_list_data &args, long long index);
-
-/*
-om_data console_log(om_data x)
-{
-    std::cout << string_value(x) << std::endl;
-    return new_null();
-}
-*/
 
 om_data __print__(om_data x);
 
