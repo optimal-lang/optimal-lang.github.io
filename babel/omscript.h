@@ -211,7 +211,7 @@ om_data new_func(om_callback *callback);
 om_data new_func(om_func_def def);
 #endif
 
-om_data get_arg(om_list_data &args, long long index);
+om_data __get_arg__(om_list_data &args, long long index);
 
 /*
 om_data console_log(om_data x)

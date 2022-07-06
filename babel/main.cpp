@@ -17,9 +17,9 @@ int main()
 
         auto x=new_number(123);
         (*print)({x});
-        auto add3=new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); om_data c=get_arg(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
+        auto add3=new_func([&](om_list_data __arguments__)->om_data{om_data a=__get_arg__(__arguments__, 0); om_data b=__get_arg__(__arguments__, 1); om_data c=__get_arg__(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
         (*print)({(*add3)({new_number(11),new_number(22),new_number(33)})});
-        om_data test01= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); {{auto a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
+        om_data test01= new_func([&](om_list_data __arguments__)->om_data{om_data a=__get_arg__(__arguments__, 0); {{auto a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
         (*print)({(*test01)({new_number(22)})});
         auto y=((*(((*(new_number(1)))+(*(new_number(2))))))+(*(new_number(3))));
         (*print)({y});

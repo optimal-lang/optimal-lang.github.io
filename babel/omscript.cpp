@@ -452,7 +452,7 @@ om_data new_func(om_func_def def)
     return NEWPTR(om_func, (def));
 }
 
-om_data get_arg(om_list_data &args, long long index)
+om_data __get_arg__(om_list_data &args, long long index)
 {
     if (index >= args.size())
         return new_undefined();
