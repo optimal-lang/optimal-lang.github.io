@@ -804,8 +804,8 @@ om_data new_func(om_callback callback) {
   return ret;
 }
 
-om_data get_arg(om_list_data args, long index) {
-  om_data ret = new om_data(omscript_im.get_arg(om_list_data.swigGetCPtr(args), index), true);
+om_data __get_arg__(om_list_data args, long index) {
+  om_data ret = new om_data(omscript_im.__get_arg__(om_list_data.swigGetCPtr(args), index), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }

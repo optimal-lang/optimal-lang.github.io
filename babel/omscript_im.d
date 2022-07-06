@@ -394,7 +394,7 @@ static this() {
   mixin(bindCode("new_list__SWIG_2", "D_new_list__SWIG_2"));
   mixin(bindCode("new_dict", "D_new_dict"));
   mixin(bindCode("new_func", "D_new_func"));
-  mixin(bindCode("get_arg", "D_get_arg"));
+  mixin(bindCode("__get_arg__", "D___get_arg__"));
   mixin(bindCode("__print__", "D___print__"));
   mixin(bindCode("__eq__", "D___eq__"));
   mixin(bindCode("__equal__", "D___equal__"));
@@ -678,7 +678,7 @@ SwigExternC!(void* function(void* jarg1)) new_list__SWIG_1;
 SwigExternC!(void* function()) new_list__SWIG_2;
 SwigExternC!(void* function(void* jarg1)) new_dict;
 SwigExternC!(void* function(void* jarg1)) new_func;
-SwigExternC!(void* function(void* jarg1, long jarg2)) get_arg;
+SwigExternC!(void* function(void* jarg1, long jarg2)) __get_arg__;
 SwigExternC!(void* function(void* jarg1)) __print__;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) __eq__;
 SwigExternC!(void* function(void* jarg1, void* jarg2)) __equal__;

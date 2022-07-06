@@ -10,8 +10,8 @@ void main()
     {
         public override om_data run(om_list_data __arguments__)
         {
-            om_data a = get_arg(__arguments__, 0);
-            om_data b = get_arg(__arguments__, 1);
+            om_data a = __get_arg__(__arguments__, 0);
+            om_data b = __get_arg__(__arguments__, 1);
             return new_number((number_value(a) + number_value(b)) * number_value(c));
         }
     };
@@ -25,7 +25,7 @@ void main()
         {
         public override om_data run(om_list_data __arguments__)
         {
-            om_data a = get_arg(__arguments__, 0); om_data b = get_arg(__arguments__, 1);
+            om_data a = __get_arg__(__arguments__, 0); om_data b = __get_arg__(__arguments__, 1);
                 return new_number((number_value(a) + number_value(b)) * number_value(c));
         }
     }

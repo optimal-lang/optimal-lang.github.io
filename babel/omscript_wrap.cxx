@@ -1615,7 +1615,7 @@ SWIGEXPORT void * D_new_func(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_get_arg(void * jarg1, long long jarg2) {
+SWIGEXPORT void * D___get_arg__(void * jarg1, long long jarg2) {
   void * jresult ;
   om_list_data *arg1 = 0 ;
   long long arg2 ;
@@ -1627,7 +1627,7 @@ SWIGEXPORT void * D_get_arg(void * jarg1, long long jarg2) {
     return 0;
   } 
   arg2 = (long long)jarg2;
-  result = get_arg(*arg1,arg2);
+  result = __get_arg__(*arg1,arg2);
   jresult = new om_data((const om_data &)result); 
   return jresult;
 }
