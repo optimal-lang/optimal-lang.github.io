@@ -7,13 +7,13 @@ int main()
     static om_data undefined = new_undefined();
     try
     {
-        om_data add2= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
+        var add2= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); {{return ((*(a))+(*(b)));} return undefined;}});
         (*print)({(*add2)({new_number(11),new_number(22)})});
         var x=new_number(123);
         (*print)({x});
         var add3=new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); om_data b=get_arg(__arguments__, 1); om_data c=get_arg(__arguments__, 2); {{return ((*(((*(a))+(*(b)))))+(*(c)));} return undefined;}});
         (*print)({(*add3)({new_number(11),new_number(22),new_number(33)})});
-        om_data test01= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); {{var a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
+        var test01= new_func([&](om_list_data __arguments__)->om_data{om_data a=get_arg(__arguments__, 0); {{var a10=((*(a))+(*(new_number(10)))); (*print)({a10});} return undefined;}});
         (*print)({(*test01)({new_number(22)})});
         var y=((*(((*(new_number(1)))+(*(new_number(2))))))+(*(new_number(3))));
         (*print)({y});

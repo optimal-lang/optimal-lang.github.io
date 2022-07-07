@@ -21,7 +21,7 @@ HEADERS += utf8LogHandler.h \
     omvar.h
 
 SOURCES += \
-    main.cpp \
+    tmp.cpp \
     omscript.cpp
 
 INCLUDEPATH += $$PWD

@@ -93,7 +93,7 @@ export function compile_ast(ast, info = {}) {
         } break;
         case "FunctionDeclaration": {
             let text = "";
-            text += "om_data " + ast.id.name + "= new_func("
+            text += "var " + ast.id.name + "= new_func("
             text += "[&](om_list_data __arguments__)->om_data{";
             let params = [];
             let i = 0;
