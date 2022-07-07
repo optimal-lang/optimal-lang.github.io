@@ -15,6 +15,8 @@ int main()
         print({add3({var(11),var(22),var(33)})});
         var test01=(var_func)([&](std::vector<var> __arguments__)->var{var a=get_arg(__arguments__, 0); {{var a10=(a+var(10)); print({a10});} return undefined;}});
         print({test01({var(22)})});
+        var y=((var(1)+var(2))+var(3));
+        print({y});
 
     }
     catch(std::runtime_error e)
