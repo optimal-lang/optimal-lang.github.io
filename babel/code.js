@@ -18,10 +18,10 @@ function test01(a) {
 }
 print(test01(22));
 
-/*
 let y = 1 + 2 + 3;
 print(y);
 
+/*
 print("abc");
 print("abc" + 123);
 print("abc" + null);
