@@ -17,6 +17,10 @@ int main()
         print({test01({var(22)})});
         var y=((var(1)+var(2))+var(3));
         print({y});
+        print({var("abc")});
+        print({(var("abc")+var(123))});
+        print({(var("abc")+null)});
+        print({(var("abc")+undefined)});
 
     }
     catch(std::runtime_error e)

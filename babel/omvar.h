@@ -61,7 +61,8 @@ public:
     {
         //__print__(this->data);
         //__print__(other.data);
-        om_data sum = ::new_number(::number_value(this->data) + ::number_value(other.data));
+        //om_data sum = ::new_number(::number_value(this->data) + ::number_value(other.data));
+        om_data sum = ::__op_add__(this->data, other.data);
         var result = sum;
         return result;
     }
@@ -72,7 +73,8 @@ public:
         {
             args.push_back(__arguments__[i].data);
         }
-        var result = (*(this->data.get()))(args);
+        //var result = (*(this->data.get()))(args);
+        var result = __call__(this->data, new_undefined(), args);
         return result;
     }
 };

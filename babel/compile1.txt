@@ -4,3 +4,7 @@
 32
 undefined
 6
+"abc"
+"abc123"
+"abcnull"
+"abcundefined"

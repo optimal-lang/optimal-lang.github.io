@@ -51,3 +51,6 @@ include($$(HOME)/include/include.pri)
 contains(DEFINES, OM_USE_GC) {
   LIBS += -lgc -lgccpp
 }
+
+DISTFILES += \
+    code.js

@@ -60,8 +60,8 @@ public:
     virtual double number_value();
     virtual const std::string string_value();
     virtual void push(om_data x);
-    virtual om_data operator+(om_register &other);
-    virtual om_data operator()(om_list_data __arguments__);
+    //virtual om_data operator+(om_register &other);
+    //virtual om_data operator()(om_list_data __arguments__);
     virtual om_data &operator[](om_data index);
 };
 
@@ -186,7 +186,7 @@ public:
     virtual std::string printable_text();
     virtual const std::string string_value();
     virtual bool bool_value();
-    virtual om_data operator()(om_list_data __arguments__);
+    virtual om_data operator()(om_data __this__, om_list_data __arguments__);
 };
 
 om_data new_undefined();
@@ -218,5 +218,7 @@ om_data __eq__(om_data a, om_data b);
 om_data __equal__(om_data a, om_data b);
 
 om_data __call__(om_data f, om_data __this__, om_list_data __arguments__);
+
+om_data __op_add__(om_data a, om_data b);
 
 #endif //OMSCRIPT_H

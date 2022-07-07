@@ -358,7 +358,7 @@ bool om_func::bool_value()
     return true;
 }
 
-om_data om_func::operator()(om_list_data __arguments__)
+om_data om_func::operator()(om_data __this__, om_list_data __arguments__)
 {
     if (this->callback)
         return this->callback->run(__arguments__);
@@ -459,6 +459,7 @@ om_data __get_arg__(om_list_data &args, long long index)
     return args[index];
 }
 
+/*
 om_data om_register::operator+(om_register &other)
 {
     if ((this->type_of() == om_register::type::NULL_ || this->type_of() == om_register::type::UNDEFINED) &&
@@ -481,6 +482,7 @@ om_data om_register::operator()(om_list_data __arguments__)
 {
     return new_undefined();
 }
+*/
 
 om_data &om_register::operator[](om_data index)
 {
@@ -656,5 +658,25 @@ om_data __equal__(om_data a, om_data b)
 
 om_data __call__(om_data f, om_data __this__, om_list_data __arguments__)
 {
-    return (*GETPTR(f))(__arguments__);
+    //return (*GETPTR(f))(__arguments__);
+    if (f->type_of() != om_register::type::FUNCTION) return new_undefined();
+    return (*((om_func *)GETPTR(f)))(__this__, __arguments__);
+}
+
+om_data __op_add__(om_data a, om_data b)
+{
+    if ((a->type_of() == om_register::type::NULL_ || a->type_of() == om_register::type::UNDEFINED) &&
+            (b->type_of() == om_register::type::NULL_ || b->type_of() == om_register::type::UNDEFINED))
+    {
+        return new_null();
+    }
+    if (a->type_of() == om_register::type::STRING || b->type_of() == om_register::type::STRING)
+    {
+        return new_string(::string_value(a) + ::string_value(b));
+    }
+    if (a->type_of() == om_register::type::LIST)
+    {
+        return new_string(::string_value(a) + ::string_value(b));
+    }
+    return new_number(::number_value(a) + ::number_value(b));
 }
