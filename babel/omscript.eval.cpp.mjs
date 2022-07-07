@@ -132,13 +132,13 @@ export function compile_ast(ast, info = {}) {
             return text;
         } break;
         case "BooleanLiteral": {
-            return `new_bool(${ast.value})`;
+            return `var(${ast.value})`;
         } break;
         case "NumericLiteral": {
-            return `new_number(${ast.extra.raw})`;
+            return `var(${ast.extra.raw})`;
         } break;
         case "StringLiteral": {
-            return `new_string(${ast.extra.raw})`;
+            return `var(${ast.extra.raw})`;
         } break;
         case "NullLiteral": {
             return null;
