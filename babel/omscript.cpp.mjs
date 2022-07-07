@@ -5,7 +5,7 @@ import { compile_ast } from "./omscript.eval.cpp.mjs";
 import { optimize } from "./optimize.mjs";
 
 const CPP_HEAD =
-    `#include "omscript.h"
+    `#include "omvar.h"
 
 int main() {
     //GC_INIT();

@@ -38,7 +38,7 @@ function compile_switch(ast, info) {
     //text += "do {";
     text += "{{";
     let sym = gensym("switch");
-    text += `om_data ${sym}=${compile_ast(discriminant, info)};`;
+    text += `var ${sym}=${compile_ast(discriminant, info)};`;
     let cases = [];
     let has_default = false;
     let default_label = gensym("default");
@@ -148,7 +148,7 @@ export function compile_ast(ast, info = {}) {
             let declarations = ast.declarations;
             if (declarations.length !== 1) throw new Error("VariableDeclaration error(1)");
             let declaration = declarations[0];
-            let text = "auto " + declaration.id.name + "=";
+            let text = "var " + declaration.id.name + "=";
             let init = compile_ast(declaration.init, info);
             text += init;
             return text;
