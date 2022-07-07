@@ -85,6 +85,12 @@ var print(const var &x)
     return x;
 }
 
+var print(var &x)
+{
+    ::__print__(x.data);
+    return x;
+}
+
 var eq(const var &a, const var &b)
 {
     return ::__eq__(a.data, b.data);
