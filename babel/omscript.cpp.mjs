@@ -8,9 +8,8 @@ const CPP_HEAD =
     `#include "omvar.h"
 
 int main() {
-    //GC_INIT();
-    static om_data null = new_null();
-    static om_data undefined = new_undefined();
+    static var null = new_null();
+    static var undefined = new_undefined();
     try {
 `;
 

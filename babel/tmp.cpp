@@ -2,9 +2,8 @@
 
 int main()
 {
-    //GC_INIT();
-    static om_data null = new_null();
-    static om_data undefined = new_undefined();
+    static var null = new_null();
+    static var undefined = new_undefined();
     try
     {
         var add2=(var_func)([&](std::vector<var> __arguments__)->var{var a=get_arg(__arguments__, 0); var b=get_arg(__arguments__, 1); {{return (a+b);} return undefined;}});
