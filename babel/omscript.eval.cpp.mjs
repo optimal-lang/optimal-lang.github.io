@@ -78,12 +78,12 @@ export function compile_ast(ast, info = {}) {
     //common.printAsJson(ast, "ast");
     switch (ast.type) {
         case "FunctionExpression": {
-            let text = "new_func(";
-            text += "[&](om_list_data __arguments__)->om_data{";
+            let text = "(var_func)(";
+            text += "[&](std::vector<var> __arguments__)->var{";
             let params = [];
             let i = 0;
             for (let param of ast.params) {
-                params.push(`om_data ${param.name}=get_arg(__arguments__, ${i});`);
+                params.push(`var ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
@@ -92,13 +92,12 @@ export function compile_ast(ast, info = {}) {
             return text;
         } break;
         case "FunctionDeclaration": {
-            let text = "";
-            text += "var " + ast.id.name + "= new_func("
-            text += "[&](om_list_data __arguments__)->om_data{";
+            let text = "var " + ast.id.name + "=(var_func)(";
+            text += "[&](std::vector<var> __arguments__)->var{";
             let params = [];
             let i = 0;
             for (let param of ast.params) {
-                params.push(`om_data ${param.name}=get_arg(__arguments__, ${i});`);
+                params.push(`var ${param.name}=get_arg(__arguments__, ${i});`);
                 i++;
             }
             text += params.join("");
@@ -113,7 +112,7 @@ export function compile_ast(ast, info = {}) {
         case "BinaryExpression": {
             let left = compile_ast(ast.left, info);
             let right = compile_ast(ast.right, info);
-            return "(" + `(*(${left}))` + ast.operator + `(*(${right}))` + ")";
+            return "(" + left + ast.operator + right + ")";
         } break;
         case "Identifier": {
             return ast.name;
@@ -122,7 +121,7 @@ export function compile_ast(ast, info = {}) {
             return compile_ast(ast.expression, info);
         } break;
         case "CallExpression": {
-            let text = `(*${ast.callee.name})({`;
+            let text = `${ast.callee.name}({`;
             let args = [];
             for (let arg of ast.arguments) {
                 arg = compile_ast(arg, info);

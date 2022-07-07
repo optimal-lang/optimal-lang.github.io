@@ -3,6 +3,7 @@ function add2(a, b) {
 }
 print(add2(11, 22));
 
+/*
 let x = 123;
 print(x);
 
@@ -78,3 +79,4 @@ print(list1[1][2]);
 
 list1[1][2] = 777;
 print(list1);
+*/
