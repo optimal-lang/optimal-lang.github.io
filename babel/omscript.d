@@ -196,18 +196,6 @@ class om_register {
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   }
 
-  public om_data swigOpAdd(om_register other) {
-    om_data ret = new om_data(omscript_im.om_register_swigOpAdd(cast(void*)swigCPtr, om_register.swigGetCPtr(other)), true);
-    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
-    return ret;
-  }
-
-  public om_data opCall(om_list_data __arguments__) {
-    om_data ret = new om_data(omscript_im.om_register_opCall(cast(void*)swigCPtr, om_list_data.swigGetCPtr(__arguments__)), true);
-    if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
-    return ret;
-  }
-
   public om_data opIndex(om_data index) {
     om_data ret = new om_data(omscript_im.om_register_opIndex(cast(void*)swigCPtr, om_data.swigGetCPtr(index)), false);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
@@ -743,8 +731,8 @@ class om_func : om_register {
     return ret;
   }
 
-  public override om_data opCall(om_list_data __arguments__) {
-    om_data ret = new om_data(omscript_im.om_func_opCall(cast(void*)swigCPtr, om_list_data.swigGetCPtr(__arguments__)), true);
+  public om_data opCall(om_data __this__, om_list_data __arguments__) {
+    om_data ret = new om_data(omscript_im.om_func_opCall(cast(void*)swigCPtr, om_data.swigGetCPtr(__this__), om_list_data.swigGetCPtr(__arguments__)), true);
     if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
     return ret;
   }
@@ -830,6 +818,12 @@ om_data __equal__(om_data a, om_data b) {
 
 om_data __call__(om_data f, om_data __this__, om_list_data __arguments__) {
   om_data ret = new om_data(omscript_im.__call__(om_data.swigGetCPtr(f), om_data.swigGetCPtr(__this__), om_list_data.swigGetCPtr(__arguments__)), true);
+  if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
+  return ret;
+}
+
+om_data __op_add__(om_data a, om_data b) {
+  om_data ret = new om_data(omscript_im.__op_add__(om_data.swigGetCPtr(a), om_data.swigGetCPtr(b)), true);
   if (omscript_im.SwigPendingException.isPending) throw omscript_im.SwigPendingException.retrieve();
   return ret;
 }

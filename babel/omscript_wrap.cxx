@@ -598,44 +598,6 @@ SWIGEXPORT void D_om_register_push(void * jarg1, void * jarg2) {
 }
 
 
-SWIGEXPORT void * D_om_register_swigOpAdd(void * jarg1, void * jarg2) {
-  void * jresult ;
-  om_register *arg1 = (om_register *) 0 ;
-  om_register *arg2 = 0 ;
-  om_data result;
-  
-  arg1 = (om_register *)jarg1;
-  arg2 = (om_register *)jarg2;
-  if (!arg2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "om_register & type is null");
-    return 0;
-  } 
-  result = (arg1)->operator +(*arg2);
-  jresult = new om_data((const om_data &)result); 
-  return jresult;
-}
-
-
-SWIGEXPORT void * D_om_register_opCall(void * jarg1, void * jarg2) {
-  void * jresult ;
-  om_register *arg1 = (om_register *) 0 ;
-  om_list_data arg2 ;
-  om_list_data *argp2 ;
-  om_data result;
-  
-  arg1 = (om_register *)jarg1;
-  argp2 = (om_list_data *)jarg2;
-  if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
-    return 0;
-  }
-  arg2 = *argp2; 
-  result = (arg1)->operator ()(arg2);
-  jresult = new om_data((const om_data &)result); 
-  return jresult;
-}
-
-
 SWIGEXPORT void * D_om_register_opIndex(void * jarg1, void * jarg2) {
   void * jresult ;
   om_register *arg1 = (om_register *) 0 ;
@@ -1442,21 +1404,29 @@ SWIGEXPORT unsigned int D_om_func_bool_value(void * jarg1) {
 }
 
 
-SWIGEXPORT void * D_om_func_opCall(void * jarg1, void * jarg2) {
+SWIGEXPORT void * D_om_func_opCall(void * jarg1, void * jarg2, void * jarg3) {
   void * jresult ;
   om_func *arg1 = (om_func *) 0 ;
-  om_list_data arg2 ;
-  om_list_data *argp2 ;
+  om_data arg2 ;
+  om_list_data arg3 ;
+  om_data *argp2 ;
+  om_list_data *argp3 ;
   om_data result;
   
   arg1 = (om_func *)jarg1;
-  argp2 = (om_list_data *)jarg2;
+  argp2 = (om_data *)jarg2;
   if (!argp2) {
-    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
     return 0;
   }
   arg2 = *argp2; 
-  result = (arg1)->operator ()(arg2);
+  argp3 = (om_list_data *)jarg3;
+  if (!argp3) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_list_data");
+    return 0;
+  }
+  arg3 = *argp3; 
+  result = (arg1)->operator ()(arg2,arg3);
   jresult = new om_data((const om_data &)result); 
   return jresult;
 }
@@ -1732,6 +1702,32 @@ SWIGEXPORT void * D___call__(void * jarg1, void * jarg2, void * jarg3) {
   }
   arg3 = *argp3; 
   result = __call__(arg1,arg2,arg3);
+  jresult = new om_data((const om_data &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * D___op_add__(void * jarg1, void * jarg2) {
+  void * jresult ;
+  om_data arg1 ;
+  om_data arg2 ;
+  om_data *argp1 ;
+  om_data *argp2 ;
+  om_data result;
+  
+  argp1 = (om_data *)jarg1;
+  if (!argp1) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
+    return 0;
+  }
+  arg1 = *argp1; 
+  argp2 = (om_data *)jarg2;
+  if (!argp2) {
+    SWIG_DSetPendingException(SWIG_DIllegalArgumentException, "Attempt to dereference null om_data");
+    return 0;
+  }
+  arg2 = *argp2; 
+  result = __op_add__(arg1,arg2);
   jresult = new om_data((const om_data &)result); 
   return jresult;
 }
