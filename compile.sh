@@ -1,4 +1,5 @@
-#! bash -uvx
+#! bash
+set -uvx
 set -e
 deno run --allow-all compile1.mjs | tee compile1.txt
 sleep 3
